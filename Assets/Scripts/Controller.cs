@@ -15,5 +15,11 @@ public class Controller : MonoBehaviour
 
         Udara newUdara = new Udara();
         newUdara.DisplayStats();
+
+        Krug newKrug = new Krug();
+        newKrug.DisplayStats();
+
+        MurkWolf newWolf = new MurkWolf();
+        newWolf.DisplayStats();
     }
 }

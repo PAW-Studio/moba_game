@@ -34,13 +34,13 @@ public class MurkWolf : Camps
 		{"level13", 11},
 		{"level14", 6},
 		{"level15", 11},
-		{"level15", 11},
 		{"level16", 11},
 		{"level17", 11}
 	};
+	Dictionary<string, double> growthXP = new Dictionary<string, double>();
 
 	//TODO - include growthXP
-		
+
 	// setting base AS based on excel
 	double baseAS = 0.625;
 
@@ -303,12 +303,24 @@ public class MurkWolf : Camps
 		currentAD = getStatistic(currentAD, growthAD["level17"]);
 	}
 
+	public void DisplayStats()
+    {
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
+    }
+
 }
 
 public class Raptor : Camps
 {
 	string CampName = "Raptor";
-
+	Dictionary<string, double> growthAD = new Dictionary<string, double>();
+	Dictionary<string, double> growthXP = new Dictionary<string, double>();
 	// setting base and growth health based on excel
 	double baseHealth = 2925;
 	double growthHealth = 720;
@@ -590,12 +602,24 @@ public class Raptor : Camps
 	{
 		currentAD = getStatistic(currentAD, growthAD["level17"]);
 	}
+	public void DisplayStats()
+	{
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
+	}
+
 }
 
 public class Krug : Camps
 {
 	string CampName = "Krug";
-
+	Dictionary<string, double> growthAD = new Dictionary<string, double>();
+	Dictionary<string, double> growthXP = new Dictionary<string, double>();
 	// setting base and growth health based on excel
 	double baseHealth = 2010;
 	double growthHealth = 472;
@@ -880,12 +904,24 @@ public class Krug : Camps
 	{
 		currentAD = getStatistic(currentAD, growthAD["level17"]);
 	}
+	public void DisplayStats()
+	{
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
+	}
+
 }
 
 public class Gromp : Camps
 {
 	string CampName = "Gromp";
-
+	Dictionary<string, double> growthAD = new Dictionary<string, double>();
+	Dictionary<string, double> growthXP = new Dictionary<string, double>();
 	// setting base and growth health based on excel
 	double baseHealth = 1650;
 	double growthHealth = 410;
@@ -1169,14 +1205,27 @@ public class Gromp : Camps
 	{
 		currentAD = getStatistic(currentAD, growthAD["level17"]);
 	}
+
+	public void DisplayStats()
+	{
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
+	}
+
 }
 
 public class RedBrambleback : Camps
-	{
-		string CampName = "RedBrambleback";
-
-		// setting base and growth health based on excel
-		double baseHealth = 1850;
+{
+	string CampName = "RedBrambleback";
+	Dictionary<string, double> growthAD = new Dictionary<string, double>();
+	Dictionary<string, double> growthXP = new Dictionary<string, double>();
+	// setting base and growth health based on excel
+	double baseHealth = 1850;
 		double growthHealth = 460;
 
 		// setting base and growth AD based on excel
@@ -1457,11 +1506,25 @@ public class RedBrambleback : Camps
 		{
 			currentAD = getStatistic(currentAD, growthAD["level17"]);
 		}
+
+	public void DisplayStats()
+	{
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
 	}
+
+}
 
 public class BlueSentinel : Camps
 	{
-		string CampName = "BlueSentinel";
+	Dictionary<string, double> growthAD = new Dictionary<string, double>();
+	Dictionary<string, double> growthXP = new Dictionary<string, double>();
+	string CampName = "BlueSentinel";
 
 		// setting base and growth health based on excel
 		double baseHealth = 2160;
@@ -1745,11 +1808,23 @@ public class BlueSentinel : Camps
 		{
 			currentAD = getStatistic(currentAD, growthAD["level17"]);
 		}
+	public void DisplayStats()
+	{
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
 	}
+
+}
 
 public class ScuttleCrab : Camps
 	{
-		string CampName = "ScuttleCrab";
+
+	string CampName = "ScuttleCrab";
 
 		// setting base and growth health based on excel
 		double baseHealth = 1050;
@@ -1949,5 +2024,16 @@ public class ScuttleCrab : Camps
 		{
 			currentGold = getStatistic(currentGold, growthGold);
 		}
+	public void DisplayStats()
+	{
+		Debug.Log("Camp Name:" + CampName + "\n " +
+			"Current Health:" + currentHealth + "\n " +
+			"Current AD:" + currentAD + "\n " +
+			"Current AS:" + currentAS + "\n " +
+			"Current Range:" + currentRange + "\n " +
+			"Current Leash:" + currentLeash + "\n " +
+			"Current Level:" + currentLevel + "\n ");
 	}
+
+}
 
