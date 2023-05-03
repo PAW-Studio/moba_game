@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// jpc
 public class Globals
 {
     // creating a global variable for equation modifier 1
