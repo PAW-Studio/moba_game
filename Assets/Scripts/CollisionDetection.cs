@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class CollisionDetection : MonoBehaviour
 {
+    int collisionNumber = 0;
     private void OnCollisionEnter(Collision other) 
     {
         Debug.Log("Collision Detected");
-        GetComponent<MeshRenderer>().material.color = Color.red;
+        collisionNumber ++;
+        if (collisionNumber < 2)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().material.color = Color.green;
+        }
     }
 }
