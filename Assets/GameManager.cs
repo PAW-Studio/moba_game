@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     float TimeInterval = 10;
     float timer = 0f; 
     float spawnDelay = 5f;
-    int waveCount = 1;
+    int waveCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
                 
                 cannonMinion1 = Instantiate(cannonMinion, blueSpawnLocation, Quaternion.identity);
                 cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+                waveCount = 0;
             }
         }
     }
