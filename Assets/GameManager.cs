@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject minionPrefab;
+    public GameObject meleeMinion;
+    public GameObject casterMinion;
+    public GameObject cannonMinion;
     public Vector3 blueSpawnLocation = new Vector3(0, 0, 0);
     public Vector3 redSpawnLocation = new Vector3(-40, 0, -40);
     float TimeInterval = 10;
     float timer = 0f; 
     float spawnDelay = 5f;
-    
+    int waveCount = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,15 +32,35 @@ public class GameManager : MonoBehaviour
         
         if (timer >= TimeInterval)
         {
-            GameObject minionSpawned1;
-            GameObject minionSpawned2;
+            GameObject meleeMinion1;
+            GameObject meleeMinion2;
+            GameObject meleeMinion3;
+            GameObject casterMinion1;
+            GameObject casterMinion2;
+            GameObject casterMinion3;
             
-            minionSpawned1 = Instantiate(minionPrefab, blueSpawnLocation, Quaternion.identity);
-            minionSpawned2 = Instantiate(minionPrefab, blueSpawnLocation, Quaternion.identity);
-
-            minionSpawned1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
-            minionSpawned2.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            meleeMinion1 = Instantiate(meleeMinion, blueSpawnLocation, Quaternion.identity);
+            meleeMinion2 = Instantiate(meleeMinion, blueSpawnLocation, Quaternion.identity);
+            meleeMinion3 = Instantiate(meleeMinion, blueSpawnLocation, Quaternion.identity);
+            casterMinion1 = Instantiate(casterMinion, blueSpawnLocation, Quaternion.identity);
+            casterMinion2 = Instantiate(casterMinion, blueSpawnLocation, Quaternion.identity);
+            casterMinion3 = Instantiate(casterMinion, blueSpawnLocation, Quaternion.identity);
+            meleeMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            meleeMinion2.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            meleeMinion3.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            casterMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            casterMinion2.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            casterMinion3.GetComponent<MinionAIScript>().destination = redSpawnLocation;
             timer -= spawnDelay;
+            waveCount ++;
+
+            if (waveCount == 3)
+            {
+                GameObject cannonMinion1;
+                
+                cannonMinion1 = Instantiate(cannonMinion, blueSpawnLocation, Quaternion.identity);
+                cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            }
         }
     }
 }

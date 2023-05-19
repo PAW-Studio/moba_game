@@ -167,7 +167,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d801306ba218649a10776272e6ea1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minionPrefab: {fileID: 2097141191256232439, guid: db584e114203f2749b6cb1210f81eefa,
+  meleeMinion: {fileID: 2097141191256232439, guid: 53bb8d78824ac8c4badbaf437e558c4e,
+    type: 3}
+  casterMinion: {fileID: 2097141191256232439, guid: db584e114203f2749b6cb1210f81eefa,
+    type: 3}
+  cannonMinion: {fileID: 2097141191256232439, guid: 9efd8a895f8dc2b48889d30a04a865d6,
     type: 3}
   blueSpawnLocation: {x: 45, y: 0, z: 45}
   redSpawnLocation: {x: -45, y: 0, z: -45}
