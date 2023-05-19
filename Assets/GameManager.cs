@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject meleeMinion;
     public GameObject casterMinion;
     public GameObject cannonMinion;
-    public Vector3 blueSpawnLocation = new Vector3(0, 0, 0);
+    public Vector3 blueSpawnLocation = new Vector3(33, 0, 57);
     public Vector3 redSpawnLocation = new Vector3(-40, 0, -40);
     float TimeInterval = 10;
     float timer = 0f; 
