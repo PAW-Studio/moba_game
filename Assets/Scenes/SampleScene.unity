@@ -164,7 +164,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 190088899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3e2b0e3de2ccf348aa56a57180890ff, type: 3}
+  m_Script: {fileID: 11500000, guid: fac35f2b83282104aaa031eb8434fa24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   meleeMinion: {fileID: 2097141191256232439, guid: 53bb8d78824ac8c4badbaf437e558c4e,
