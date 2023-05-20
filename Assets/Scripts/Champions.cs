@@ -55,6 +55,10 @@ public class Otrill : Champions
     double baseAD = 63.5;
     double growthAD = 3.75;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
     // setting base and growth AS based on excel
     double baseAS = 0.631;
     double growthAS = 0.02625;
@@ -228,6 +232,11 @@ public class Morya : Champions
     double baseAD = 62;
     double growthAD = 3.75;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
+
     // setting base and growth AS based on excel
     double baseAS = 0.625;
     double growthAS = 0.02125;
@@ -400,6 +409,11 @@ public class VaRun : Champions
     // setting base and growth AD based on excel
     double baseAD = 56;
     double growthAD = 3.3;
+
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.658;
@@ -575,6 +589,11 @@ public class Misa : Champions
     double baseAD = 52;
     double growthAD = 3.5;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
+
     // setting base and growth AS based on excel
     double baseAS = 0.7;
     double growthAS = 0.0185;
@@ -749,6 +768,11 @@ public class Udara : Champions
     double baseAD = 55.5;
     double growthAD = 3.25;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
+
     // setting base and growth AS based on excel
     double baseAS = 0.641;
     double growthAS = 0.0179;
@@ -921,6 +945,11 @@ public class Sura : Champions
     // setting base and growth AD based on excel
     double baseAD = 61;
     double growthAD = 4.8;
+
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.65;
@@ -1095,6 +1124,11 @@ public class Hakka : Champions
     double baseAD = 55;
     double growthAD = 3.4;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
+
     // setting base and growth AS based on excel
     double baseAS = 0.657;
     double growthAS = 0.026;
@@ -1267,6 +1301,11 @@ public class Dira : Champions
     // setting base and growth AD based on excel
     double baseAD = 54.5;
     double growthAD = 3;
+
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.63;
@@ -1441,6 +1480,11 @@ public class Tapani : Champions
     double baseAD = 61;
     double growthAD = 2.9;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
+
     // setting base and growth AS based on excel
     double baseAS = 0.7;
     double growthAS = 0.0352;
@@ -1614,6 +1658,11 @@ public class Moorg : Champions
     double baseAD = 52;
     double growthAD = 2.1;
 
+    // setting base, growth and current AP
+    double baseAP = 0;
+    double growthAP = 0;
+    double currentAP;
+    
     // setting base and growth AS based on excel
     double baseAS = 0.645;
     double growthAS = 0.034;
