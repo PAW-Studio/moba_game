@@ -58,7 +58,8 @@ public class Otrill : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
+    
+    
     // setting base and growth AS based on excel
     double baseAS = 0.631;
     double growthAS = 0.02625;
@@ -90,6 +91,7 @@ public class Otrill : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Otrill()
@@ -104,7 +106,7 @@ public class Otrill : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -235,7 +237,6 @@ public class Morya : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.625;
@@ -268,7 +269,7 @@ public class Morya : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
-
+    double currentAP;
     //defining constructor
     public Morya()
     {
@@ -282,7 +283,7 @@ public class Morya : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -413,7 +414,6 @@ public class VaRun : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.658;
@@ -446,6 +446,7 @@ public class VaRun : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public VaRun()
@@ -460,7 +461,7 @@ public class VaRun : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -592,7 +593,6 @@ public class Misa : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.7;
@@ -625,6 +625,7 @@ public class Misa : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Misa()
@@ -639,7 +640,7 @@ public class Misa : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -771,7 +772,6 @@ public class Udara : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.641;
@@ -804,6 +804,7 @@ public class Udara : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Udara()
@@ -818,7 +819,7 @@ public class Udara : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -949,7 +950,6 @@ public class Sura : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.65;
@@ -982,6 +982,7 @@ public class Sura : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Sura()
@@ -996,7 +997,7 @@ public class Sura : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -1127,7 +1128,6 @@ public class Hakka : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.657;
@@ -1160,6 +1160,7 @@ public class Hakka : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Hakka()
@@ -1174,7 +1175,7 @@ public class Hakka : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -1305,7 +1306,6 @@ public class Dira : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.63;
@@ -1338,6 +1338,7 @@ public class Dira : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Dira()
@@ -1352,7 +1353,7 @@ public class Dira : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -1483,7 +1484,6 @@ public class Tapani : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
 
     // setting base and growth AS based on excel
     double baseAS = 0.7;
@@ -1516,6 +1516,7 @@ public class Tapani : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Tapani()
@@ -1530,7 +1531,7 @@ public class Tapani : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
@@ -1661,8 +1662,7 @@ public class Moorg : Champions
     // setting base, growth and current AP
     double baseAP = 0;
     double growthAP = 0;
-    double currentAP;
-    
+
     // setting base and growth AS based on excel
     double baseAS = 0.645;
     double growthAS = 0.034;
@@ -1694,6 +1694,7 @@ public class Moorg : Champions
     double currentRange;
     double currentLevel;
     double currentXP;
+    double currentAP;
 
     //defining constructor
     public Moorg()
@@ -1708,7 +1709,7 @@ public class Moorg : Champions
         currentRange = baseRange;
         currentXP = Globals.level1;
         currentLevel = 0;
-
+        currentAP = baseAP;
     }
 
     //defining function to check champion_level
