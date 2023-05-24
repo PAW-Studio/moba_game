@@ -13,14 +13,20 @@ public class MinionAIScript : MonoBehaviour
 
     public bool isBlue;
     public bool hasTarget = false;
-    public float health = 100f;
-    public float attackTimer = 3f;
+    public float maxHealth = 100f;
+    public float currentHealth;
+    public float attackTimer = 2f;
+    public float attackRange = 10f;
 
     UnityEngine.AI.NavMeshAgent agent;
+    public MinionHealthBar minionHealthBar;
     
     // Start is called before the first frame update
     void Start()
     {
+        currentHealth = maxHealth;
+        minionHealthBar.SetMaxHealth(maxHealth);
+        
         if (isBlue)
         {
             this.gameObject.GetComponent<Renderer>().material = blueMinionMat;
@@ -42,14 +48,24 @@ public class MinionAIScript : MonoBehaviour
     {
        if (hasTarget && targetMinion != null)
        {
-            agent.SetDestination(targetMinion.transform.position);
-            attackTimer = attackTimer - Time.deltaTime;
+            if (Vector3.Distance(transform.position, targetMinion.transform.position) > attackRange)
+            {
+                agent.SetDestination(targetMinion.transform.position);
+                agent.stoppingDistance = attackRange;
+            }
+
+            else
+            {
+                agent.SetDestination(targetMinion.transform.position);
+            }
+                
+                attackTimer = attackTimer - Time.deltaTime;
         
             if (attackTimer <= 0)
             {
-                attackTimer = 3f;
-                targetMinion.GetComponent<MinionAIScript>().health -= 30;
-                Debug.Log("Health" + health);
+                attackTimer = 2f;
+                targetMinion.GetComponent<MinionAIScript>().currentHealth -= 30;
+                targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth);
             }
 
        }
@@ -61,7 +77,7 @@ public class MinionAIScript : MonoBehaviour
        }
 
 
-       if (health <= 0)
+       if (currentHealth <= 0)
        {
             Destroy(this.gameObject);
        }

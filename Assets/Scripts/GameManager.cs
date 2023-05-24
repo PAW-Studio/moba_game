@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {   
         SpawnTime();
-        Debug.Log(Time.time);
     }
 
     void SpawnTime()
@@ -45,7 +44,10 @@ public class GameManager : MonoBehaviour
                 meleeMinions[i] = Instantiate(meleeMinion, redSpawnLocation, Quaternion.identity);
                 meleeMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
                 meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
-                
+            }
+
+            for(int i = 0; i < 3; i++)
+            { 
                 casterMinions[i] = Instantiate(casterMinion, blueSpawnLocation, Quaternion.identity);
                 casterMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
                 casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
