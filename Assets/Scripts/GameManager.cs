@@ -7,17 +7,19 @@ public class GameManager : MonoBehaviour
     public GameObject meleeMinion;
     public GameObject casterMinion;
     public GameObject cannonMinion;
-    public Vector3 blueSpawnLocation = new Vector3(33, 0, 57);
-    public Vector3 redSpawnLocation = new Vector3(-40, 0, -40);
+    public Vector3 blueSpawnLocation = new Vector3(-159, 1, -152);
+    public Vector3 redSpawnLocation = new Vector3(132, 1, 140);
+    
     float TimeInterval = 10f;
     float timer = 0f; 
-    float spawnDelay = 70f;
+    float spawnDelay = 30f;
     int waveCount = 0;
     
     // Start is called before the first frame update
+    
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -25,42 +27,73 @@ public class GameManager : MonoBehaviour
     {   
         SpawnTime();
     }
+    
 
     void SpawnTime()
     {
+        // Starting game timer
         timer += Time.deltaTime;
         
         if (timer >= TimeInterval)
         {
-            GameObject[] meleeMinions = new GameObject[3];
-            GameObject[] casterMinions = new GameObject[3];
+            MeleeMinionSpawn();
+            CasterMinionSpawn();
             
-            for(int i = 0; i < 3; i++)
+            // Resetting timer for subsequent waves
+            timer -= spawnDelay;
+            waveCount ++;
+            
+            CannonMinionSpawn();
+        }
+    }
+
+    void MeleeMinionSpawn()
+    {
+        // Spawning and setting destination for melee minions
+        GameObject[] meleeMinions = new GameObject[3];
+
+        for(int i = 0; i < 3; i++)
             {
                 meleeMinions[i] = Instantiate(meleeMinion, blueSpawnLocation, Quaternion.identity);
                 meleeMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
+                
+                // Blue minions
                 meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
 
                 meleeMinions[i] = Instantiate(meleeMinion, redSpawnLocation, Quaternion.identity);
                 meleeMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
+                
+                // Red minions
                 meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
             }
+    }
 
-            for(int i = 0; i < 3; i++)
+    void CasterMinionSpawn()
+    {
+        // Spawning and setting destination for caster minions
+        GameObject[] casterMinions = new GameObject[3];
+
+        for(int i = 0; i < 3; i++)
             { 
                 casterMinions[i] = Instantiate(casterMinion, blueSpawnLocation, Quaternion.identity);
                 casterMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
+                
+                // Blue minions
                 casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
-
+                
                 casterMinions[i] = Instantiate(casterMinion, redSpawnLocation, Quaternion.identity);
                 casterMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
+                
+                // Red minions
                 casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+
             }
+    }
 
-            timer -= spawnDelay;
-            waveCount ++;
-
-            if (waveCount == 3)
+    void CannonMinionSpawn()
+    {
+        // Every third wave spawns a cannon minion and sets destination as above
+        if (waveCount == 3)
             {  
                 GameObject cannonMinion1;
 
@@ -71,9 +104,10 @@ public class GameManager : MonoBehaviour
                 cannonMinion1 = Instantiate(cannonMinion, redSpawnLocation, Quaternion.identity);
                 cannonMinion1.GetComponent<MinionAIScript>().destination = blueSpawnLocation;
                 cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
+                
+                // Resetting wave count for next cannon minion wave
                 waveCount = 0;
             }
-            
-        }
     }
+
 }

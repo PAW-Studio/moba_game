@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MinionHealthBar : MonoBehaviour
 {
+    // Referencing slider component; rest is straightforward
     public Slider slider;
 
     public void SetMaxHealth(float health)
