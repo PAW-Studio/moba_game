@@ -19,6 +19,7 @@ public class MinionAIScript : MonoBehaviour
     public float attackReset = 2f;
     public float damage = 30f;
     public float attackRange = 10f;
+    public Vector3 offset = new Vector3(5, 0, 5);
 
     UnityEngine.AI.NavMeshAgent agent;
     Renderer renderer;
@@ -60,9 +61,17 @@ public class MinionAIScript : MonoBehaviour
        {
             if (targetMinion.layer == 11 || targetMinion.layer == 12)
             {
-                MoveToTower();
+                if (targetMinion.tag == "BlueTower")
+                {
+                    MoveToBlueTower();
+                }
+                
+                else if (targetMinion.tag == "RedTower")
+                {
+                    MoveToRedTower();
+                }
             }
-            
+
             else
             {
                 MoveToMinion();
@@ -110,10 +119,14 @@ public class MinionAIScript : MonoBehaviour
         }
     }
 
-    void MoveToTower()
+    void MoveToBlueTower()
     {
-        agent.SetDestination(targetMinion.transform.position);
-        agent.stoppingDistance = 10;
+        agent.SetDestination(targetMinion.transform.position + offset);
+    }
+
+    void MoveToRedTower()
+    {
+        agent.SetDestination(targetMinion.transform.position - offset);
     }
 
     void InitiateAttack()

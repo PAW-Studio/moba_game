@@ -408,6 +408,7 @@ MonoBehaviour:
   attackReset: 2
   damage: 30
   attackRange: 10
+  offset: {x: 5, y: 0, z: 5}
   minionHealthBar: {fileID: 1160320716082583607}
 --- !u!54 &7823334880852452850
 Rigidbody:
