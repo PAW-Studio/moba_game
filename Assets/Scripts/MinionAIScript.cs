@@ -58,7 +58,15 @@ public class MinionAIScript : MonoBehaviour
        
        if (hasTarget && targetMinion != null)
        {
-            MoveToTarget();
+            if (targetMinion.layer == 11 || targetMinion.layer == 12)
+            {
+                MoveToTower();
+            }
+            
+            else
+            {
+                MoveToMinion();
+            }
                 
             attackTimer = attackTimer - Time.deltaTime;
         
@@ -84,7 +92,7 @@ public class MinionAIScript : MonoBehaviour
        }
     }
 
-    void MoveToTarget()
+    void MoveToMinion()
     {
         // Calculating distance between this minion and target
         if (Vector3.Distance(transform.position, targetMinion.transform.position) > attackRange)
@@ -95,11 +103,17 @@ public class MinionAIScript : MonoBehaviour
             agent.stoppingDistance = attackRange;
         }
 
-        else
+         else
         {
             // If target minion is less than attackRange distance away, moves towards it
             agent.SetDestination(targetMinion.transform.position);
         }
+    }
+
+    void MoveToTower()
+    {
+        agent.SetDestination(targetMinion.transform.position);
+        agent.stoppingDistance = 10;
     }
 
     void InitiateAttack()
