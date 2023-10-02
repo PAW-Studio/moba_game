@@ -116,6 +116,7 @@ public class MinionAIScript : MonoBehaviour
         {
             // If target minion is less than attackRange distance away, moves towards it
             agent.SetDestination(targetMinion.transform.position);
+            agent.velocity = Vector3.zero;
         }
     }
 

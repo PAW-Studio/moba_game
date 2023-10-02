@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &854972454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 854972455}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &854972455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854972454}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3941949472533276122}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &826781752715643415
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,10 +219,10 @@ GameObject:
   - component: {fileID: 3941949472533276122}
   - component: {fileID: 3111100705940168840}
   - component: {fileID: 1839908456915884832}
-  - component: {fileID: 7780977919674929030}
   - component: {fileID: 7780977919674929029}
   - component: {fileID: 7780977919674929028}
   - component: {fileID: 7780977919674929027}
+  - component: {fileID: 1529093974}
   m_Layer: 0
   m_Name: PVP_M_PGD19TowerBlue_01_High_0
   m_TagString: BlueTower
@@ -208,11 +239,12 @@ Transform:
   m_GameObject: {fileID: 1572365990761820970}
   m_LocalRotation: {x: -0.2883168, y: 0.64552224, z: 0.6457476, w: 0.28841743}
   m_LocalPosition: {x: -88.70268, y: -3.9422123, z: -90.021355}
-  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8474451053876287653}
   - {fileID: 6564275241057518676}
+  - {fileID: 854972455}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 131.865}
@@ -266,27 +298,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7780977919674929030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572365990761820970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 944464ebf453cf94d873d875baba5311, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetMinion: {fileID: 0}
-  hasTarget: 0
-  attackRange: 10
-  attackTimer: 2
-  attackReset: 2
-  damage: 30
-  maxHealth: 20000
-  currentHealth: 0
-  minionHealthBar: {fileID: 5854947662609202490}
 --- !u!54 &7780977919674929029
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -335,10 +346,31 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 9.28
-  m_Height: 28.51
+  m_Radius: 6
+  m_Height: 1.12
   m_Direction: 1
-  m_Center: {x: -0.37, y: 0.09, z: 2.8}
+  m_Center: {x: 0.01, y: 0.36, z: 0.04}
+--- !u!114 &1529093974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572365990761820970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93e837f8fc2ae9449535725a470c640, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetMinion: {fileID: 0}
+  hasTarget: 0
+  attackRange: 10
+  attackTimer: 2
+  attackReset: 2
+  damage: 30
+  maxHealth: 10000
+  currentHealth: 0
+  minionHealthBar: {fileID: 5854947662609202490}
 --- !u!1 &4336013490725218619
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,7 +504,7 @@ Transform:
   m_GameObject: {fileID: 7154180717943487723}
   m_LocalRotation: {x: 0.2883682, y: -0.6456345, z: -0.6456343, w: 0.28836825}
   m_LocalPosition: {x: 0.49, y: 0.08, z: 0.13}
-  m_LocalScale: {x: 15, y: 1.0000001, z: 15}
+  m_LocalScale: {x: 10, y: 1.0000001, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3941949472533276122}
@@ -538,10 +570,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 1.15
+  m_Radius: 1.8
   m_Height: 1.9999995
   m_Direction: 1
-  m_Center: {x: -0.03, y: 0.43, z: -0.02}
+  m_Center: {x: 0, y: 0.37, z: 0.01}
 --- !u!114 &8247002202448893093
 MonoBehaviour:
   m_ObjectHideFlags: 0
