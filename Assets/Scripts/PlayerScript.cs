@@ -50,4 +50,8 @@ public class PlayerScript : MonoBehaviour
     {
         Debug.Log("Attack: " + AttackValue);
     }
+    public void SetSpeed(float speed) 
+    {
+        _speed = speed;
+    }
 }
