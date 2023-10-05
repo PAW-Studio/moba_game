@@ -14,6 +14,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private Rigidbody _rb;
     FixedJoystick joyStick;
 
+    //
+    private float lastHorizontal = 0;
+
+    public Animator characterAnimator;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -42,9 +47,27 @@ public class PlayerScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if(characterAnimator) 
+        {
+            if(joyStick.Horizontal == 0 || joyStick.Vertical == 0) 
+            {
+                characterAnimator.SetBool("run",false);
+            }
+            else 
+            {
+                characterAnimator.SetBool("run",true);
+            }
+        }
         var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
         vel.y = _rb.velocity.y;
         _rb.velocity = vel;
+
+        //Set facing direction
+        float angle=   Mathf.Atan(joyStick.Horizontal * joyStick.Vertical);
+        Vector3 rotation = transform.eulerAngles;
+              rotation.y = angle;
+        transform.eulerAngles= rotation;
+        //
     }
     public void InitiateAttack(int AttackValue)
     {
@@ -52,6 +75,8 @@ public class PlayerScript : MonoBehaviour
     }
     public void SetSpeed(float speed) 
     {
+        //Temp
+        speed = 50f;
         _speed = speed;
     }
 }
