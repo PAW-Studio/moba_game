@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,14 +14,19 @@ public class GameManager : MonoBehaviour
     public Transform characterSpawnTranform;
 
     public GameObject characterPrefab;
+
+
+    public List<Button> AttackButtons=new List<Button>();
     [SerializeField]
     CameraFollow cameraFollow;
+
 
     float TimeInterval = 10f;
     float timer = 0f;
     float spawnDelay = 30f;
     int waveCount = 0;
 
+    
     // Start is called before the first frame update
 
     void Start()
@@ -120,5 +127,14 @@ public class GameManager : MonoBehaviour
     public void SpawnCharacter()
     {
         GameObject character = Instantiate(characterPrefab,characterSpawnTranform.position,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+
+        Character characterScirpt = character.GetComponent<Character>();
+        for(int i = 0 ; i < AttackButtons.Count ; i++)
+        {
+            int val = characterScirpt.AttackValues[i];
+            AttackButtons[i].onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val));
+        }
+       
+        
     }
 }

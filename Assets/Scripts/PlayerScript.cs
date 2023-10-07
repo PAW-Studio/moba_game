@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
         joyStick = FindObjectOfType<FixedJoystick>();
+       
     }
 
     // Update is called once per frame
@@ -44,34 +45,67 @@ public class PlayerScript : MonoBehaviour
                 transform.eulerAngles = new Vector3(0,rotationY,0);
             }
         }
-    }
-    private void FixedUpdate()
-    {
-        if(characterAnimator) 
+        //Movement
+         if(characterAnimator) 
         {
             if(joyStick.Horizontal == 0 || joyStick.Vertical == 0) 
             {
                 characterAnimator.SetBool("run",false);
+             //   characterAnimator.SetBool("attack_E",true);
             }
-            else 
+            else if(joyStick.Horizontal>.1f || joyStick.Vertical>0.1f)
             {
                 characterAnimator.SetBool("run",true);
+                float angle = Mathf.Atan2(joyStick.Horizontal,joyStick.Vertical) * Mathf.Rad2Deg;
+                this.transform.rotation = Quaternion.Euler(new Vector3(0,angle,0));
+              
             }
         }
         var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
         vel.y = _rb.velocity.y;
         _rb.velocity = vel;
+     
 
         //Set facing direction
-        float angle=   Mathf.Atan(joyStick.Horizontal * joyStick.Vertical);
-        Vector3 rotation = transform.eulerAngles;
-              rotation.y = angle;
-        transform.eulerAngles= rotation;
+        //float angle=   Mathf.Atan(joyStick.Horizontal * joyStick.Vertical);
+        //Vector3 rotation = transform.eulerAngles;
+        //      rotation.y = angle;
+        //transform.eulerAngles= rotation;
+
+        if(characterAnimator) 
+        {
+            if(attack) 
+            {
+              // attack = false;
+                characterAnimator.SetBool("attack_E",true);
+                Debug.LogError("SET TRUE");
+            }
+            if(off) 
+            {
+                off = true;
+             //   characterAnimator.SetBool("attack_E",false);
+            }
+            Debug.LogError("Has chracter");
+        }
+
+
+        //
         //
     }
+
+    private void FixedUpdate()
+    {
+       
+    }
+    bool attack = false, off=false;
     public void InitiateAttack(int AttackValue)
     {
-        Debug.Log("Attack: " + AttackValue);
+        characterAnimator.SetBool(GetComponent<Character>().SelectedCharacterIndex==0? "attack_E": "auto",true);
+        Invoke("SetBoolOff",0.2f);
+    }
+    public void SetBoolOff() 
+    {
+        characterAnimator.SetBool("attack_E",false);
     }
     public void SetSpeed(float speed) 
     {
