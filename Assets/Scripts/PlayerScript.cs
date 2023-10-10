@@ -13,18 +13,20 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float _jumpForce = 200;
     [SerializeField] private Rigidbody _rb;
     FixedJoystick joyStick;
-
+    [SerializeField]
+    float smoothTime = 0.05f;
+    [SerializeField]
+    float currentVelocity;
     //
     private float lastHorizontal = 0;
 
     public Animator characterAnimator;
-    
+
     // Start is called before the first frame update
     void Start()
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
         joyStick = FindObjectOfType<FixedJoystick>();
-       
     }
 
     // Update is called once per frame
@@ -46,73 +48,58 @@ public class PlayerScript : MonoBehaviour
             }
         }
         //Movement
-         if(characterAnimator) 
+        if(characterAnimator)
         {
-            if(joyStick.Horizontal == 0 || joyStick.Vertical == 0) 
+            if(joyStick.Direction.sqrMagnitude == 0)
             {
                 characterAnimator.SetBool("run",false);
-             //   characterAnimator.SetBool("attack_E",true);
             }
-            else if(joyStick.Horizontal>.1f || joyStick.Vertical>0.1f)
+            else
             {
                 characterAnimator.SetBool("run",true);
                 float angle = Mathf.Atan2(joyStick.Horizontal,joyStick.Vertical) * Mathf.Rad2Deg;
-                this.transform.rotation = Quaternion.Euler(new Vector3(0,angle,0));
-              
+                float FinaleAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,angle,ref currentVelocity,smoothTime);
+                this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
+
             }
         }
-       // transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
-       var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
-      vel.y = _rb.velocity.y;
-       _rb.velocity = vel;
-     
+        //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
-        //Set facing direction
-        //float angle=   Mathf.Atan(joyStick.Horizontal * joyStick.Vertical);
-        //Vector3 rotation = transform.eulerAngles;
-        //      rotation.y = angle;
-        //transform.eulerAngles= rotation;
+        var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
+        vel.y = _rb.velocity.y;
+        _rb.velocity = vel;
 
-        if(characterAnimator) 
+
+        if(characterAnimator)
         {
-            if(attack) 
+            if(attack)
             {
-              // attack = false;
+                // attack = false;
                 characterAnimator.SetBool("attack_E",true);
-                Debug.LogError("SET TRUE");
             }
-            if(off) 
+            if(off)
             {
                 off = true;
-             //   characterAnimator.SetBool("attack_E",false);
             }
         }
-
-
-        //
-        //
     }
 
-    private void FixedUpdate()
-    {
-       
-    }
-    bool attack = false, off=false;
+    bool attack = false, off = false;
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
         characterAnimator.SetBool(attackType.ToString(),true);
         StartCoroutine(SetBoolOff(attackType,0.2f));
     }
-    public IEnumerator SetBoolOff(AttackType attackType,float duration=0.2f) 
+    public IEnumerator SetBoolOff(AttackType attackType,float duration = 0.2f)
     {
         yield return new WaitForSeconds(duration);
         characterAnimator.SetBool(attackType.ToString(),false);
     }
-    public void SetSpeed(float speed) 
+    public void SetSpeed(float speed)
     {
         //Temp
         speed = 30f;
         _speed = speed;
     }
 }
-public enum AttackType {w, q ,e ,r}
+public enum AttackType { w, q, e, r, auto }

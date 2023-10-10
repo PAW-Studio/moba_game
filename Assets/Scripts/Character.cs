@@ -20,20 +20,31 @@ public class Character : MonoBehaviour
     
     void Start()
     {
-        SelectCharacter(SelectedCharacterIndex);
         characterOtrill = new Otrill();
         characterOtrill.CheckLevel();
         characterOtrill.DisplayStats();
-        playerScript.characterAnimator = characterModels[SelectedCharacterIndex].GetComponent<Animator>();
-        playerScript.SetSpeed(characterOtrill.GetMovementSpeed());
-        
+        SelectCharacter(SelectedCharacterIndex);
     }   
+    public void ChangeCharacter() 
+    {
+        if(SelectedCharacterIndex < characterModels.Count-1) 
+        {
+            SelectedCharacterIndex += 1;
+        }
+        else 
+        {
+            SelectedCharacterIndex = 0;
+        }
+        SelectCharacter(SelectedCharacterIndex);
+    }
     public void SelectCharacter(int index) 
     {
         for(int i = 0 ; i < characterModels.Count ; i++)
         {
             characterModels[i].SetActive(i == index ? true : false);  
-        }    
+        }
+        playerScript.characterAnimator = characterModels[SelectedCharacterIndex].GetComponent<Animator>();
+        playerScript.SetSpeed(characterOtrill.GetMovementSpeed());
     }
 }
 
