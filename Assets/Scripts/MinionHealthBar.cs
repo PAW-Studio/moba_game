@@ -7,7 +7,11 @@ public class MinionHealthBar : MonoBehaviour
 {
     // Referencing slider component; rest is straightforward
     public Slider slider;
-
+    Camera cam;
+    private void OnEnable()
+    {
+        cam = FindObjectOfType<Camera>();
+    }
     public void SetMaxHealth(float health)
     {
         slider.maxValue = health;
@@ -17,4 +21,9 @@ public class MinionHealthBar : MonoBehaviour
     {
         slider.value = health;
     }
+    //private void Update()
+    //{
+    //    if(cam)
+    //        slider.gameObject.transform.LookAt(cam.transform);
+    //}
 }

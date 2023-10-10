@@ -61,9 +61,10 @@ public class PlayerScript : MonoBehaviour
               
             }
         }
-        var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
-        vel.y = _rb.velocity.y;
-        _rb.velocity = vel;
+       // transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
+       var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
+      vel.y = _rb.velocity.y;
+       _rb.velocity = vel;
      
 
         //Set facing direction
@@ -85,7 +86,6 @@ public class PlayerScript : MonoBehaviour
                 off = true;
              //   characterAnimator.SetBool("attack_E",false);
             }
-            Debug.LogError("Has chracter");
         }
 
 
@@ -98,19 +98,21 @@ public class PlayerScript : MonoBehaviour
        
     }
     bool attack = false, off=false;
-    public void InitiateAttack(int AttackValue)
+    public void InitiateAttack(int AttackValue,AttackType attackType)
     {
-        characterAnimator.SetBool(GetComponent<Character>().SelectedCharacterIndex==0? "attack_E": "auto",true);
-        Invoke("SetBoolOff",0.2f);
+        characterAnimator.SetBool(attackType.ToString(),true);
+        StartCoroutine(SetBoolOff(attackType,0.2f));
     }
-    public void SetBoolOff() 
+    public IEnumerator SetBoolOff(AttackType attackType,float duration=0.2f) 
     {
-        characterAnimator.SetBool("attack_E",false);
+        yield return new WaitForSeconds(duration);
+        characterAnimator.SetBool(attackType.ToString(),false);
     }
     public void SetSpeed(float speed) 
     {
         //Temp
-        speed = 50f;
+        speed = 30f;
         _speed = speed;
     }
 }
+public enum AttackType {w, q ,e ,r}

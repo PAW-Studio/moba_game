@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
 
     public List<Button> AttackButtons=new List<Button>();
+    public List<AttackType> AttackTypes = new List<AttackType>();
     [SerializeField]
     CameraFollow cameraFollow;
 
@@ -132,7 +133,8 @@ public class GameManager : MonoBehaviour
         for(int i = 0 ; i < AttackButtons.Count ; i++)
         {
             int val = characterScirpt.AttackValues[i];
-            AttackButtons[i].onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val));
+            AttackType type = AttackTypes[i];
+            AttackButtons[i].onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
         }
        
         
