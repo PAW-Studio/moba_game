@@ -214,7 +214,11 @@ public class Otrill : Champions
     {
         Debug.Log("Champion Name: " + championName + "\n " 
             + "Current Health: " + currentHealth + ";" 
-            + "Current AD: " + currentAD + "\n ");
+            + "Current AD: " + currentAD + "\n " + "Current MovementSpeed: " + currentMovementSpeed + "\n ");
+    }
+    public float GetMovementSpeed()    
+    {
+        return (float) currentMovementSpeed;
     }
 }
 public class Morya : Champions
