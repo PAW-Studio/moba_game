@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     float spawnDelay = 30f;
     int waveCount = 0;
 
-    
+    public Character currentCharacter;
     // Start is called before the first frame update
 
     void Start()
@@ -136,7 +136,11 @@ public class GameManager : MonoBehaviour
             AttackType type = AttackTypes[i];
             AttackButtons[i].onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
         }
-       
-        
+        currentCharacter = characterScirpt;
+    }
+    //Temp to change character
+    public void ChangeCharacter() 
+    {
+        currentCharacter.ChangeCharacter();
     }
 }
