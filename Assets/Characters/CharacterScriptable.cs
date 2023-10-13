@@ -180,4 +180,4 @@ public class CharacterScriptable : ScriptableObject
             + "Current AD: " + currentAD + "\n ");
     }
 }
-public enum CharacterType { Otrill,Morya,VaRun,Misa,Udara,Sura,Hakka,Dira,Tapani,Moorg}
+public enum CharacterType { Otrill,Morya,VaRun,Misa,Udara,Sura,Hakka,Dira,Tapani,Moorg,Jahan,Ranzeb,Serina}

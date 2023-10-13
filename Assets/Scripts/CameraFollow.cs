@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform player;
-    private Vector3 cameraOffset;
+    public Transform player;                                            //Camera follow target transform
+    private Vector3 cameraOffset;                                       //offset value         
 
     [Range(0.01f, 1.0f)]
-    public float smoothness = 0.5f;
+    public float smoothness = 0.5f;                                     //Camera follow smoothness
     // Start is called before the first frame update
     void Start()
     {

@@ -13,13 +13,14 @@ public class GameManager : MonoBehaviour
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform characterSpawnTranform;
 
-    public GameObject characterPrefab;
+    public GameObject characterPrefab;                                                  //Character prefab object for Instantiation
 
 
-    public List<Button> AttackButtons=new List<Button>();
-    public List<AttackType> AttackTypes = new List<AttackType>();
+    public List<Button> AttackButtons = new List<Button>();                               //Attack buttons reference
+    public List<AttackType> AttackTypes = new List<AttackType>();                       //Attack types list
+    public Character currentCharacter;                                               //Character script reference for current character
     [SerializeField]
-    CameraFollow cameraFollow;
+    CameraFollow cameraFollow;                                                          //Reference for camerafollow script
 
 
     float TimeInterval = 10f;
@@ -27,7 +28,6 @@ public class GameManager : MonoBehaviour
     float spawnDelay = 30f;
     int waveCount = 0;
 
-    public Character currentCharacter;
     // Start is called before the first frame update
 
     void Start()
@@ -125,6 +125,9 @@ public class GameManager : MonoBehaviour
             waveCount = 0;
         }
     }
+    /// <summary>
+    /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
+    /// </summary>
     public void SpawnCharacter()
     {
         GameObject character = Instantiate(characterPrefab,characterSpawnTranform.position,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
@@ -139,7 +142,7 @@ public class GameManager : MonoBehaviour
         currentCharacter = characterScirpt;
     }
     //Temp to change character
-    public void ChangeCharacter() 
+    public void ChangeCharacter()
     {
         currentCharacter.ChangeCharacter();
     }

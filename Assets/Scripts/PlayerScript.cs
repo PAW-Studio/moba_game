@@ -7,25 +7,25 @@ public class PlayerScript : MonoBehaviour
     NavMeshAgent agent;
 
     public float rotateSpeedMovement = 0.1f;
+    public Animator characterAnimator;                                                             //Character Animator
     float rotateVelocity;
 
-    [SerializeField] private float _speed = 1;
+    [SerializeField] private float _speed = 1;                                                     //Movemnt speed
     [SerializeField] private float _jumpForce = 200;
-    [SerializeField] private Rigidbody _rb;
+    [SerializeField] private Rigidbody _rb;                                                        //Player rigidbody
     FixedJoystick joyStick;
     [SerializeField]
-    float smoothTime = 0.05f;
+    float smoothTime = 0.05f;                                                                      //Character rotation smoothness offset
     [SerializeField]
-    float currentVelocity;
-    //
-    private float lastHorizontal = 0;
-
-    public Animator characterAnimator;
+    float currentVelocity;                                                                         //Current velocity
+    
     Character character;
-    // Start is called before the first frame update
+    // Set references 
     void Start()
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
+
+        //Set reference for joystick and character
         joyStick = FindObjectOfType<FixedJoystick>();
         character = GetComponent<Character>();
     }
@@ -49,7 +49,7 @@ public class PlayerScript : MonoBehaviour
                 transform.eulerAngles = new Vector3(0,rotationY,0);
             }
         }
-        //Movement
+        //Character movement and rotation
         if(characterAnimator)
         {
             if(joyStick.Direction.sqrMagnitude == 0)
@@ -62,36 +62,39 @@ public class PlayerScript : MonoBehaviour
                 float angle = Mathf.Atan2(joyStick.Horizontal,joyStick.Vertical) * Mathf.Rad2Deg;
                 float FinaleAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,angle,ref currentVelocity,smoothTime);
                 this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
-
             }
         }
-        
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
     
         var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
         vel.y = _rb.velocity.y;
         _rb.velocity = vel;
+        //-
 
-
-        if(characterAnimator)
-        {
-            if(attack)
-            {
-                // attack = false;
-                characterAnimator.SetBool("attack_E",true);
-            }
-            if(off)
-            {
-                off = true;
-            }
-        }
+        //if(characterAnimator)
+        //{
+        //    if(attack)
+        //    {
+        //        // attack = false;
+        //        characterAnimator.SetBool("attack_E",true);
+        //    }
+        //    if(off)
+        //    {
+        //        off = true;
+        //    }
+        //}
     }
 
     bool attack = false, off = false;
     bool lastAutoAttackWasLeft = true;
+    /// <summary>
+    /// Attack button functionality: 
+    /// </summary>
+    /// <param name="AttackValue">Attack amount </param>
+    /// <param name="attackType">Attack type of character</param>
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
-        //Exception conditions for special attack instead of animation
+        //Check for special attack instead of animation
         if(character.currentCharacterModel.characterType== CharacterType.Hakka )
         {
             if(attackType== AttackType.auto)    
@@ -107,15 +110,25 @@ public class PlayerScript : MonoBehaviour
                 character.ShowModel(false);
             }
         }
+        //Trigger attack animation
         characterAnimator.SetBool(attackType.ToString(),true);
         StartCoroutine(SetBoolOff(attackType,0.2f));
     }
-    
+    /// <summary>
+    /// Set bull parameter of animator false
+    /// </summary>
+    /// <param name="attackType">animator bool string</param>
+    /// <param name="duration">delay before reseting the bool</param>
+    /// <returns></returns>
     public IEnumerator SetBoolOff(AttackType attackType,float duration = 0.2f)
     {
         yield return new WaitForSeconds(duration);
         characterAnimator.SetBool(attackType.ToString(),false);
     }
+    /// <summary>
+    /// Set character walking speed
+    /// </summary>
+    /// <param name="speed">character movement speed</param>
     public void SetSpeed(float speed)
     {
         //Temp
@@ -123,4 +136,5 @@ public class PlayerScript : MonoBehaviour
         _speed = speed;
     }
 }
+//Player attack types 
 public enum AttackType { w, q, e, r, auto,left,right }
