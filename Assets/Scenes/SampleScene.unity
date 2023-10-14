@@ -373,8 +373,8 @@ MonoBehaviour:
   - {fileID: 5745253775320093967}
   - {fileID: 5745253774558442511}
   AttackTypes: 0100000000000000020000000300000004000000
-  cameraFollow: {fileID: 688131336}
   currentCharacter: {fileID: 0}
+  cameraFollow: {fileID: 688131336}
 --- !u!1 &215671428
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,12 +512,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeedMovement: 3
+  characterAnimator: {fileID: 0}
   _speed: 100
   _jumpForce: 200
   _rb: {fileID: 215671435}
   smoothTime: 0.05
   currentVelocity: 0
-  characterAnimator: {fileID: 0}
 --- !u!54 &215671435
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20175,7 +20175,12 @@ MonoBehaviour:
   playerScript: {fileID: 0}
   AttackValues: 
   characterModels: []
+  SelectedCharacterType: 0
   SelectedCharacterIndex: 0
+  currentCharacterModel:
+    characterType: 0
+    characterModel: {fileID: 0}
+  invisibleTime: 5
 --- !u!23 &4237582128924020807
 MeshRenderer:
   m_ObjectHideFlags: 0

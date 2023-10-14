@@ -94,6 +94,7 @@ public class PlayerScript : MonoBehaviour
     /// <param name="attackType">Attack type of character</param>
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
+        Debug.LogError(attackType + "  Character : "+ (character.currentCharacterModel.characterType));
         //Check for special attack instead of animation
         if(character.currentCharacterModel.characterType== CharacterType.Hakka )
         {
@@ -103,11 +104,43 @@ public class PlayerScript : MonoBehaviour
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
             }
         }
+        else if(character.currentCharacterModel.characterType == CharacterType.Tapani)
+        {
+            if(attackType == AttackType.auto)
+            {
+                attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
+                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+            }
+            Debug.LogError(attackType);
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Otrill)
+        {
+            if(attackType == AttackType.r)
+            {
+                attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
+                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+                Debug.LogError(attackType);
+            }
+            
+        }
         else if(character.currentCharacterModel.characterType == CharacterType.Moorg) 
         {
             if(attackType == AttackType.r)
             { //Invisible effect
-                character.ShowModel(false);
+              // character.ShowModel(false);
+                foreach(Transform item in character.gameObject.transform)
+                {
+                    if(item.GetComponent<MeshRenderer>())
+                    {
+                        foreach(Material m in item.GetComponent<MeshRenderer>().materials)
+                        {
+                            Color c = m.color;
+                            c.a = 0.5f;
+                            m.color = c;
+
+                        }
+                    } 
+                }
             }
         }
         //Trigger attack animation
@@ -137,4 +170,4 @@ public class PlayerScript : MonoBehaviour
     }
 }
 //Player attack types 
-public enum AttackType { w, q, e, r, auto,left,right }
+public enum AttackType { w, q, e, r, auto,left,right,rLeft,rRight }
