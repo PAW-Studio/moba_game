@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour
 
     public float rotateSpeedMovement = 0.1f;
     public Animator characterAnimator;                                                             //Character Animator
+    //public CharacterController characterController;                                                //Character Controller 
     float rotateVelocity;
 
     [SerializeField] private float _speed = 1;                                                     //Movemnt speed
@@ -18,8 +19,11 @@ public class PlayerScript : MonoBehaviour
     float smoothTime = 0.05f;                                                                      //Character rotation smoothness offset
     [SerializeField]
     float currentVelocity;                                                                         //Current velocity
-    
+    bool Attack_R_IsAtcitve = false;                                                                 //True if R attack is active 
+    [SerializeField]
+    float R_Attack_ActiveTime = 5f;                                                                //Duration till the R attack is active
     Character character;
+    
     // Set references 
     void Start()
     {
@@ -64,11 +68,14 @@ public class PlayerScript : MonoBehaviour
                 this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
             }
         }
+        Debug.LogError(_speed);
+        //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
-    
+
         var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
         vel.y = _rb.velocity.y;
         _rb.velocity = vel;
+        
         //-
 
         //if(characterAnimator)
@@ -94,13 +101,13 @@ public class PlayerScript : MonoBehaviour
     /// <param name="attackType">Attack type of character</param>
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
-        Debug.LogError(attackType + "  Character : "+ (character.currentCharacterModel.characterType));
+        Debug.LogError(attackType + "  Character : " + (character.currentCharacterModel.characterType));
         //Check for special attack instead of animation
-        if(character.currentCharacterModel.characterType== CharacterType.Hakka )
+        if(character.currentCharacterModel.characterType == CharacterType.Hakka)
         {
-            if(attackType== AttackType.auto)    
+            if(attackType == AttackType.auto)
             {
-                attackType = lastAutoAttackWasLeft? AttackType.right: AttackType.left;  //One by one left then right then left -attacks
+                attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
             }
         }
@@ -117,13 +124,25 @@ public class PlayerScript : MonoBehaviour
         {
             if(attackType == AttackType.r)
             {
+                if(Attack_R_IsAtcitve) return;
+                Attack_R_IsAtcitve = true;
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
                 attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
                 Debug.LogError(attackType);
+                Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
             }
-            
+           else if(attackType == AttackType.auto)
+            {
+                if(Attack_R_IsAtcitve) 
+                {
+                    //Auto become R-left and R-right while R is active
+                    attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
+                    lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+                }
+            }
         }
-        else if(character.currentCharacterModel.characterType == CharacterType.Moorg) 
+        else if(character.currentCharacterModel.characterType == CharacterType.Moorg)
         {
             if(attackType == AttackType.r)
             { //Invisible effect
@@ -137,9 +156,8 @@ public class PlayerScript : MonoBehaviour
                             Color c = m.color;
                             c.a = 0.5f;
                             m.color = c;
-
                         }
-                    } 
+                    }
                 }
             }
         }
@@ -165,9 +183,14 @@ public class PlayerScript : MonoBehaviour
     public void SetSpeed(float speed)
     {
         //Temp
-        speed = 30f;
+        speed = 20f;
         _speed = speed;
+    }
+    //Reset indicator boolean of R attack
+    public void ResetRAttackIndicator()
+    {
+        Attack_R_IsAtcitve = false;
     }
 }
 //Player attack types 
-public enum AttackType { w, q, e, r, auto,left,right,rLeft,rRight }
+public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight }

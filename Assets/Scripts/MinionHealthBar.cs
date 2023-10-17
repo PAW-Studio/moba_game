@@ -8,6 +8,7 @@ public class MinionHealthBar : MonoBehaviour
     // Referencing slider component; rest is straightforward
     public Slider slider;
     Camera cam;
+   
     private void OnEnable()
     {
         cam = FindObjectOfType<Camera>();

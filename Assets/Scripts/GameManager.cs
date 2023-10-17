@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject characterPrefab;                                                  //Character prefab object for Instantiation
 
 
-    public List<Button> AttackButtons = new List<Button>();                               //Attack buttons reference
+    public List<AttackButton> AttackButtons = new List<AttackButton>();                               //Attack buttons reference
     public List<AttackType> AttackTypes = new List<AttackType>();                       //Attack types list
     public Character currentCharacter;                                               //Character script reference for current character
     [SerializeField]
@@ -27,9 +27,18 @@ public class GameManager : MonoBehaviour
     float timer = 0f;
     float spawnDelay = 30f;
     int waveCount = 0;
-
+    [SerializeField]
+    Image RButton;                                                                  //RButton image reference 
     // Start is called before the first frame update
-
+    public static GameManager instance;
+    //Set instance of GameManage script
+    private void Awake()
+    {
+        if(instance == null) 
+        {
+            instance = this;
+        }
+    }
     void Start()
     {
 
@@ -137,13 +146,56 @@ public class GameManager : MonoBehaviour
         {
             int val = characterScirpt.AttackValues[i];
             AttackType type = AttackTypes[i];
-            AttackButtons[i].onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
+            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
         }
         currentCharacter = characterScirpt;
     }
+    //Trigger attack active coroutine 
+    public void TriggerAttackActiveCoroutine(AttackType attackType,float duration) 
+    {
+        StartCoroutine(Attack_ActiveCoroutine(attackType,duration));
+    }
+    /// <summary>
+    /// Indicates that attack is active 
+    /// </summary>
+    /// <param name="attackType">Attack which is initiated</param>
+    /// <param name="activeTime">Duration till the attack will be active</param>
+    public IEnumerator Attack_ActiveCoroutine(AttackType attackType,float activeTime) 
+    {
+        AttackButton attackButton = AttackButtons.Find(x => x.attackType == attackType);
+      //  attackButton.button.interactable = false;
+        float time = 0f,duration=activeTime;
+        float start = 0, end = 1;
+        if(attackButton.ActiveIndicator)
+        {
+            while(time < duration)
+            {
+                attackButton.ActiveIndicator.fillAmount = Mathf.Lerp(start,end,time / duration);
+                time += Time.deltaTime;
+                yield return null;
+            }
+            attackButton.ActiveIndicator.fillAmount = 1;
+        }
+        else 
+        {
+            yield return new WaitForSeconds(activeTime);
+        }
+       // attackButton.button.interactable = true;
+        attackButton.ActiveIndicator.fillAmount = 0;
+    }
+
     //Temp to change character
     public void ChangeCharacter()
     {
         currentCharacter.ChangeCharacter();
     }
+    
+}
+//Handle attack buttton UI with this class
+[System.Serializable]
+public class AttackButton 
+{
+    public AttackType attackType;
+    public Button button;
+    public Image ActiveIndicator;
 }

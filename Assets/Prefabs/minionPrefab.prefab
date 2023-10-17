@@ -120,9 +120,14 @@ MonoBehaviour:
   targetMinion: {fileID: 0}
   isBlue: 0
   hasTarget: 0
-  health: 100
+  maxHealth: 100
+  currentHealth: 0
   attackTimer: 3
+  attackReset: 2
+  damage: 30
   attackRange: 10
+  offset: {x: 5, y: 0, z: 5}
+  minionHealthBar: {fileID: 0}
 --- !u!54 &7823334880852452850
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -272,7 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6178a25df1803a46a6dd65fee05b320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetList: []
+  targetList:
+  - {fileID: 884645105129681068, guid: 5aa1d963f59d69d4ebed36ceae42169e, type: 3}
   minionAgent: {fileID: 0}
   minionScript: {fileID: 0}
   closestTarget: {fileID: 0}
