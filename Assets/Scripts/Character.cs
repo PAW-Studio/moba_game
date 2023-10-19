@@ -12,6 +12,9 @@ public class Character : MonoBehaviour
     [SerializeField]
     List<CharacterModels> characterModels = new List<CharacterModels>();              //List of available character models with character type and object
 
+    [SerializeField]
+    List<CharacterScriptable> characterScriptables = new List<CharacterScriptable>();   //Character scriptable data
+
     public CharacterType SelectedCharacterType;                                    //Selected character type
     public int SelectedCharacterIndex = 0;                                         //Selected character index to set the current selected character
 
@@ -19,7 +22,7 @@ public class Character : MonoBehaviour
 
     public CharacterModels currentCharacterModel;                                  //current selected character set to this reference variable
     public float invisibleTime = 5f;
-
+    public CharacterScriptable characterData;
     void Start()
     {
         //Temp 
@@ -55,12 +58,19 @@ public class Character : MonoBehaviour
         for(int i = 0 ; i < characterModels.Count ; i++)
         {
             characterModels[i].characterModel.SetActive(i == index ? true : false);
+           
         }
         SelectedCharacterType = characterModels[index].characterType;
         currentCharacterModel = characterModels.Find(x => x.characterType == SelectedCharacterType);
         Debug.LogError(currentCharacterModel.characterModel.name);
         playerScript.characterAnimator = characterModels.Find(x => x.characterType == SelectedCharacterType).characterModel.GetComponent<Animator>();
         playerScript.SetSpeed(characterOtrill.GetMovementSpeed());
+
+        //We can use this data later
+        characterData = characterScriptables.Find(x => x.characterModel.characterType == SelectedCharacterType);
+        if(characterData)
+        characterData.DisplayStats();
+      
     }
     //True: Show character ,False: Hide character
     public void ShowModel(bool val)

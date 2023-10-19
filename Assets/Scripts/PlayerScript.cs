@@ -20,10 +20,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     float currentVelocity;                                                                         //Current velocity
     bool Attack_R_IsAtcitve = false;                                                                 //True if R attack is active 
+    bool Attack_R_CoolDown = false;                                                                 //True if waiting for cool down after "R" attack
     [SerializeField]
     float R_Attack_ActiveTime = 5f;                                                                //Duration till the R attack is active
     Character character;
-    
+    float R_Attack_CooldownTime = 10f;
     // Set references 
     void Start()
     {
@@ -68,7 +69,7 @@ public class PlayerScript : MonoBehaviour
                 this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
             }
         }
-        Debug.LogError(_speed);
+       
         //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
@@ -124,13 +125,16 @@ public class PlayerScript : MonoBehaviour
         {
             if(attackType == AttackType.r)
             {
-                if(Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve|| Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
                 attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
                 Debug.LogError(attackType);
                 Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime+R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
            else if(attackType == AttackType.auto)
             {
@@ -190,6 +194,17 @@ public class PlayerScript : MonoBehaviour
     public void ResetRAttackIndicator()
     {
         Attack_R_IsAtcitve = false;
+    }
+    //Reset after cool down time
+    public void ResetRAttackCoolDownIndicator()
+    {
+        Attack_R_CoolDown = false;
+        Debug.LogError("Stop");
+    }
+    //Cancel all invokes when object is destroyed
+    private void OnDestroy()
+    {
+        CancelInvoke();
     }
 }
 //Player attack types 

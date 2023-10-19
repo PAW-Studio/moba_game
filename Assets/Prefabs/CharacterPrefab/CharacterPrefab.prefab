@@ -144,12 +144,24 @@ MonoBehaviour:
     characterModel: {fileID: 1054802033097891536}
   - characterType: 4
     characterModel: {fileID: 2003315569475982846}
+  characterScriptables:
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
   SelectedCharacterType: 0
   SelectedCharacterIndex: 6
   currentCharacterModel:
     characterType: 6
     characterModel: {fileID: 0}
   invisibleTime: 5
+  characterData: {fileID: 0}
 --- !u!1 &7848315012700048725
 GameObject:
   m_ObjectHideFlags: 0

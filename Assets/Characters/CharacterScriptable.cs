@@ -5,9 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="Character",menuName ="Character Data", order =1)]
 public class CharacterScriptable : ScriptableObject
 {
-    public CharacterType characterType;
+    [Tooltip("Character FBX model -Idle and character type")]
+    public CharacterModels characterModel;
+   
     //Base and growth
-    public string championName = "Morya";
+    public string championName = "";
     public string summonerName = "";
 
     // setting base and growth health based on excel
@@ -48,18 +50,36 @@ public class CharacterScriptable : ScriptableObject
     //
 
     // creating variables to store current levels of each statistic
-   public double currentHealth;
+    [HideInInspector]
+    public double currentHealth;
+    [HideInInspector]
     public double currentHealthRegen;
+    [HideInInspector]
     public double currentAD;
+    [HideInInspector]
     public double currentAS;
+    [HideInInspector]
     public double currentArmor;
+    [HideInInspector]
     public double currentMagicResistance;
+    [HideInInspector]
     public double currentMovementSpeed;
+    [HideInInspector]
     public double currentRange;
+    [HideInInspector]
     public double currentLevel;
+    [HideInInspector]
     public double currentXP;
+    [HideInInspector]
     public double currentAP;
     //
+
+    //Character Details
+    //Animator name in resource folder;
+    [Tooltip("Animator name in Resources/CharacterAnimators folder")]
+    public string CharacterAnimatorName;
+  
+
     public void SetUpValues() 
     {
         currentHealth = baseHealth;
@@ -165,13 +185,13 @@ public class CharacterScriptable : ScriptableObject
 
     public void UpdateStatistics()
     {
-        //currentHealth = getStatistic(baseHealth,growthHealth,currentLevel);
-        //currentHealthRegen = getStatistic(baseHealthRegen,growthHealthRegen,currentLevel);
-        //currentAD = getStatistic(baseAD,growthAD,currentLevel);
-        //currentAS = getStatistic(baseAS,growthAS,currentLevel);
-        //currentArmor = getStatistic(baseArmor,growthAD,currentLevel);
-        //currentMagicResistance = getStatistic(baseMagicResistance,growthMagicResistance,currentLevel);
-        //currentRange = getStatistic(baseRange,growthRange,currentLevel);
+        currentHealth = Champions.getStatistic(baseHealth,growthHealth,currentLevel);
+        currentHealthRegen = Champions.getStatistic(baseHealthRegen,growthHealthRegen,currentLevel);
+        currentAD = Champions.getStatistic(baseAD,growthAD,currentLevel);
+        currentAS = Champions.getStatistic(baseAS,growthAS,currentLevel);
+        currentArmor = Champions.getStatistic(baseArmor,growthAD,currentLevel);
+        currentMagicResistance = Champions.getStatistic(baseMagicResistance,growthMagicResistance,currentLevel);
+        currentRange = Champions.getStatistic(baseRange,growthRange,currentLevel);
     }
     public void DisplayStats()
     {

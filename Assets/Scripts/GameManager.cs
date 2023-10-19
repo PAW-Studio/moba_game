@@ -16,11 +16,12 @@ public class GameManager : MonoBehaviour
     public GameObject characterPrefab;                                                  //Character prefab object for Instantiation
 
 
-    public List<AttackButton> AttackButtons = new List<AttackButton>();                               //Attack buttons reference
-    public List<AttackType> AttackTypes = new List<AttackType>();                       //Attack types list
+    public List<AttackButton> AttackButtons = new List<AttackButton>();               //Attack buttons reference
+    public List<AttackType> AttackTypes = new List<AttackType>();                     //Attack types list
     public Character currentCharacter;                                               //Character script reference for current character
+    public static GameManager instance;                                              //Set instance of GameManage script
     [SerializeField]
-    CameraFollow cameraFollow;                                                          //Reference for camerafollow script
+    CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
 
     float TimeInterval = 10f;
@@ -30,8 +31,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Image RButton;                                                                  //RButton image reference 
     // Start is called before the first frame update
-    public static GameManager instance;
-    //Set instance of GameManage script
+    [SerializeField]
+    TMPro.TMP_Dropdown QalityDropdown;                                              //Graphic quality dropdown 
+   
+   
     private void Awake()
     {
         if(instance == null) 
@@ -41,12 +44,21 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-
+        Debug.LogError(QualitySettings.GetQualityLevel());
         //spawn character
         SpawnCharacter();
-
+        qLevel = 2;
+        QalityDropdown.value = qLevel;
     }
-
+    int qLevel = 0;
+    public void ChangeQuality() 
+    {
+        qLevel = QalityDropdown.value;
+        QualitySettings.SetQualityLevel(qLevel);
+        qLevel += 1;
+        Debug.LogError(qLevel);
+        if(qLevel == 6) qLevel = 0;
+    }  
     // Update is called once per frame
     void Update()
     {
