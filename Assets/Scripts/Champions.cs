@@ -32,7 +32,7 @@ public class Globals
 }
 public class Champions
 {
-    protected static double getStatistic(double baseStatistic, double growthStatistic, double currentLevel)
+    public static double getStatistic(double baseStatistic, double growthStatistic, double currentLevel)
     {
         double return_value = baseStatistic + (growthStatistic * (currentLevel - 1) * (Globals.modifier1 + (Globals.modifier2 * (currentLevel - 1))));
         return return_value;

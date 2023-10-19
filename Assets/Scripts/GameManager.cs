@@ -13,31 +13,52 @@ public class GameManager : MonoBehaviour
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform characterSpawnTranform;
 
-    public GameObject characterPrefab;
+    public GameObject characterPrefab;                                                  //Character prefab object for Instantiation
 
 
-    public List<Button> AttackButtons=new List<Button>();
-    public List<AttackType> AttackTypes = new List<AttackType>();
+    public List<AttackButton> AttackButtons = new List<AttackButton>();               //Attack buttons reference
+    public List<AttackType> AttackTypes = new List<AttackType>();                     //Attack types list
+    public Character currentCharacter;                                               //Character script reference for current character
+    public static GameManager instance;                                              //Set instance of GameManage script
     [SerializeField]
-    CameraFollow cameraFollow;
+    CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
 
     float TimeInterval = 10f;
     float timer = 0f;
     float spawnDelay = 30f;
     int waveCount = 0;
-
-    public Character currentCharacter;
+    [SerializeField]
+    Image RButton;                                                                  //RButton image reference 
     // Start is called before the first frame update
-
+    [SerializeField]
+    TMPro.TMP_Dropdown QalityDropdown;                                              //Graphic quality dropdown 
+   
+   
+    private void Awake()
+    {
+        if(instance == null) 
+        {
+            instance = this;
+        }
+    }
     void Start()
     {
-
+        Debug.LogError(QualitySettings.GetQualityLevel());
         //spawn character
         SpawnCharacter();
-
+        qLevel = 2;
+        QalityDropdown.value = qLevel;
     }
-
+    int qLevel = 0;
+    public void ChangeQuality() 
+    {
+        qLevel = QalityDropdown.value;
+        QualitySettings.SetQualityLevel(qLevel);
+        qLevel += 1;
+        Debug.LogError(qLevel);
+        if(qLevel == 6) qLevel = 0;
+    }  
     // Update is called once per frame
     void Update()
     {
@@ -125,6 +146,9 @@ public class GameManager : MonoBehaviour
             waveCount = 0;
         }
     }
+    /// <summary>
+    /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
+    /// </summary>
     public void SpawnCharacter()
     {
         GameObject character = Instantiate(characterPrefab,characterSpawnTranform.position,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
@@ -134,13 +158,56 @@ public class GameManager : MonoBehaviour
         {
             int val = characterScirpt.AttackValues[i];
             AttackType type = AttackTypes[i];
-            AttackButtons[i].onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
+            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
         }
         currentCharacter = characterScirpt;
     }
+    //Trigger attack active coroutine 
+    public void TriggerAttackActiveCoroutine(AttackType attackType,float duration) 
+    {
+        StartCoroutine(Attack_ActiveCoroutine(attackType,duration));
+    }
+    /// <summary>
+    /// Indicates that attack is active 
+    /// </summary>
+    /// <param name="attackType">Attack which is initiated</param>
+    /// <param name="activeTime">Duration till the attack will be active</param>
+    public IEnumerator Attack_ActiveCoroutine(AttackType attackType,float activeTime) 
+    {
+        AttackButton attackButton = AttackButtons.Find(x => x.attackType == attackType);
+      //  attackButton.button.interactable = false;
+        float time = 0f,duration=activeTime;
+        float start = 0, end = 1;
+        if(attackButton.ActiveIndicator)
+        {
+            while(time < duration)
+            {
+                attackButton.ActiveIndicator.fillAmount = Mathf.Lerp(start,end,time / duration);
+                time += Time.deltaTime;
+                yield return null;
+            }
+            attackButton.ActiveIndicator.fillAmount = 1;
+        }
+        else 
+        {
+            yield return new WaitForSeconds(activeTime);
+        }
+       // attackButton.button.interactable = true;
+        attackButton.ActiveIndicator.fillAmount = 0;
+    }
+
     //Temp to change character
-    public void ChangeCharacter() 
+    public void ChangeCharacter()
     {
         currentCharacter.ChangeCharacter();
     }
+    
+}
+//Handle attack buttton UI with this class
+[System.Serializable]
+public class AttackButton 
+{
+    public AttackType attackType;
+    public Button button;
+    public Image ActiveIndicator;
 }

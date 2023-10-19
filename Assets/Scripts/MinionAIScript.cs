@@ -25,10 +25,12 @@ public class MinionAIScript : MonoBehaviour
     Renderer renderer;
 
     public MinionHealthBar minionHealthBar;
-    
+  
+    Camera cam;
     // Start is called before the first frame update
     void Start()
-    {   
+    {
+        cam = FindObjectOfType<Camera>();
         // Caching references
         renderer = GetComponent<Renderer>();
         agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -94,7 +96,7 @@ public class MinionAIScript : MonoBehaviour
         agent.SetDestination(destination);
        }
 
-
+     
        if (currentHealth <= 0)
        {
             Destroy(this.gameObject);
