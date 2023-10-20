@@ -24,7 +24,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     float R_Attack_ActiveTime = 5f;                                                                //Duration till the R attack is active
     Character character;
-    float R_Attack_CooldownTime = 10f;
+    float R_Attack_CooldownTime = 10f;                                                             //Cooldown time after "R" is deactivated
+
+    bool lastAutoAttackWasLeft = true;                                                             //Used to decide what should be the next attack in case of left and right attacks
     // Set references 
     void Start()
     {
@@ -76,25 +78,8 @@ public class PlayerScript : MonoBehaviour
         var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
         vel.y = _rb.velocity.y;
         _rb.velocity = vel;
-        
-        //-
-
-        //if(characterAnimator)
-        //{
-        //    if(attack)
-        //    {
-        //        // attack = false;
-        //        characterAnimator.SetBool("attack_E",true);
-        //    }
-        //    if(off)
-        //    {
-        //        off = true;
-        //    }
-        //}
     }
 
-    bool attack = false, off = false;
-    bool lastAutoAttackWasLeft = true;
     /// <summary>
     /// Attack button functionality: 
     /// </summary>
@@ -102,6 +87,8 @@ public class PlayerScript : MonoBehaviour
     /// <param name="attackType">Attack type of character</param>
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
+        bool OtrillRActivated = false; //Used to detect "R" click
+
         Debug.LogError(attackType + "  Character : " + (character.currentCharacterModel.characterType));
         //Check for special attack instead of animation
         if(character.currentCharacterModel.characterType == CharacterType.Hakka)
@@ -135,8 +122,10 @@ public class PlayerScript : MonoBehaviour
                 Debug.LogError(attackType);
                 Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime+R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                OtrillRActivated = true;
+                GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Mele";
             }
-           else if(attackType == AttackType.auto)
+            else if(attackType == AttackType.auto)
             {
                 if(Attack_R_IsAtcitve) 
                 {
@@ -151,23 +140,19 @@ public class PlayerScript : MonoBehaviour
             if(attackType == AttackType.r)
             { //Invisible effect
               // character.ShowModel(false);
-                foreach(Transform item in character.gameObject.transform)
-                {
-                    if(item.GetComponent<MeshRenderer>())
-                    {
-                        foreach(Material m in item.GetComponent<MeshRenderer>().materials)
-                        {
-                            Color c = m.color;
-                            c.a = 0.5f;
-                            m.color = c;
-                        }
-                    }
-                }
             }
         }
-        //Trigger attack animation
-        characterAnimator.SetBool(attackType.ToString(),true);
-        StartCoroutine(SetBoolOff(attackType,0.2f));
+
+        if(character.currentCharacterModel.characterType == CharacterType.Otrill && OtrillRActivated)
+        {
+            OtrillRActivated = false;
+        }
+        else
+        {  //Trigger attack animation
+            characterAnimator.SetBool(attackType.ToString(),true);
+            StartCoroutine(SetBoolOff(attackType,0.2f));
+        }
+
     }
     /// <summary>
     /// Set bull parameter of animator false
@@ -194,6 +179,7 @@ public class PlayerScript : MonoBehaviour
     public void ResetRAttackIndicator()
     {
         Attack_R_IsAtcitve = false;
+        GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Auto";
     }
     //Reset after cool down time
     public void ResetRAttackCoolDownIndicator()
@@ -206,6 +192,23 @@ public class PlayerScript : MonoBehaviour
     {
         CancelInvoke();
     }
+    /// <summary>
+    /// Triggers death animation of character 
+    /// </summary>
+    public void TriggerDeathAnimation() 
+    {
+        characterAnimator.SetBool("die",true);
+        Invoke("SetDeathBoolOff",0.3f);
+    }
+    /// <summary>
+    /// Reset death animation bool to avoid death animation loop
+    /// </summary>
+    public void SetDeathBoolOff() 
+    {
+        characterAnimator.SetBool("die",false);
+    }
 }
-//Player attack types 
+/// <summary>
+/// Character attack types
+/// </summary>
 public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight }

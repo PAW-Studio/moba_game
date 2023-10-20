@@ -17,6 +17,10 @@ public class CameraFollow : MonoBehaviour
             SetPlayerAndOffset(player);
         }
     }
+    /// <summary>
+    /// Set player and offeset transform
+    /// </summary>
+    /// <param name="_player">Target player transform</param>
     public void SetPlayerAndOffset(Transform _player) 
     {
         if(_player) 

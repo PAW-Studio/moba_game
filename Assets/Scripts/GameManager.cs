@@ -32,9 +32,9 @@ public class GameManager : MonoBehaviour
     Image RButton;                                                                  //RButton image reference 
     // Start is called before the first frame update
     [SerializeField]
-    TMPro.TMP_Dropdown QalityDropdown;                                              //Graphic quality dropdown 
-   
-   
+    TMPro.TMP_Dropdown QalityDropdown;                                              //Graphics quality dropdown 
+    int qLevel = 0;                                                                 //Graphics quality level index
+
     private void Awake()
     {
         if(instance == null) 
@@ -42,15 +42,19 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
     }
+    /// <summary>
+    /// Spawn character and set grahics quality level
+    /// </summary>
     void Start()
     {
-        Debug.LogError(QualitySettings.GetQualityLevel());
         //spawn character
         SpawnCharacter();
-        qLevel = 2;
-        QalityDropdown.value = qLevel;
+        qLevel = 2;                                         //Default graphics quality level-2 (Medium) : (0->VeryLow,1->Low,2->Medium,3->High,4->VeryHigh,5->Ultra
+        QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
     }
-    int qLevel = 0;
+    /// <summary>
+    /// Change graphics quality level
+    /// </summary>
     public void ChangeQuality() 
     {
         qLevel = QalityDropdown.value;
@@ -201,7 +205,14 @@ public class GameManager : MonoBehaviour
     {
         currentCharacter.ChangeCharacter();
     }
-    
+    /// <summary>
+    /// Trigger die animation for current player character
+    /// </summary>
+    public void TriggerDieAnimation()
+    {
+        currentCharacter.playerScript.TriggerDeathAnimation();
+    }
+
 }
 //Handle attack buttton UI with this class
 [System.Serializable]

@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This scirptable object can be created from Menu->Asset->Create->CharacterData. It can used to store the details of characters like base health, speed, name, character image, etc and we can use this data in game 
+
 [CreateAssetMenu(fileName ="Character",menuName ="Character Data", order =1)]
 public class CharacterScriptable : ScriptableObject
 {
     [Tooltip("Character FBX model -Idle and character type")]
-    public CharacterModels characterModel;
+    public CharacterModels characterModel;                               //Character FBX model (Idle -fbx model)
    
     //Base and growth
-    public string championName = "";
+    public string championName = "";                                    //Name of character
     public string summonerName = "";
 
     // setting base and growth health based on excel
@@ -77,9 +79,9 @@ public class CharacterScriptable : ScriptableObject
     //Character Details
     //Animator name in resource folder;
     [Tooltip("Animator name in Resources/CharacterAnimators folder")]
-    public string CharacterAnimatorName;
+    public string CharacterAnimatorName;                                       //Can be used later to load the animator of character at runtime from resource folder
   
-
+    //Set up values  of character
     public void SetUpValues() 
     {
         currentHealth = baseHealth;
@@ -94,6 +96,10 @@ public class CharacterScriptable : ScriptableObject
         currentLevel = 0;
         currentAP = baseAP;
     }
+
+    /// <summary>
+    /// Check character level : method is taken from champion script
+    /// </summary>
     public void CheckLevel()
     {
         if(currentXP >= Globals.level2)
@@ -183,6 +189,9 @@ public class CharacterScriptable : ScriptableObject
         }
     }
 
+    /// <summary>
+    /// Update character statistics
+    /// </summary>
     public void UpdateStatistics()
     {
         currentHealth = Champions.getStatistic(baseHealth,growthHealth,currentLevel);
@@ -193,6 +202,9 @@ public class CharacterScriptable : ScriptableObject
         currentMagicResistance = Champions.getStatistic(baseMagicResistance,growthMagicResistance,currentLevel);
         currentRange = Champions.getStatistic(baseRange,growthRange,currentLevel);
     }
+    /// <summary>
+    /// Display states: temporary for displaying states 
+    /// </summary>
     public void DisplayStats()
     {
         Debug.Log("Champion Name: " + championName + "\n "
@@ -200,4 +212,7 @@ public class CharacterScriptable : ScriptableObject
             + "Current AD: " + currentAD + "\n ");
     }
 }
+/// <summary>
+/// characters : this enum is used to decide the character and model is set based on this type
+/// </summary>
 public enum CharacterType { Otrill,Morya,VaRun,Misa,Udara,Sura,Hakka,Dira,Tapani,Moorg,Jahan,Ranzeb,Serina}
