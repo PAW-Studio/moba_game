@@ -19,7 +19,9 @@ public class GameManager : MonoBehaviour
     public List<AttackButton> AttackButtons = new List<AttackButton>();               //Attack buttons reference
     public List<AttackType> AttackTypes = new List<AttackType>();                     //Attack types list
     public Character currentCharacter;                                               //Character script reference for current character
+    public bool canSpawnNextWave = true;                                            //Used to stop spawning waves or pause waves
     public static GameManager instance;                                              //Set instance of GameManage script
+
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
@@ -35,6 +37,13 @@ public class GameManager : MonoBehaviour
     TMPro.TMP_Dropdown QalityDropdown;                                              //Graphics quality dropdown 
     int qLevel = 0;                                                                 //Graphics quality level index
 
+    [SerializeField]
+    float FirstWaveSpawnDelay=90f;                                                  //Delay time after which first wave should spawn (time in seconds)
+    [SerializeField]
+    float IntervalBetweenWaves = 30f;                                               //Time interval between waves (in seconds)
+    [SerializeField]
+    int SpawnCannonAfterWaves = 3;                                                  //Used to decide after how many waves the cannon should spawn
+    int WaveCounter=0;                                                              //Counts waves for calculations
     private void Awake()
     {
         if(instance == null) 
@@ -51,6 +60,8 @@ public class GameManager : MonoBehaviour
         SpawnCharacter();
         qLevel = 2;                                         //Default graphics quality level-2 (Medium) : (0->VeryLow,1->Low,2->Medium,3->High,4->VeryHigh,5->Ultra
         QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
+
+        StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
     }
     /// <summary>
     /// Change graphics quality level
@@ -66,9 +77,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SpawnTime();
+      //  SpawnTime();
     }
-
+    
 
     void SpawnTime()
     {
@@ -212,7 +223,39 @@ public class GameManager : MonoBehaviour
     {
         currentCharacter.playerScript.TriggerDeathAnimation();
     }
+    /// <summary>
+    /// Trigger minion spawn after delay
+    /// </summary>
+    public IEnumerator MinionSpawnCoroutine()
+    {
+        yield return new WaitForSeconds(FirstWaveSpawnDelay);     //Wait for delay 
+       StartCoroutine(SpawnWave());  //Start firs wave
+    }
+    /// <summary>
+    /// Spawns minions after the given time interval
+    /// </summary>
+    public IEnumerator SpawnWave()
+    {
+        yield return new WaitForSeconds(IntervalBetweenWaves);
+        if(canSpawnNextWave)
+        {
+            WaveCounter += 1;
+            MeleeMinionSpawn();
+            CasterMinionSpawn();
 
+            if(WaveCounter % SpawnCannonAfterWaves == 0)                // checks that if the wave is multiple of the given variable for spawning cannon or not
+            {
+                CannonMinionSpawn();
+            }
+            
+        }
+      StartCoroutine(SpawnWave());                              //Continue spawn coroutine                                             
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine(SpawnWave());   
+    }
 }
 //Handle attack buttton UI with this class
 [System.Serializable]

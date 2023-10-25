@@ -522,9 +522,13 @@ MonoBehaviour:
     ActiveIndicator: {fileID: 0}
   AttackTypes: 0100000000000000020000000300000004000000
   currentCharacter: {fileID: 0}
+  canSpawnNextWave: 1
   cameraFollow: {fileID: 688131336}
   RButton: {fileID: 2106097442}
   QalityDropdown: {fileID: 992343782}
+  FirstWaveSpawnDelay: 90
+  IntervalBetweenWaves: 30
+  SpawnCannonAfterWaves: 3
 --- !u!1 &215671428
 GameObject:
   m_ObjectHideFlags: 0
