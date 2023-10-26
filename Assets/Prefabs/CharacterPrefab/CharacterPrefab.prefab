@@ -93,6 +93,7 @@ MonoBehaviour:
   smoothTime: 0.05
   currentVelocity: 0
   R_Attack_ActiveTime: 5
+  moving: 0
 --- !u!54 &884645105129681059
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -631,6 +632,19 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2218970909229180027}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7714608312989834384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299912572443220266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be64d0898fff55940b02359b5abe9337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerScript: {fileID: 884645105129681058}
 --- !u!4 &1819989936925475728 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 417e9776a91bf224eae37873939d6ea4,

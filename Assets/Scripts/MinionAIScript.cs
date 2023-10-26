@@ -19,18 +19,28 @@ public class MinionAIScript : MonoBehaviour
     public float attackReset = 2f;
     public float damage = 30f;
     public float attackRange = 10f;
-    public Vector3 offset = new Vector3(5, 0, 5);
+    public Vector3 offset = new Vector3(5,0,5);
 
     UnityEngine.AI.NavMeshAgent agent;
     Renderer renderer;
+    [SerializeField]
+    public GameObject referenceObject;                                      //Healthbar display reference object for the minion
 
     public MinionHealthBar minionHealthBar;
-  
+
     Camera cam;
+    Transform healthBarTransform;
     // Start is called before the first frame update
     void Start()
     {
+        //Instntiate healthbar for the minion and set it in canvas and set proper scale 
+        GameObject Healthbar = Instantiate(GameManager.instance.MinioinHealthBar,GameManager.instance.MinionHealthbarsParent);
+        Healthbar.transform.localScale = Vector3.one;
+        minionHealthBar = Healthbar.GetComponent<MinionHealthBar>();
+        healthBarTransform = minionHealthBar.transform;
         cam = FindObjectOfType<Camera>();
+        //
+
         // Caching references
         renderer = GetComponent<Renderer>();
         agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -40,7 +50,7 @@ public class MinionAIScript : MonoBehaviour
         minionHealthBar.SetMaxHealth(maxHealth);
 
         // Setting type of minion based on layer
-        if (isBlue)
+        if(isBlue)
         {
             renderer.material = blueMinionMat;
             this.gameObject.layer = 9;
@@ -51,24 +61,24 @@ public class MinionAIScript : MonoBehaviour
             renderer.material = redMinionMat;
             this.gameObject.layer = 10;
         }
-        
+
         agent.SetDestination(destination);
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-       if (hasTarget && targetMinion != null)
-       {
-            if (targetMinion.layer == 11 || targetMinion.layer == 12)
+
+        if(hasTarget && targetMinion != null)
+        {
+            if(targetMinion.layer == 11 || targetMinion.layer == 12)
             {
-                if (targetMinion.tag == "BlueTower")
+                if(targetMinion.tag == "BlueTower")
                 {
                     MoveToBlueTower();
                 }
-                
-                else if (targetMinion.tag == "RedTower")
+
+                else if(targetMinion.tag == "RedTower")
                 {
                     MoveToRedTower();
                 }
@@ -78,43 +88,52 @@ public class MinionAIScript : MonoBehaviour
             {
                 MoveToMinion();
             }
-                
+
             attackTimer = attackTimer - Time.deltaTime;
-        
-            if (attackTimer <= 0)
+
+            if(attackTimer <= 0)
             {
                 attackTimer = attackReset;
-                
+
                 InitiateAttack();
             }
-       }
+        }
 
-       if (targetMinion == null)
-       {
-        // No target; resumes pathing towards destination
-        hasTarget = false;
-        agent.SetDestination(destination);
-       }
+        if(targetMinion == null)
+        {
+            // No target; resumes pathing towards destination
+            hasTarget = false;
+            agent.SetDestination(destination);
+        }
 
-     
-       if (currentHealth <= 0)
-       {
+
+        if(currentHealth <= 0)
+        {
+            Destroy(minionHealthBar.gameObject);
             Destroy(this.gameObject);
-       }
+        }
     }
 
+    private void FixedUpdate()
+    {
+        if(referenceObject)         //Handle exception for null reference 
+        {
+            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+        }
+
+    }
     void MoveToMinion()
     {
         // Calculating distance between this minion and target
-        if (Vector3.Distance(transform.position, targetMinion.transform.position) > attackRange)
+        if(Vector3.Distance(transform.position,targetMinion.transform.position) > attackRange)
         {
             agent.SetDestination(targetMinion.transform.position);
-            
+
             // Minion stops at attackRange distance from target 
             agent.stoppingDistance = attackRange;
         }
 
-         else
+        else
         {
             // If target minion is less than attackRange distance away, moves towards it
             agent.SetDestination(targetMinion.transform.position);
@@ -135,10 +154,10 @@ public class MinionAIScript : MonoBehaviour
     void InitiateAttack()
     {
         // Attacks opposite tower
-        if (targetMinion.layer == 11 || targetMinion.layer == 12)
-        {    
+        if(targetMinion.layer == 11 || targetMinion.layer == 12)
+        {
             targetMinion.GetComponent<TowerAIScript>().currentHealth -= damage;
-            
+
             // Reduces tower health from current health bar
             targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth);
         }

@@ -37,7 +37,7 @@ public class PlayerScript : MonoBehaviour
         character = GetComponent<Character>();
     }
 
-
+    public bool moving = false;
     // Update is called once per frame
     void Update()
     {
@@ -75,9 +75,20 @@ public class PlayerScript : MonoBehaviour
         //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
-        var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
-        vel.y = _rb.velocity.y;
-        _rb.velocity = vel;
+       
+        if(moving) //If animation with movement then auto move rigidbody
+        {
+            var vel2 = transform.forward* _speed*1.5f;  //Increased speed -can be variable with respect to character and animations
+            vel2.y = _rb.velocity.y;
+            _rb.velocity = vel2;
+        }
+        else //Move character with respect to josystick
+        {
+            var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
+            vel.y = _rb.velocity.y;
+            _rb.velocity = vel;
+        }
+
     }
 
     /// <summary>

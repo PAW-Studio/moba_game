@@ -12,7 +12,11 @@ public class GameManager : MonoBehaviour
     public Vector3 blueSpawnLocation = new Vector3(-159,1,-152);
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform characterSpawnTranform;
-
+    public GameObject MinioinHealthBar;                                                 //Healthbar prefab for minions
+    public Transform MinionHealthbarsParent;                                            //Parent transform for minion healthbars
+    public Transform MeleeMinionParentContainer;                                        //Parent transform for melee minions
+    public Transform CasterMinionParentContainer;                                        //Parent transform for caster minions
+    public Transform CannonMinionParentContainer;                                        //Parent transform for cannon minions
     public GameObject characterPrefab;                                                  //Character prefab object for Instantiation
 
 
@@ -106,13 +110,13 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0 ; i < 3 ; i++)
         {
-            meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity);
+            meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
             meleeMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
 
             // Blue minions
             meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
 
-            meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity);
+            meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
             meleeMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
 
             // Red minions
@@ -127,13 +131,13 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0 ; i < 3 ; i++)
         {
-            casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity);
+            casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
             casterMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
 
             // Blue minions
             casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
 
-            casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity);
+            casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
             casterMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
 
             // Red minions
@@ -149,11 +153,11 @@ public class GameManager : MonoBehaviour
         {
             GameObject cannonMinion1;
 
-            cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity);
+            cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = true;
 
-            cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity);
+            cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = blueSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
 
@@ -229,14 +233,14 @@ public class GameManager : MonoBehaviour
     public IEnumerator MinionSpawnCoroutine()
     {
         yield return new WaitForSeconds(FirstWaveSpawnDelay);     //Wait for delay 
-       StartCoroutine(SpawnWave());  //Start firs wave
+       StartCoroutine(SpawnWave(0));  //Start firs wave
     }
     /// <summary>
     /// Spawns minions after the given time interval
     /// </summary>
-    public IEnumerator SpawnWave()
+    public IEnumerator SpawnWave(float delay=-1f)
     {
-        yield return new WaitForSeconds(IntervalBetweenWaves);
+        yield return new WaitForSeconds(delay!=-1?delay: IntervalBetweenWaves );  //If delay is specified then use it
         if(canSpawnNextWave)
         {
             WaveCounter += 1;
