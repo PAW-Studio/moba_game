@@ -9,6 +9,7 @@ public class AnimationMovementManager : MonoBehaviour
     public void SetMovementOn() 
     {
         playerScript.moving = true;
+        Debug.LogError("SetTrue");
     }
     public void SetMovementOff()
     {
