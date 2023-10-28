@@ -48,6 +48,7 @@ public class MinionAIScript : MonoBehaviour
         // Setting minion health bar
         currentHealth = maxHealth;
         minionHealthBar.SetMaxHealth(maxHealth);
+        Healthbar.gameObject.SetActive(true); 
 
         // Setting type of minion based on layer
         if(isBlue)
