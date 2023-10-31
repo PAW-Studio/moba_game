@@ -159,9 +159,12 @@ public class PlayerScript : MonoBehaviour
             OtrillRActivated = false;
         }
         else
-        {  //Trigger attack animation
-            characterAnimator.SetBool(attackType.ToString(),true);
-            StartCoroutine(SetBoolOff(attackType,0.2f));
+        {
+            if(characterAnimator)
+            { //Trigger attack animation
+                characterAnimator.SetBool(attackType.ToString(),true);
+                StartCoroutine(SetBoolOff(attackType,0.2f));
+            }
         }
 
     }
@@ -217,6 +220,15 @@ public class PlayerScript : MonoBehaviour
     public void SetDeathBoolOff() 
     {
         characterAnimator.SetBool("die",false);
+    }
+    /// <summary>
+    /// Destory character gameobject 
+    /// </summary>
+    public void CharacterDie() 
+    {
+        GameManager.instance.CharacterLastPosition = transform.position;
+        GameManager.instance.SpawnCharacter();      //Temp for development spawn character after destroy
+        Destroy(this.gameObject);
     }
 }
 /// <summary>

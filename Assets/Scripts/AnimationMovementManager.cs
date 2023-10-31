@@ -34,14 +34,21 @@ public class AnimationMovementManager : MonoBehaviour
     /// </summary>
     public void SetRootMotionOn()
     {
-       // playerScript.characterAnimator.applyRootMotion = true;
+      playerScript.characterAnimator.applyRootMotion = true;
     }
     /// <summary>
     /// Set charactor animators's root motion settings OFF 
     /// </summary>
     public void SetRootMotionOff()
     {
-       // playerScript.characterAnimator.applyRootMotion = false;
+        playerScript.characterAnimator.applyRootMotion = false;
        // transform.position = startPosition;
+    }
+    /// <summary>
+    /// Trigger destroy function in character main script
+    /// </summary>
+    public void TriggerDestroyCharacter() 
+    {
+        playerScript.CharacterDie();
     }
 }

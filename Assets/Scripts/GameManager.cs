@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     public bool canSpawnNextWave = true;                                            //Used to stop spawning waves or pause waves
     public static GameManager instance;                                              //Set instance of GameManage script
 
+    //Temp
+    public Vector3 CharacterLastPosition;                                           //Last position of character before death
+
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
@@ -170,7 +173,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SpawnCharacter()
     {
-        GameObject character = Instantiate(characterPrefab,characterSpawnTranform.position,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+        Vector3 spawnPosition = characterSpawnTranform.position;
+        if(CharacterLastPosition != Vector3.zero) 
+        {
+            spawnPosition = CharacterLastPosition;
+        }
+        GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
 
         Character characterScirpt = character.GetComponent<Character>();
         for(int i = 0 ; i < AttackButtons.Count ; i++)
