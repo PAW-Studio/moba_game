@@ -226,4 +226,5 @@ public class AttackAnimationDetails
 {
     public AttackType attackType;
     public float movementSpeedModifier = 1f;
+    public int DamageValue=25;
 }
