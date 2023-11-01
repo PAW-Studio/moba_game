@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
     public float rotateSpeedMovement = 0.1f;
     public Animator characterAnimator;                                                             //Character Animator
     //public CharacterController characterController;                                                //Character Controller 
+    public AttackType currentActiveAnimation= AttackType.None;                                                  //Current Active attack animation
     float rotateVelocity;
 
     [SerializeField] private float _speed = 1;                                                     //Movemnt speed
@@ -26,7 +27,13 @@ public class PlayerScript : MonoBehaviour
     Character character;
     float R_Attack_CooldownTime = 10f;                                                             //Cooldown time after "R" is deactivated
 
-    bool lastAutoAttackWasLeft = true;                                                             //Used to decide what should be the next attack in case of left and right attacks
+    //Used to decide what should be the next attack in case of left and right attacks
+    bool lastAutoAttackWasLeft = true;
+
+    //Animation movement speed will be increased using this modifier :Speed can be set from character scriptable object ,default speed can be adjusted from here
+    float AnimationMovementSpeedModifier = 1.5f;
+    float defaultModifierValue = 1.5f;
+    
     // Set references 
     void Start()
     {
@@ -75,10 +82,11 @@ public class PlayerScript : MonoBehaviour
         //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
-       
+        
         if(moving) //If animation with movement then auto move rigidbody
         {
-            var vel2 = transform.forward* _speed*1.5f;  //Increased speed -can be variable with respect to character and animations
+            Debug.LogError(AnimationMovementSpeedModifier);  
+            var vel2 = transform.forward* _speed*AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
             vel2.y = _rb.velocity.y;
             _rb.velocity = vel2;
         }
@@ -230,8 +238,27 @@ public class PlayerScript : MonoBehaviour
         GameManager.instance.SpawnCharacter();      //Temp for development spawn character after destroy
         Destroy(this.gameObject);
     }
+    /// <summary>
+    /// Set animation movement modifier speed with respect to character and animation type
+    /// </summary>
+    /// <param name="_currentActiveAnimation">current animation type</param>
+    public void SetAnimationMovementSpeedModifier(AttackType _currentActiveAnimation) 
+    {
+        currentActiveAnimation = _currentActiveAnimation;
+        AnimationMovementSpeedModifier = character.characterData != null && currentActiveAnimation != AttackType.None ? character.characterData.attackAnimationDetails.Find(x => x.attackType == currentActiveAnimation).movementSpeedModifier :defaultModifierValue;
+       
+    }
+    /// <summary>
+    /// Reset animation movement modifier value to default
+    /// </summary>
+    public void ResetAnimationMovementSpeedModifier()
+    {
+        currentActiveAnimation = AttackType.None;
+        AnimationMovementSpeedModifier = defaultModifierValue;
+    }
 }
 /// <summary>
 /// Character attack types
 /// </summary>
-public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight }
+[System.Serializable]
+public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight ,None,DieAnimation}

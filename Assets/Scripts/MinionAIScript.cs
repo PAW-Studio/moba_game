@@ -96,7 +96,7 @@ public class MinionAIScript : MonoBehaviour
             {
                 attackTimer = attackReset;
 
-                InitiateAttack();
+               // InitiateAttack();
             }
         }
 
@@ -169,5 +169,11 @@ public class MinionAIScript : MonoBehaviour
             targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
             targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth);
         }
+    }
+
+    public void DealDamage(int damage) 
+    {
+        currentHealth -= damage;
+        minionHealthBar.SetHealth(currentHealth);
     }
 }

@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     //Temp
     public Vector3 CharacterLastPosition;                                           //Last position of character before death
 
+  
+
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 

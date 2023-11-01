@@ -9,7 +9,8 @@ public class CharacterScriptable : ScriptableObject
 {
     [Tooltip("Character FBX model -Idle and character type")]
     public CharacterModels characterModel;                               //Character FBX model (Idle -fbx model)
-   
+
+    public List<AttackAnimationDetails> attackAnimationDetails = new List<AttackAnimationDetails>();  //Attack type and movement speed details -used to set movement speed character as well as attack type wise dynamically 
     //Base and growth
     public string championName = "";                                    //Name of character
     public string summonerName = "";
@@ -216,3 +217,13 @@ public class CharacterScriptable : ScriptableObject
 /// characters : this enum is used to decide the character and model is set based on this type
 /// </summary>
 public enum CharacterType { Otrill,Morya,VaRun,Misa,Udara,Sura,Hakka,Dira,Tapani,Moorg,Jahan,Ranzeb,Serina}
+
+/// <summary>
+/// Used to hold the values of attack type and movement speed modifier for the attack
+/// </summary>
+[System.Serializable]
+public class AttackAnimationDetails 
+{
+    public AttackType attackType;
+    public float movementSpeedModifier = 1f;
+}

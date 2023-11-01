@@ -530,13 +530,16 @@ MonoBehaviour:
   AttackTypes: 0100000000000000020000000300000004000000
   currentCharacter: {fileID: 0}
   canSpawnNextWave: 1
-  FirstWaveSpawnDelay: 5
-  IntervalBetweenWaves: 30
-  SpawnCannonAfterWaves: 3
-  WaveCounter: 0
+  CharacterLastPosition: {x: 0, y: 0, z: 0}
+  characterScriptables:
+  - {fileID: 11400000, guid: 10489cc19858d674bbd35737a83f1c72, type: 2}
+  - {fileID: 11400000, guid: 53c8dc5224a5aa847912aa96288da3e6, type: 2}
   cameraFollow: {fileID: 688131336}
   RButton: {fileID: 2106097442}
   QalityDropdown: {fileID: 992343782}
+  FirstWaveSpawnDelay: 5
+  IntervalBetweenWaves: 30
+  SpawnCannonAfterWaves: 3
 --- !u!1 &215671428
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +684,7 @@ MonoBehaviour:
   smoothTime: 0.05
   currentVelocity: 0
   R_Attack_ActiveTime: 5
+  moving: 0
 --- !u!54 &215671435
 Rigidbody:
   m_ObjectHideFlags: 0
