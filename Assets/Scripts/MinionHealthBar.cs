@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class MinionHealthBar : MonoBehaviour
 {
     // Referencing slider component; rest is straightforward
-    public Slider slider;
-    Camera cam;
+    public Slider slider;                                       //Healthbar slider
+    Camera cam;                                                 //Scene camera referemce   
    
     private void OnEnable()
     {
@@ -22,9 +22,4 @@ public class MinionHealthBar : MonoBehaviour
     {
         slider.value = health;
     }
-    //private void Update()
-    //{
-    //    if(cam)
-    //        slider.gameObject.transform.LookAt(cam.transform);
-    //}
 }

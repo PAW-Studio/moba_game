@@ -20,9 +20,9 @@ public class Character : MonoBehaviour
 
     // Start is called before the first frame update
 
-    public CharacterModels currentCharacterModel;                                  //current selected character set to this reference variable
+    public CharacterModels currentCharacterModel;                                  //Current selected character set to this reference variable
     public float invisibleTime = 5f;
-    public CharacterScriptable characterData;
+    public CharacterScriptable characterData;                                      //Scriptable object of character to reference the selected character details
     void Start()
     {
         //Temp 
@@ -58,7 +58,7 @@ public class Character : MonoBehaviour
         for(int i = 0 ; i < characterModels.Count ; i++)
         {
             characterModels[i].characterModel.SetActive(i == index ? true : false);
-           
+
         }
         SelectedCharacterType = characterModels[index].characterType;
         currentCharacterModel = characterModels.Find(x => x.characterType == SelectedCharacterType);
@@ -69,8 +69,8 @@ public class Character : MonoBehaviour
         //We can use this data later
         characterData = characterScriptables.Find(x => x.characterModel.characterType == SelectedCharacterType);
         if(characterData)
-        characterData.DisplayStats();
-      
+            characterData.DisplayStats();
+
     }
     //True: Show character ,False: Hide character
     public void ShowModel(bool val)
@@ -83,6 +83,7 @@ public class Character : MonoBehaviour
     {
         currentCharacterModel.characterModel.SetActive(true);
     }
+
 }
 /// <summary>
 /// This class is used to hold the character type and character model object in the script

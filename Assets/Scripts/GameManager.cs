@@ -12,14 +12,25 @@ public class GameManager : MonoBehaviour
     public Vector3 blueSpawnLocation = new Vector3(-159,1,-152);
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform characterSpawnTranform;
-
+    public GameObject MinioinHealthBar;                                                 //Healthbar prefab for minions
+    public Transform MinionHealthbarsParent;                                            //Parent transform for minion healthbars
+    public Transform MeleeMinionParentContainer;                                        //Parent transform for melee minions
+    public Transform CasterMinionParentContainer;                                        //Parent transform for caster minions
+    public Transform CannonMinionParentContainer;                                        //Parent transform for cannon minions
     public GameObject characterPrefab;                                                  //Character prefab object for Instantiation
 
 
     public List<AttackButton> AttackButtons = new List<AttackButton>();               //Attack buttons reference
     public List<AttackType> AttackTypes = new List<AttackType>();                     //Attack types list
     public Character currentCharacter;                                               //Character script reference for current character
+    public bool canSpawnNextWave = true;                                            //Used to stop spawning waves or pause waves
     public static GameManager instance;                                              //Set instance of GameManage script
+
+    //Temp
+    public Vector3 CharacterLastPosition;                                           //Last position of character before death
+
+  
+
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
@@ -32,9 +43,16 @@ public class GameManager : MonoBehaviour
     Image RButton;                                                                  //RButton image reference 
     // Start is called before the first frame update
     [SerializeField]
-    TMPro.TMP_Dropdown QalityDropdown;                                              //Graphic quality dropdown 
-   
-   
+    TMPro.TMP_Dropdown QalityDropdown;                                              //Graphics quality dropdown 
+    int qLevel = 0;                                                                 //Graphics quality level index
+
+    [SerializeField]
+    float FirstWaveSpawnDelay=90f;                                                  //Delay time after which first wave should spawn (time in seconds)
+    [SerializeField]
+    float IntervalBetweenWaves = 30f;                                               //Time interval between waves (in seconds)
+    [SerializeField]
+    int SpawnCannonAfterWaves = 3;                                                  //Used to decide after how many waves the cannon should spawn
+    int WaveCounter=0;                                                              //Counts waves for calculations
     private void Awake()
     {
         if(instance == null) 
@@ -42,15 +60,21 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
     }
+    /// <summary>
+    /// Spawn character and set grahics quality level
+    /// </summary>
     void Start()
     {
-        Debug.LogError(QualitySettings.GetQualityLevel());
         //spawn character
         SpawnCharacter();
-        qLevel = 2;
-        QalityDropdown.value = qLevel;
+        qLevel = 2;                                         //Default graphics quality level-2 (Medium) : (0->VeryLow,1->Low,2->Medium,3->High,4->VeryHigh,5->Ultra
+        QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
+
+        StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
     }
-    int qLevel = 0;
+    /// <summary>
+    /// Change graphics quality level
+    /// </summary>
     public void ChangeQuality() 
     {
         qLevel = QalityDropdown.value;
@@ -62,9 +86,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SpawnTime();
+      //  SpawnTime();
     }
-
+    
 
     void SpawnTime()
     {
@@ -91,13 +115,13 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0 ; i < 3 ; i++)
         {
-            meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity);
+            meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
             meleeMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
 
             // Blue minions
             meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
 
-            meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity);
+            meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
             meleeMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
 
             // Red minions
@@ -112,13 +136,13 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0 ; i < 3 ; i++)
         {
-            casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity);
+            casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
             casterMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
 
             // Blue minions
             casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
 
-            casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity);
+            casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
             casterMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
 
             // Red minions
@@ -134,11 +158,11 @@ public class GameManager : MonoBehaviour
         {
             GameObject cannonMinion1;
 
-            cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity);
+            cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = true;
 
-            cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity);
+            cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = blueSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
 
@@ -151,7 +175,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SpawnCharacter()
     {
-        GameObject character = Instantiate(characterPrefab,characterSpawnTranform.position,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+        Vector3 spawnPosition = characterSpawnTranform.position;
+        if(CharacterLastPosition != Vector3.zero) 
+        {
+            spawnPosition = CharacterLastPosition;
+        }
+        GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
 
         Character characterScirpt = character.GetComponent<Character>();
         for(int i = 0 ; i < AttackButtons.Count ; i++)
@@ -201,7 +230,46 @@ public class GameManager : MonoBehaviour
     {
         currentCharacter.ChangeCharacter();
     }
-    
+    /// <summary>
+    /// Trigger die animation for current player character
+    /// </summary>
+    public void TriggerDieAnimation()
+    {
+        currentCharacter.playerScript.TriggerDeathAnimation();
+    }
+    /// <summary>
+    /// Trigger minion spawn after delay
+    /// </summary>
+    public IEnumerator MinionSpawnCoroutine()
+    {
+        yield return new WaitForSeconds(FirstWaveSpawnDelay);     //Wait for delay 
+       StartCoroutine(SpawnWave(0));  //Start firs wave
+    }
+    /// <summary>
+    /// Spawns minions after the given time interval
+    /// </summary>
+    public IEnumerator SpawnWave(float delay=-1f)
+    {
+        yield return new WaitForSeconds(delay!=-1?delay: IntervalBetweenWaves );  //If delay is specified then use it
+        if(canSpawnNextWave)
+        {
+            WaveCounter += 1;
+            MeleeMinionSpawn();
+            CasterMinionSpawn();
+
+            if(WaveCounter % SpawnCannonAfterWaves == 0)                // checks that if the wave is multiple of the given variable for spawning cannon or not
+            {
+                CannonMinionSpawn();
+            }
+            
+        }
+      StartCoroutine(SpawnWave());                              //Continue spawn coroutine                                             
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine(SpawnWave());   
+    }
 }
 //Handle attack buttton UI with this class
 [System.Serializable]

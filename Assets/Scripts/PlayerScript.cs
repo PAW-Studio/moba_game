@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
     public float rotateSpeedMovement = 0.1f;
     public Animator characterAnimator;                                                             //Character Animator
     //public CharacterController characterController;                                                //Character Controller 
+    public AttackType currentActiveAnimation= AttackType.None;                                                  //Current Active attack animation
     float rotateVelocity;
 
     [SerializeField] private float _speed = 1;                                                     //Movemnt speed
@@ -24,7 +25,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     float R_Attack_ActiveTime = 5f;                                                                //Duration till the R attack is active
     Character character;
-    float R_Attack_CooldownTime = 10f;
+    float R_Attack_CooldownTime = 10f;                                                             //Cooldown time after "R" is deactivated
+
+    //Used to decide what should be the next attack in case of left and right attacks
+    bool lastAutoAttackWasLeft = true;
+
+    //Animation movement speed will be increased using this modifier :Speed can be set from character scriptable object ,default speed can be adjusted from here
+    float AnimationMovementSpeedModifier = 1.5f;
+    float defaultModifierValue = 1.5f;
+    
     // Set references 
     void Start()
     {
@@ -35,7 +44,7 @@ public class PlayerScript : MonoBehaviour
         character = GetComponent<Character>();
     }
 
-
+    public bool moving = false;
     // Update is called once per frame
     void Update()
     {
@@ -73,28 +82,23 @@ public class PlayerScript : MonoBehaviour
         //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
-        var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
-        vel.y = _rb.velocity.y;
-        _rb.velocity = vel;
         
-        //-
+        if(moving) //If animation with movement then auto move rigidbody
+        {
+            Debug.LogError(AnimationMovementSpeedModifier);  
+            var vel2 = transform.forward* _speed*AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
+            vel2.y = _rb.velocity.y;
+            _rb.velocity = vel2;
+        }
+        else //Move character with respect to josystick
+        {
+            var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
+            vel.y = _rb.velocity.y;
+            _rb.velocity = vel;
+        }
 
-        //if(characterAnimator)
-        //{
-        //    if(attack)
-        //    {
-        //        // attack = false;
-        //        characterAnimator.SetBool("attack_E",true);
-        //    }
-        //    if(off)
-        //    {
-        //        off = true;
-        //    }
-        //}
     }
 
-    bool attack = false, off = false;
-    bool lastAutoAttackWasLeft = true;
     /// <summary>
     /// Attack button functionality: 
     /// </summary>
@@ -102,6 +106,8 @@ public class PlayerScript : MonoBehaviour
     /// <param name="attackType">Attack type of character</param>
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
+        bool OtrillRActivated = false; //Used to detect "R" click
+
         Debug.LogError(attackType + "  Character : " + (character.currentCharacterModel.characterType));
         //Check for special attack instead of animation
         if(character.currentCharacterModel.characterType == CharacterType.Hakka)
@@ -135,8 +141,10 @@ public class PlayerScript : MonoBehaviour
                 Debug.LogError(attackType);
                 Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime+R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                OtrillRActivated = true;
+                GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Mele";
             }
-           else if(attackType == AttackType.auto)
+            else if(attackType == AttackType.auto)
             {
                 if(Attack_R_IsAtcitve) 
                 {
@@ -151,23 +159,22 @@ public class PlayerScript : MonoBehaviour
             if(attackType == AttackType.r)
             { //Invisible effect
               // character.ShowModel(false);
-                foreach(Transform item in character.gameObject.transform)
-                {
-                    if(item.GetComponent<MeshRenderer>())
-                    {
-                        foreach(Material m in item.GetComponent<MeshRenderer>().materials)
-                        {
-                            Color c = m.color;
-                            c.a = 0.5f;
-                            m.color = c;
-                        }
-                    }
-                }
             }
         }
-        //Trigger attack animation
-        characterAnimator.SetBool(attackType.ToString(),true);
-        StartCoroutine(SetBoolOff(attackType,0.2f));
+
+        if(character.currentCharacterModel.characterType == CharacterType.Otrill && OtrillRActivated)
+        {
+            OtrillRActivated = false;
+        }
+        else
+        {
+            if(characterAnimator)
+            { //Trigger attack animation
+                characterAnimator.SetBool(attackType.ToString(),true);
+                StartCoroutine(SetBoolOff(attackType,0.2f));
+            }
+        }
+
     }
     /// <summary>
     /// Set bull parameter of animator false
@@ -194,6 +201,7 @@ public class PlayerScript : MonoBehaviour
     public void ResetRAttackIndicator()
     {
         Attack_R_IsAtcitve = false;
+        GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Auto";
     }
     //Reset after cool down time
     public void ResetRAttackCoolDownIndicator()
@@ -206,6 +214,51 @@ public class PlayerScript : MonoBehaviour
     {
         CancelInvoke();
     }
+    /// <summary>
+    /// Triggers death animation of character 
+    /// </summary>
+    public void TriggerDeathAnimation() 
+    {
+        characterAnimator.SetBool("die",true);
+        Invoke("SetDeathBoolOff",0.3f);
+    }
+    /// <summary>
+    /// Reset death animation bool to avoid death animation loop
+    /// </summary>
+    public void SetDeathBoolOff() 
+    {
+        characterAnimator.SetBool("die",false);
+    }
+    /// <summary>
+    /// Destory character gameobject 
+    /// </summary>
+    public void CharacterDie() 
+    {
+        GameManager.instance.CharacterLastPosition = transform.position;
+        GameManager.instance.SpawnCharacter();      //Temp for development spawn character after destroy
+        Destroy(this.gameObject);
+    }
+    /// <summary>
+    /// Set animation movement modifier speed with respect to character and animation type
+    /// </summary>
+    /// <param name="_currentActiveAnimation">current animation type</param>
+    public void SetAnimationMovementSpeedModifier(AttackType _currentActiveAnimation) 
+    {
+        currentActiveAnimation = _currentActiveAnimation;
+        AnimationMovementSpeedModifier = character.characterData != null && currentActiveAnimation != AttackType.None ? character.characterData.attackAnimationDetails.Find(x => x.attackType == currentActiveAnimation).movementSpeedModifier :defaultModifierValue;
+       
+    }
+    /// <summary>
+    /// Reset animation movement modifier value to default
+    /// </summary>
+    public void ResetAnimationMovementSpeedModifier()
+    {
+        currentActiveAnimation = AttackType.None;
+        AnimationMovementSpeedModifier = defaultModifierValue;
+    }
 }
-//Player attack types 
-public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight }
+/// <summary>
+/// Character attack types
+/// </summary>
+[System.Serializable]
+public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight ,None,DieAnimation}
