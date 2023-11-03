@@ -57,18 +57,28 @@ public class AnimationMovementManager : MonoBehaviour
 
         foreach(MinionAIScript target in HitList)
         {
-            Debug.LogError("*Minion Hit :");
-            target.DealDamage(25); //Temp 25 for now
+            Debug.LogError("*Minion Hit :"); 
+            //Get value with respect to attack type from character data 
+            int damage = playerScript.GetComponent<Character>().characterData.attackDamageDetails.Find(x => x.attackType == playerScript.currentAttackType).DamageValue;
+            target.DealDamage(damage);
         }
+        playerScript.currentAttackType = AttackType.None;  //Reset attack type
         HitList.Clear();
 
     }
 
-    
-    public void SetAttackIndicator() 
+    /// <summary>
+    /// Set current attack type and bool variable to indicate that player is attacking -This method is called from animation clips 
+    /// </summary>
+    /// <param name="_attackType">Current attack type</param>
+    public void SetAttackIndicator(AttackType _attackType) 
     {
         Attacking = true;
+        playerScript.currentAttackType = _attackType;
     }
+    /// <summary>
+    /// Reset attack indicator bool
+    /// </summary>
     public void ResetAttackIndicator()
     {
         Attacking = false;

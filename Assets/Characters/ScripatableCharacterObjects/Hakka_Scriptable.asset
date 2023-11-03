@@ -21,6 +21,13 @@ MonoBehaviour:
     movementSpeedModifier: 2
   - attackType: 3
     movementSpeedModifier: 1.5
+  attackDamageDetails:
+  - attackType: 4
+    DamageValue: 25
+  - attackType: 2
+    DamageValue: 50
+  - attackType: 3
+    DamageValue: 100
   championName: Hakka
   summonerName: 
   baseHealth: 670

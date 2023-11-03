@@ -11,6 +11,7 @@ public class CharacterScriptable : ScriptableObject
     public CharacterModels characterModel;                               //Character FBX model (Idle -fbx model)
 
     public List<AttackAnimationDetails> attackAnimationDetails = new List<AttackAnimationDetails>();  //Attack type and movement speed details -used to set movement speed character as well as attack type wise dynamically 
+    public List<AttackDamageDetails> attackDamageDetails = new List<AttackDamageDetails>();   //List of attack types and respective damages values that can be done
     //Base and growth
     public string championName = "";                                    //Name of character
     public string summonerName = "";
@@ -226,5 +227,14 @@ public class AttackAnimationDetails
 {
     public AttackType attackType;
     public float movementSpeedModifier = 1f;
-    public int DamageValue=25;
+   // public int DamageValue=25;
+}
+/// <summary>
+/// Used to hold the values of attack type and damange that can be done 
+/// </summary>
+[System.Serializable]
+public class AttackDamageDetails
+{
+    public AttackType attackType;
+    public int DamageValue = 25;
 }

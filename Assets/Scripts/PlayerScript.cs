@@ -9,7 +9,8 @@ public class PlayerScript : MonoBehaviour
     public float rotateSpeedMovement = 0.1f;
     public Animator characterAnimator;                                                             //Character Animator
     //public CharacterController characterController;                                                //Character Controller 
-    public AttackType currentActiveAnimation= AttackType.None;                                                  //Current Active attack animation
+    public AttackType currentActiveAnimation= AttackType.None;                                       //Current Active attack animation
+    public AttackType currentAttackType;                                                             //track current attack type
     float rotateVelocity;
 
     [SerializeField] private float _speed = 1;                                                     //Movemnt speed

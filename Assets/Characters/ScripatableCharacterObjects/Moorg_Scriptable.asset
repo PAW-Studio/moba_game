@@ -19,6 +19,11 @@ MonoBehaviour:
   attackAnimationDetails:
   - attackType: 2
     movementSpeedModifier: 2
+  attackDamageDetails:
+  - attackType: 4
+    DamageValue: 25
+  - attackType: 2
+    DamageValue: 50
   championName: Moorg
   summonerName: 
   baseHealth: 670
