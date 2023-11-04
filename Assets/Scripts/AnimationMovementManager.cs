@@ -125,5 +125,5 @@ public class CollisionDetectorObject
 /// </summary>
 public enum DamageType 
 {
-   None,Normal, Area
+   None,Normal, Area,LeftNormal,RightNormal
 }
