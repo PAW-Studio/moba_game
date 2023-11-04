@@ -86,7 +86,6 @@ public class PlayerScript : MonoBehaviour
         
         if(moving) //If animation with movement then auto move rigidbody
         {
-            Debug.LogError(AnimationMovementSpeedModifier);  
             var vel2 = transform.forward* _speed*AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
             vel2.y = _rb.velocity.y;
             _rb.velocity = vel2;

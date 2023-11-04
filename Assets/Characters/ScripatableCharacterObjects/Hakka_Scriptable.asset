@@ -28,6 +28,8 @@ MonoBehaviour:
     DamageValue: 50
   - attackType: 3
     DamageValue: 100
+  - attackType: 1
+    DamageValue: 75
   championName: Hakka
   summonerName: 
   baseHealth: 670
