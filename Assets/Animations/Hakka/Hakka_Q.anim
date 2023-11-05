@@ -75442,6 +75442,34 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
+  - time: 0.8666667
+    functionName: SetDamageType
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 2
+    messageOptions: 0
+  - time: 0.9
+    functionName: SetAttackIndicator
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
+  - time: 1.2
+    functionName: ResetAttackIndicator
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.3333334
+    functionName: DetectHit
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.5
     functionName: SetMovementOff
     data: 
