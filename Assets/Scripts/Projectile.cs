@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Projectile : MonoBehaviour
+{
+    public float speed=5f;                                                     //Projectile speed
+    public bool shoot;                                                         //Set true to shoot this projectile
+    public float lifeTime=2f;                                                  //Life time of projectile
+    float timePassed = 0;                                                      //Time passed from shooting time
+    public GameObject projectileColliderOjbect;                                //Collider object of this projectile to detect hit    
+   
+    /// <summary>
+    /// Move projectile in forward direction and detect hit, destroy on hit or when life time is over
+    /// </summary>
+    void Update()
+    {
+        if(shoot)
+        {
+           Collider[] hits = Physics.OverlapSphere(projectileColliderOjbect.transform.position,5f);
+            bool hit = false;
+            foreach(Collider item in hits)
+            {
+                if(item.GetComponent<MinionAIScript>()) 
+                {
+                    item.GetComponent<MinionAIScript>().DealDamage(25);
+                    hit = true;
+                    break;
+                }
+            }
+            transform.Translate(transform.forward*speed*Time.deltaTime,Space.World);
+            timePassed += Time.deltaTime;
+            if(timePassed > lifeTime || hit) 
+            {
+                Destroy(this.gameObject);
+            }
+        }
+    }
+    /// <summary>
+    /// Trigger movement of projectile
+    /// </summary>
+    public void Shoot() 
+    {
+        shoot = true;
+
+    }
+}
+

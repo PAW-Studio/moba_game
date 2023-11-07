@@ -13,6 +13,13 @@ public class AnimationMovementManager : MonoBehaviour
     public List<MinionAIScript> HitList = new List<MinionAIScript>();    
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
+
+    [Header("Throw/Shootable projectile")]
+    public GameObject ArrowPrefab;                                          //Arrow prefab
+    public Transform spawnTrasform;                                         //Arrow spawn transform
+    public Projectile arrowProjectile;                                      //Reference script of arrow projectile
+   
+
     private void OnEnable()
     {
         // startPosition = transform.position;
@@ -108,6 +115,25 @@ public class AnimationMovementManager : MonoBehaviour
     public CollisionDetector GetCollionsDetectorObject()
     {
       return  collisionDetectorObjects.Find(x => x.damageType == currentAttackDamangeType).collisionDetector;
+    }
+    /// <summary>
+    /// Spawn arrow/other throwable /shootable projectile : This method is called from animation clip 
+    /// </summary>
+    public void SpawnArrow() 
+    {
+        GameObject arrow = Instantiate(ArrowPrefab,spawnTrasform.parent);
+        arrowProjectile = arrow.GetComponent<Projectile>();
+    }
+    /// <summary>
+    /// Set shoot boolean in projectile script and shoot : This method is called from animation clip 
+    /// </summary>
+    public void ShootArrow() 
+    {
+        if(arrowProjectile) 
+        {
+            arrowProjectile.transform.SetParent(playerScript.transform.parent);
+            arrowProjectile.Shoot();
+        }
     }
 }
 [System.Serializable]

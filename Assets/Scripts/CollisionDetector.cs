@@ -32,6 +32,12 @@ public class CollisionDetector : MonoBehaviour
             case DamageType.Area:
                 hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,AreadDamageDistance);  // Sphere area covered
                 break;
+            case DamageType.LeftNormal:
+                hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,3f);
+                break;
+            case DamageType.RightNormal:
+                hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,3f);
+                break;
             default:
                 break;
         }
