@@ -14,8 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterModel:
     characterType: 0
-    characterModel: {fileID: 919132149155446097, guid: 5126a15eb752029468911d406991e083,
+    characterModel: {fileID: 919132149155446097, guid: 128a3f3fea9465441975124a64cad902,
       type: 3}
+  attackAnimationDetails: []
+  attackDamageDetails: []
+  attackCoolDownDetails:
+  - attackType: 1
+    coolDownBaseValue: 11
+    coolDownformula: -0.75
+    modifier: 0
+  - attackType: 0
+    coolDownBaseValue: 20
+    coolDownformula: -2
+    modifier: 0
+  - attackType: 2
+    coolDownBaseValue: 14
+    coolDownformula: -1.5
+    modifier: 0
+  - attackType: 3
+    coolDownBaseValue: 120
+    coolDownformula: -15
+    modifier: 0
   championName: Otrill
   summonerName: 
   baseHealth: 670

@@ -265,7 +265,19 @@ public class GameManager : MonoBehaviour
         }
       StartCoroutine(SpawnWave());                              //Continue spawn coroutine                                             
     }
-
+    /// <summary>
+    /// Starts coroutine for attack cooldown timer and image update
+    /// </summary>
+    /// <param name="activeTime">attack active time</param>
+    /// <param name="timerValue">cooldown time</param>
+    /// <param name="attackType">current attack type</param>
+    public void StartTimeTextUpdate(float activeTime,float timerValue,AttackType attackType) 
+    {
+       StartCoroutine( AttackButtons.Find(x => x.attackType == attackType).UpdateTimerText(activeTime,timerValue));
+    }
+    /// <summary>
+    /// Stop coroutine on disable
+    /// </summary>
     private void OnDisable()
     {
         StopCoroutine(SpawnWave());   
@@ -275,7 +287,65 @@ public class GameManager : MonoBehaviour
 [System.Serializable]
 public class AttackButton 
 {
-    public AttackType attackType;
-    public Button button;
-    public Image ActiveIndicator;
+    public AttackType attackType;                           //Type of attack
+    public Button button;                                   //Button object for this attack
+    public Image ActiveIndicator;                           //Image that indicates that attack is active    
+    public GameObject DeactiveIndicator;                    //Gameobject that covers attack button while the attack is on cooldown
+    public TMPro.TextMeshProUGUI coolDownTimer;             //Remaining time display object while cooldown is on
+    public TMPro.TextMeshProUGUI attackName;                //Object reference for attack name text 
+    /// <summary>
+    /// Update remaining time text on button while attack button is on cooldown
+    /// </summary>
+    /// <param name="val">coolddown time</param>
+    public void UpdateTime(float val) 
+    {
+        string timerText = "";
+        if(val > 1)
+        {
+            timerText =System.Convert.ToInt32(val).ToString();
+            Debug.LogError(timerText);
+        }
+        else
+        {          
+            timerText = val.ToString("F1");
+        }
+        coolDownTimer.text = timerText.ToString();
+    }
+    /// <summary>
+    /// Method to trigger coroutine for continuously update remaining time and image fill amount 
+    /// </summary>
+    /// <param name="activeTime">activet time of attack</param>
+    /// <param name="timerValue">cooldown time value</param>
+    public void StartTimerUpdateCoroutine(float activeTime,float timerValue) 
+    {
+        GameManager.instance.StartTimeTextUpdate(activeTime,timerValue,attackType);     
+    }
+    /// <summary>
+    /// Updates timer text and image fill amount of attack button while button is on cooldown mode
+    /// </summary>
+    /// <param name="activeTime">active time of attack</param>
+    /// <param name="delay">coold down time</param>
+    /// <returns></returns>
+    public IEnumerator UpdateTimerText(float activeTime,float delay)
+    {
+        yield return new WaitForSeconds(activeTime);
+        attackName.gameObject.SetActive(false);
+        coolDownTimer.gameObject.SetActive(true);
+        Image InactiveImage = DeactiveIndicator.GetComponent<Image>();
+        InactiveImage.fillAmount = 1;
+        float time = delay;
+        while(time > 0)
+        {
+           // float timeRemaining = Mathf.Lerp(time,0,time / delay);
+            float InactiveImageFill = Mathf.Lerp(0,1,time / delay);
+            InactiveImage.fillAmount = InactiveImageFill;
+            time -= Time.deltaTime;
+            UpdateTime(time);
+            yield return null;
+        }
+        UpdateTime(0);
+        InactiveImage.fillAmount = 0;
+        coolDownTimer.gameObject.SetActive(false);
+        attackName.gameObject.SetActive(true);
+    }
 }

@@ -30,6 +30,23 @@ MonoBehaviour:
     DamageValue: 100
   - attackType: 1
     DamageValue: 75
+  attackCoolDownDetails:
+  - attackType: 1
+    coolDownBaseValue: 3
+    coolDownformula: 0
+    modifier: 0
+  - attackType: 0
+    coolDownBaseValue: 22
+    coolDownformula: -1
+    modifier: 0
+  - attackType: 2
+    coolDownBaseValue: 12
+    coolDownformula: -1
+    modifier: 0
+  - attackType: 3
+    coolDownBaseValue: 85
+    coolDownformula: 0
+    modifier: 0
   championName: Ranzeb
   summonerName: 
   baseHealth: 670
@@ -61,4 +78,4 @@ MonoBehaviour:
   currentLevel: 0
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: OtrillAnimator
+  CharacterAnimatorName: RanzebAnimator

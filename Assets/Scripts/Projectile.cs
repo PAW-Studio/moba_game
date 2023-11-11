@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     float timePassed = 0;                                                      //Time passed from shooting time
     public GameObject projectileColliderOjbect;                                //Collider object of this projectile to detect hit    
    
+     
     /// <summary>
     /// Move projectile in forward direction and detect hit, destroy on hit or when life time is over
     /// </summary>
@@ -17,6 +18,7 @@ public class Projectile : MonoBehaviour
     {
         if(shoot)
         {
+
            Collider[] hits = Physics.OverlapSphere(projectileColliderOjbect.transform.position,5f);
             bool hit = false;
             foreach(Collider item in hits)
@@ -42,6 +44,7 @@ public class Projectile : MonoBehaviour
     public void Shoot() 
     {
         shoot = true;
+        Debug.DrawRay(transform.position,transform.forward * 130,Color.blue,10f);
 
     }
 }

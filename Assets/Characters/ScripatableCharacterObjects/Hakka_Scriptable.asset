@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterModel:
     characterType: 6
-    characterModel: {fileID: 919132149155446097, guid: 128a3f3fea9465441975124a64cad902,
+    characterModel: {fileID: 919132149155446097, guid: 417e9776a91bf224eae37873939d6ea4,
       type: 3}
   attackAnimationDetails:
   - attackType: 1
@@ -30,6 +30,23 @@ MonoBehaviour:
     DamageValue: 100
   - attackType: 1
     DamageValue: 75
+  attackCoolDownDetails:
+  - attackType: 0
+    coolDownBaseValue: 14
+    coolDownformula: -1
+    modifier: 1
+  - attackType: 0
+    coolDownBaseValue: 0
+    coolDownformula: 0
+    modifier: 1
+  - attackType: 0
+    coolDownBaseValue: 0
+    coolDownformula: 0
+    modifier: 1
+  - attackType: 0
+    coolDownBaseValue: 0
+    coolDownformula: 0
+    modifier: 1
   championName: Hakka
   summonerName: 
   baseHealth: 670
@@ -61,4 +78,4 @@ MonoBehaviour:
   currentLevel: 0
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: OtrillAnimator
+  CharacterAnimatorName: HakkaAnimator

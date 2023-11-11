@@ -13,7 +13,7 @@ public class AnimationMovementManager : MonoBehaviour
     public List<MinionAIScript> HitList = new List<MinionAIScript>();    
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
-
+    public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
     [Header("Throw/Shootable projectile")]
     public GameObject ArrowPrefab;                                          //Arrow prefab
     public Transform spawnTrasform;                                         //Arrow spawn transform
@@ -144,6 +144,15 @@ public class CollisionDetectorObject
 {
   public CollisionDetector collisionDetector;  //reference script of collision detector object
   public DamageType damageType;               //damage type on collision
+}
+/// <summary>
+/// Used to set different spawn positions and projectiles with respect to attack
+/// </summary>
+public class ProjectileSpawnDetails
+{
+    public Transform projectileSpawnPosition;  //spawn position of projectile 
+    public GameObject projectilePrefab;        //Projectile to  shoot
+    public AttackType AttackType;               //damage type on collision
 }
 [System.Serializable]
 /// <summary>

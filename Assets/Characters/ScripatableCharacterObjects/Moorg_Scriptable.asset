@@ -24,6 +24,27 @@ MonoBehaviour:
     DamageValue: 25
   - attackType: 2
     DamageValue: 50
+  attackCoolDownDetails:
+  - attackType: 1
+    ActiveTime: 2
+    coolDownBaseValue: 7.5
+    coolDownformula: -1
+    modifier: 0
+  - attackType: 0
+    ActiveTime: 2
+    coolDownBaseValue: 9
+    coolDownformula: 0
+    modifier: 0
+  - attackType: 2
+    ActiveTime: 0
+    coolDownBaseValue: 24
+    coolDownformula: -2.5
+    modifier: 0
+  - attackType: 3
+    ActiveTime: 2
+    coolDownBaseValue: 180
+    coolDownformula: -15
+    modifier: 0
   championName: Moorg
   summonerName: 
   baseHealth: 670
@@ -55,4 +76,4 @@ MonoBehaviour:
   currentLevel: 0
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: OtrillAnimator
+  CharacterAnimatorName: MoorgAnimator

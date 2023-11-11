@@ -13,6 +13,8 @@ public class CharacterScriptable : ScriptableObject
     public List<AttackAnimationDetails> attackAnimationDetails = new List<AttackAnimationDetails>();  //Attack type and movement speed details -used to set movement speed character as well as attack type wise dynamically 
     public List<AttackDamageDetails> attackDamageDetails = new List<AttackDamageDetails>();   //List of attack types and respective damages values that can be done
     //Base and growth
+    public List<AttackCoolDownDetails> attackCoolDownDetails = new List<AttackCoolDownDetails>(); //Cooldown timings with resepect to attack type
+
     public string championName = "";                                    //Name of character
     public string summonerName = "";
 
@@ -213,6 +215,28 @@ public class CharacterScriptable : ScriptableObject
             + "Current Health: " + currentHealth + ";"
             + "Current AD: " + currentAD + "\n ");
     }
+    /// <summary>
+    /// Get cooldown time for the attack
+    /// </summary>
+    /// <param name="attackType">attack type</param>
+    /// <returns>cooldown time for the attack</returns>
+    public float GetCoolDownTime(AttackType attackType)
+    {
+        float cooldowntime = 0;
+        cooldowntime = attackCoolDownDetails.Find(x => x.attackType == attackType).GetCoolDowntime(currentLevel);
+        return cooldowntime;
+    }
+    /// <summary>
+    /// Get actvie time of the attack
+    /// </summary>
+    /// <param name="attackType">attack type</param>
+    /// <returns>Active time for the attack</returns>
+    public float GetActiveTime(AttackType attackType)
+    {
+        float ActiveTime = 1f;
+        ActiveTime = attackCoolDownDetails.Find(x => x.attackType == attackType).ActiveTime;
+        return ActiveTime;
+    }
 }
 /// <summary>
 /// characters : this enum is used to decide the character and model is set based on this type
@@ -238,3 +262,29 @@ public class AttackDamageDetails
     public AttackType attackType;
     public int DamageValue = 25;
 }
+/// <summary>
+/// Used to hold the values of attack type and cooldownFormula
+/// </summary>
+[System.Serializable]
+public class AttackCoolDownDetails
+{
+    public AttackType attackType;
+    public float ActiveTime = 2f;
+    public float coolDownBaseValue = 0;         //Cooldown value for character level 1
+    public float coolDownformula = 0;           //Cooldwon formula -example level 1->12, level-> 11 ,formula : basevalue+(cooldownformula*characterlevel)
+    public float modifier = 0;                  
+    /// <summary>
+    /// Get cooldown timing for current level of chracter 
+    /// </summary>
+    /// <param name="characterLevel">character level</param>
+    /// <returns>cooldown time for attack</returns>
+    public float GetCoolDowntime(double characterLevel) 
+    {
+        float cooldownValue = coolDownBaseValue + (coolDownformula * (int)characterLevel);
+        return  cooldownValue <0 ?0:cooldownValue;     //return zero if less then zero
+        //Example base value 12  ,cooldown formula=-1, chracter level 1 
+        //(12 + (-1 *1)= 12-1=  11  ->cooldown value
+
+    }
+}
+

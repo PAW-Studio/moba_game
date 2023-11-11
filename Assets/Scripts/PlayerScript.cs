@@ -9,7 +9,7 @@ public class PlayerScript : MonoBehaviour
     public float rotateSpeedMovement = 0.1f;
     public Animator characterAnimator;                                                             //Character Animator
     //public CharacterController characterController;                                                //Character Controller 
-    public AttackType currentActiveAnimation= AttackType.None;                                       //Current Active attack animation
+    public AttackType currentActiveAnimation = AttackType.None;                                       //Current Active attack animation
     public AttackType currentAttackType;                                                             //track current attack type
     float rotateVelocity;
 
@@ -23,6 +23,17 @@ public class PlayerScript : MonoBehaviour
     float currentVelocity;                                                                         //Current velocity
     bool Attack_R_IsAtcitve = false;                                                                 //True if R attack is active 
     bool Attack_R_CoolDown = false;                                                                 //True if waiting for cool down after "R" attack
+
+    bool Attack_Q_IsAtcitve = false;                                                                 //True if Q attack is active 
+    bool Attack_Q_CoolDown = false;                                                                 //True if waiting for cool down after "Q" attack
+
+    bool Attack_W_IsAtcitve = false;                                                                 //True if W attack is active 
+    bool Attack_W_CoolDown = false;                                                                 //True if waiting for cool down after "W" attack
+
+    bool Attack_E_IsAtcitve = false;                                                                 //True if E attack is active 
+    bool Attack_E_CoolDown = false;                                                                 //True if waiting for cool down after "E" attack
+
+
     [SerializeField]
     float R_Attack_ActiveTime = 5f;                                                                //Duration till the R attack is active
     Character character;
@@ -34,7 +45,7 @@ public class PlayerScript : MonoBehaviour
     //Animation movement speed will be increased using this modifier :Speed can be set from character scriptable object ,default speed can be adjusted from here
     float AnimationMovementSpeedModifier = 1.5f;
     float defaultModifierValue = 1.5f;
-    
+
     // Set references 
     void Start()
     {
@@ -79,14 +90,14 @@ public class PlayerScript : MonoBehaviour
                 this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
             }
         }
-       
+
         //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
         //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
-        
+
         if(moving) //If animation with movement then auto move rigidbody
         {
-            var vel2 = transform.forward* _speed*AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
+            var vel2 = transform.forward * _speed * AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
             vel2.y = _rb.velocity.y;
             _rb.velocity = vel2;
         }
@@ -107,8 +118,6 @@ public class PlayerScript : MonoBehaviour
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
         bool OtrillRActivated = false; //Used to detect "R" click
-
-        Debug.LogError(attackType + "  Character : " + (character.currentCharacterModel.characterType));
         //Check for special attack instead of animation
         if(character.currentCharacterModel.characterType == CharacterType.Hakka)
         {
@@ -131,22 +140,23 @@ public class PlayerScript : MonoBehaviour
         {
             if(attackType == AttackType.r)
             {
-                if(Attack_R_IsAtcitve|| Attack_R_CoolDown) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
                 Debug.LogError("Start");
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
                 attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
                 Debug.LogError(attackType);
                 Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
-                Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime+R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime + R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
                 OtrillRActivated = true;
                 GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Mele";
             }
             else if(attackType == AttackType.auto)
             {
-                if(Attack_R_IsAtcitve) 
+                if(Attack_R_IsAtcitve)
                 {
                     //Auto become R-left and R-right while R is active
                     attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
@@ -156,9 +166,69 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Moorg)
         {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                Debug.LogError("Start");
+                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+               
+               
+              StartCoroutine(ResetAttackIndicator( R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+               StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime ,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime , R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime , R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
             if(attackType == AttackType.r)
-            { //Invisible effect
-              // character.ShowModel(false);
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime , R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
         }
 
@@ -209,6 +279,85 @@ public class PlayerScript : MonoBehaviour
         Attack_R_CoolDown = false;
         Debug.LogError("Stop");
     }
+
+    //Reset indicator boolean of attack
+    public IEnumerator ResetAttackIndicator(float delay,AttackType attackType)
+    {
+        yield return new WaitForSeconds(delay);
+        switch(attackType)
+        {
+            case AttackType.w:
+                Attack_W_IsAtcitve = false;
+                break;
+            case AttackType.q:
+                Attack_Q_IsAtcitve = false;
+                break;
+            case AttackType.e:
+                Attack_E_IsAtcitve = false;
+                break;
+            case AttackType.r:
+                Attack_R_IsAtcitve = false;
+                break;
+            case AttackType.auto:
+                break;
+            case AttackType.left:
+                break;
+            case AttackType.right:
+                break;
+            case AttackType.rLeft:
+                break;
+            case AttackType.rRight:
+                break;
+            case AttackType.None:
+                break;
+            case AttackType.DieAnimation:
+                break;
+            default:
+                break;
+        }
+       
+    }
+
+    //Reset cooldown boolean of attack
+    public IEnumerator ResetCoolDownAttackIndicator(float delayActiveTime,float delayCoolDownTime,AttackType attackType)
+    {
+        float delay = delayActiveTime + delayCoolDownTime;
+        //Start cooldown timer
+        GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).StartTimerUpdateCoroutine(delayActiveTime,delayCoolDownTime);  
+        yield return new WaitForSeconds(delay);
+        switch(attackType)
+        {
+            case AttackType.w:
+               Attack_W_CoolDown = false;
+                break;
+            case AttackType.q:
+                Attack_Q_CoolDown = false;
+                break;
+            case AttackType.e:
+                 Attack_E_CoolDown = false;
+                break;
+            case AttackType.r:
+                 Attack_R_CoolDown = false;
+                break;
+            case AttackType.auto:
+                break;
+            case AttackType.left:
+                break;
+            case AttackType.right:
+                break;
+            case AttackType.rLeft:
+                break;
+            case AttackType.rRight:
+                break;
+            case AttackType.None:
+                break;
+            case AttackType.DieAnimation:
+                break;
+            default:
+                break;
+        }
+        GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(false);
+    }
     //Cancel all invokes when object is destroyed
     private void OnDestroy()
     {
@@ -217,7 +366,7 @@ public class PlayerScript : MonoBehaviour
     /// <summary>
     /// Triggers death animation of character 
     /// </summary>
-    public void TriggerDeathAnimation() 
+    public void TriggerDeathAnimation()
     {
         characterAnimator.SetBool("die",true);
         Invoke("SetDeathBoolOff",0.3f);
@@ -225,14 +374,14 @@ public class PlayerScript : MonoBehaviour
     /// <summary>
     /// Reset death animation bool to avoid death animation loop
     /// </summary>
-    public void SetDeathBoolOff() 
+    public void SetDeathBoolOff()
     {
         characterAnimator.SetBool("die",false);
     }
     /// <summary>
     /// Destory character gameobject 
     /// </summary>
-    public void CharacterDie() 
+    public void CharacterDie()
     {
         GameManager.instance.CharacterLastPosition = transform.position;
         GameManager.instance.SpawnCharacter();      //Temp for development spawn character after destroy
@@ -242,11 +391,11 @@ public class PlayerScript : MonoBehaviour
     /// Set animation movement modifier speed with respect to character and animation type
     /// </summary>
     /// <param name="_currentActiveAnimation">current animation type</param>
-    public void SetAnimationMovementSpeedModifier(AttackType _currentActiveAnimation) 
+    public void SetAnimationMovementSpeedModifier(AttackType _currentActiveAnimation)
     {
         currentActiveAnimation = _currentActiveAnimation;
-        AnimationMovementSpeedModifier = character.characterData != null && currentActiveAnimation != AttackType.None ? character.characterData.attackAnimationDetails.Find(x => x.attackType == currentActiveAnimation).movementSpeedModifier :defaultModifierValue;
-       
+        AnimationMovementSpeedModifier = character.characterData != null && currentActiveAnimation != AttackType.None ? character.characterData.attackAnimationDetails.Find(x => x.attackType == currentActiveAnimation).movementSpeedModifier : defaultModifierValue;
+
     }
     /// <summary>
     /// Reset animation movement modifier value to default
@@ -261,4 +410,4 @@ public class PlayerScript : MonoBehaviour
 /// Character attack types
 /// </summary>
 [System.Serializable]
-public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight ,None,DieAnimation}
+public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight, None, DieAnimation }
