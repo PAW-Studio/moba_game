@@ -27,24 +27,52 @@ MonoBehaviour:
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
-    coolDownBaseValue: 7.5
-    coolDownformula: -1
-    modifier: 0
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 7.5
+    - level: 2
+      cooldownValue: 6.5
+    - level: 3
+      cooldownValue: 5.5
+    - level: 4
+      cooldownValue: 4.5
+    - level: 5
+      cooldownValue: 3.5
   - attackType: 0
     ActiveTime: 2
-    coolDownBaseValue: 9
-    coolDownformula: 0
-    modifier: 0
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 9
+    - level: 2
+      cooldownValue: 9
+    - level: 3
+      cooldownValue: 9
+    - level: 4
+      cooldownValue: 9
+    - level: 5
+      cooldownValue: 9
   - attackType: 2
     ActiveTime: 0
-    coolDownBaseValue: 24
-    coolDownformula: -2.5
-    modifier: 0
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 24
+    - level: 2
+      cooldownValue: 21.5
+    - level: 3
+      cooldownValue: 19
+    - level: 4
+      cooldownValue: 16.5
+    - level: 5
+      cooldownValue: 14
   - attackType: 3
     ActiveTime: 2
-    coolDownBaseValue: 180
-    coolDownformula: -15
-    modifier: 0
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 180
+    - level: 2
+      cooldownValue: 165
+    - level: 3
+      cooldownValue: 150
   championName: Moorg
   summonerName: 
   baseHealth: 670

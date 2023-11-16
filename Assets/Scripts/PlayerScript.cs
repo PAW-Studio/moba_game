@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+
 public class PlayerScript : MonoBehaviour
 {
     NavMeshAgent agent;
@@ -119,31 +121,33 @@ public class PlayerScript : MonoBehaviour
     {
         bool OtrillRActivated = false; //Used to detect "R" click
         //Check for special attack instead of animation
-        if(character.currentCharacterModel.characterType == CharacterType.Hakka)
-        {
-            if(attackType == AttackType.auto)
-            {
-                attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
-                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
-            }
-        }
-        else if(character.currentCharacterModel.characterType == CharacterType.Tapani)
-        {
-            if(attackType == AttackType.auto)
-            {
-                attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
-                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
-            }
-            Debug.LogError(attackType);
-        }
-        else if(character.currentCharacterModel.characterType == CharacterType.Otrill)
+        //if(character.currentCharacterModel.characterType == CharacterType.Hakka)
+        //{
+        //    if(attackType == AttackType.auto)
+        //    {
+        //        attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
+        //        lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+        //    }
+        //}
+        //else if(character.currentCharacterModel.characterType == CharacterType.Tapani)
+        //{
+        //    if(attackType == AttackType.auto)
+        //    {
+        //        attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
+        //        lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+        //    }
+        //    Debug.LogError(attackType);
+        //}
+        if(character.currentCharacterModel.characterType == CharacterType.Otrill)
         {
             if(attackType == AttackType.r)
             {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
                 Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
                 attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
@@ -162,6 +166,54 @@ public class PlayerScript : MonoBehaviour
                     attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
                     lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
                 }
+
+            }
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            else if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Moorg)
@@ -172,15 +224,14 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
-                Debug.LogError("Start");
-                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
-               
-               
-              StartCoroutine(ResetAttackIndicator( R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
-               StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime ,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
             if(attackType == AttackType.w)
             {
@@ -189,14 +240,14 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
                 Debug.LogError("Start");
-                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
-                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime , R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
             if(attackType == AttackType.e)
             {
@@ -205,14 +256,14 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
                 Debug.LogError("Start");
-                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
-                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime , R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
             if(attackType == AttackType.r)
             {
@@ -221,14 +272,555 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
                 Debug.LogError("Start");
-                GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).DeactiveIndicator.SetActive(true);
+                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
-                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime , R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Hakka)
+        {
+            if(attackType == AttackType.auto)
+            {
+                attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
+                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+            }
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Dira)
+        {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Sura)
+        {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Ranzeb)
+        {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Jahan)
+        {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Tapani)
+        {
+            if(attackType == AttackType.auto)
+            {
+                attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
+                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+            }
+
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Serina)
+        {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+
+
+                EnableDeactiveIndicator(attackType);
+
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+        }
+        else if(character.currentCharacterModel.characterType == CharacterType.Udara)
+        {
+            if(attackType == AttackType.q)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_Q_IsAtcitve || Attack_Q_CoolDown) return;
+                Attack_Q_IsAtcitve = true;
+                Attack_Q_CoolDown = true;
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.w)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
+                Attack_W_IsAtcitve = true;
+                Attack_W_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.e)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
+                Attack_E_IsAtcitve = true;
+                Attack_E_CoolDown = true;
+                Debug.LogError("Start");
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+            }
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+                Debug.LogError("Start");
+                 EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+
+
+                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
         }
 
@@ -246,6 +838,18 @@ public class PlayerScript : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// Enable cover image that indicates that button is on cooldown
+    /// </summary>
+    /// <param name="attackType">current attack type</param>
+    private  void EnableDeactiveIndicator(AttackType attackType)
+    {
+        AttackButton attackButton = GameManager.instance.AttackButtons.Find(x => x.attackType == attackType);
+        Image InactiveImage = attackButton.DeactiveIndicator.GetComponent<Image>();
+        InactiveImage.fillAmount = 1;
+        attackButton.DeactiveIndicator.SetActive(true);
+    }
+
     /// <summary>
     /// Set bull parameter of animator false
     /// </summary>

@@ -32,21 +32,53 @@ MonoBehaviour:
     DamageValue: 75
   attackCoolDownDetails:
   - attackType: 1
-    coolDownBaseValue: 3
-    coolDownformula: 0
-    modifier: 0
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 3
+    - level: 2
+      cooldownValue: 3
+    - level: 3
+      cooldownValue: 3
+    - level: 4
+      cooldownValue: 3
+    - level: 5
+      cooldownValue: 3
   - attackType: 0
-    coolDownBaseValue: 22
-    coolDownformula: -1
-    modifier: 0
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 22
+    - level: 2
+      cooldownValue: 21
+    - level: 3
+      cooldownValue: 20
+    - level: 4
+      cooldownValue: 19
+    - level: 5
+      cooldownValue: 18
   - attackType: 2
-    coolDownBaseValue: 12
-    coolDownformula: -1
-    modifier: 0
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 12
+    - level: 2
+      cooldownValue: 11
+    - level: 3
+      cooldownValue: 10
+    - level: 4
+      cooldownValue: 9
+    - level: 5
+      cooldownValue: 8
   - attackType: 3
-    coolDownBaseValue: 85
-    coolDownformula: 0
-    modifier: 0
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 85
+    - level: 2
+      cooldownValue: 85
+    - level: 3
+      cooldownValue: 85
   championName: Ranzeb
   summonerName: 
   baseHealth: 670

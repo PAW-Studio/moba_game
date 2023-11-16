@@ -42,7 +42,6 @@ public class AnimationMovementManager : MonoBehaviour
         playerScript.ResetAnimationMovementSpeedModifier();
         // transform.position = startPosition;
         //DetectHit();
-
     }
     /// <summary>
     /// Damages the list of targets hit by player
@@ -51,7 +50,7 @@ public class AnimationMovementManager : MonoBehaviour
     {
         foreach(MinionAIScript target in HitList)
         {
-            Debug.LogError("*Minion Hit :");
+            //Debug.LogError("*Minion Hit :");
             //Get value with respect to attack type from character data 
             int damage = playerScript.GetComponent<Character>().characterData.attackDamageDetails.Find(x => x.attackType == playerScript.currentAttackType).DamageValue;
             target.DealDamage(damage);

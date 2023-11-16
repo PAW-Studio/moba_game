@@ -73,7 +73,7 @@ public class CharacterScriptable : ScriptableObject
     [HideInInspector]
     public double currentRange;
     [HideInInspector]
-    public double currentLevel;
+    public double currentLevel=1;
     [HideInInspector]
     public double currentXP;
     [HideInInspector]
@@ -270,9 +270,7 @@ public class AttackCoolDownDetails
 {
     public AttackType attackType;
     public float ActiveTime = 2f;
-    public float coolDownBaseValue = 0;         //Cooldown value for character level 1
-    public float coolDownformula = 0;           //Cooldwon formula -example level 1->12, level-> 11 ,formula : basevalue+(cooldownformula*characterlevel)
-    public float modifier = 0;                  
+    public List<LevelCoolDownValue> levelCoolDownValues = new List<LevelCoolDownValue>();   //List of cooldown values with respect to levels   
     /// <summary>
     /// Get cooldown timing for current level of chracter 
     /// </summary>
@@ -280,11 +278,26 @@ public class AttackCoolDownDetails
     /// <returns>cooldown time for attack</returns>
     public float GetCoolDowntime(double characterLevel) 
     {
-        float cooldownValue = coolDownBaseValue + (coolDownformula * (int)characterLevel);
+        if(characterLevel == 0) 
+        {
+            characterLevel = 1;
+        }
+        float cooldownValue = 1;
+        if(levelCoolDownValues.Find(x=>x.level== characterLevel) != null) 
+        {
+            cooldownValue = levelCoolDownValues.Find(x => x.level == characterLevel).cooldownValue;  //Find cooldown value with respect to input level
+        }
+        Debug.LogError("Level " + characterLevel + "  Value " + cooldownValue);
         return  cooldownValue <0 ?0:cooldownValue;     //return zero if less then zero
-        //Example base value 12  ,cooldown formula=-1, chracter level 1 
-        //(12 + (-1 *1)= 12-1=  11  ->cooldown value
-
     }
+}
+/// <summary>
+/// Cooldown value and level
+/// </summary>
+[System.Serializable]
+public class LevelCoolDownValue
+{
+    public int level;
+    public float cooldownValue;
 }
 

@@ -303,7 +303,6 @@ public class AttackButton
         if(val > 1)
         {
             timerText =System.Convert.ToInt32(val).ToString();
-            Debug.LogError(timerText);
         }
         else
         {          

@@ -32,21 +32,53 @@ MonoBehaviour:
     DamageValue: 75
   attackCoolDownDetails:
   - attackType: 0
-    coolDownBaseValue: 14
-    coolDownformula: -1
-    modifier: 1
-  - attackType: 0
-    coolDownBaseValue: 0
-    coolDownformula: 0
-    modifier: 1
-  - attackType: 0
-    coolDownBaseValue: 0
-    coolDownformula: 0
-    modifier: 1
-  - attackType: 0
-    coolDownBaseValue: 0
-    coolDownformula: 0
-    modifier: 1
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 28
+    - level: 2
+      cooldownValue: 25
+    - level: 3
+      cooldownValue: 22.5
+    - level: 4
+      cooldownValue: 20
+    - level: 5
+      cooldownValue: 18
+  - attackType: 1
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 14
+    - level: 2
+      cooldownValue: 13
+    - level: 3
+      cooldownValue: 12
+    - level: 4
+      cooldownValue: 11
+    - level: 5
+      cooldownValue: 10
+  - attackType: 2
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 8
+    - level: 2
+      cooldownValue: 6
+    - level: 3
+      cooldownValue: 5
+    - level: 4
+      cooldownValue: 4.5
+    - level: 5
+      cooldownValue: 4
+  - attackType: 3
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 80
+    - level: 2
+      cooldownValue: 60
+    - level: 3
+      cooldownValue: 50
   championName: Hakka
   summonerName: 
   baseHealth: 670

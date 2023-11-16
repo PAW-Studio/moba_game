@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a38dcba6723f8b7478bae4af159ce7db, type: 3}
-  m_Name: Tapani_Scriptable
+  m_Name: Jahan_Scriptable
   m_EditorClassIdentifier: 
   characterModel:
-    characterType: 8
-    characterModel: {fileID: 919132149155446097, guid: 30b65a90174bb0c4ea0a1dc712b3f6fb,
+    characterType: 10
+    characterModel: {fileID: 919132149155446097, guid: 010db8c982f6e4b46ac6a38e7e65f95a,
       type: 3}
   attackAnimationDetails:
   - attackType: 1
@@ -50,38 +50,38 @@ MonoBehaviour:
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 12
+      cooldownValue: 22
     - level: 2
-      cooldownValue: 12
+      cooldownValue: 21
     - level: 3
-      cooldownValue: 12
+      cooldownValue: 20
     - level: 4
-      cooldownValue: 12
+      cooldownValue: 19
     - level: 5
-      cooldownValue: 12
+      cooldownValue: 18
   - attackType: 2
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 9
+      cooldownValue: 12
     - level: 2
-      cooldownValue: 9
+      cooldownValue: 11
     - level: 3
-      cooldownValue: 9
+      cooldownValue: 10
     - level: 4
       cooldownValue: 9
     - level: 5
-      cooldownValue: 9
+      cooldownValue: 8
   - attackType: 3
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 90
+      cooldownValue: 85
     - level: 2
-      cooldownValue: 60
+      cooldownValue: 85
     - level: 3
-      cooldownValue: 45
-  championName: Tapani
+      cooldownValue: 85
+  championName: Jahan
   summonerName: 
   baseHealth: 670
   growthHealth: 120
@@ -112,4 +112,4 @@ MonoBehaviour:
   currentLevel: 0
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: TapanilAnimator
+  CharacterAnimatorName: JahanAnimator
