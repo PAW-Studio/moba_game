@@ -17,7 +17,13 @@ MonoBehaviour:
     characterModel: {fileID: 919132149155446097, guid: 128a3f3fea9465441975124a64cad902,
       type: 3}
   attackAnimationDetails: []
-  attackDamageDetails: []
+  attackDamageDetails:
+  - attackType: 4
+    attackSubType: 1
+    DamageValue: 0
+  - attackType: 3
+    attackSubType: 1
+    DamageValue: 0
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
@@ -69,23 +75,23 @@ MonoBehaviour:
       cooldownValue: 90
   championName: Otrill
   summonerName: 
-  baseHealth: 670
-  growthHealth: 120
-  baseHealthRegen: 8.5
-  growthHealthRegen: 0.85
-  baseAD: 62
+  baseHealth: 650
+  growthHealth: 109
+  baseHealthRegen: 8
+  growthHealthRegen: 0.72
+  baseAD: 63.5
   growthAD: 3.75
   baseAP: 0
   growthAP: 0
-  baseAS: 0.625
-  growthAS: 0.02125
-  baseArmor: 44
-  growthArmor: 4.7
-  baseMagicResistance: 32
+  baseAS: 0.631
+  growthAS: 0.02625
+  baseArmor: 33.5
+  growthArmor: 4.9
+  baseMagicResistance: 30.5
   growthMagicResistance: 2.05
-  baseMovementSpeed: 330
+  baseMovementSpeed: 340
   growthMovementSpeed: 0
-  baseRange: 125
+  baseRange: 150
   growthRange: 0
   currentHealth: 0
   currentHealthRegen: 0

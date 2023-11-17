@@ -23,6 +23,33 @@ public class Character : MonoBehaviour
     public CharacterModels currentCharacterModel;                                  //Current selected character set to this reference variable
     public float invisibleTime = 5f;
     public CharacterScriptable characterData;                                      //Scriptable object of character to reference the selected character details
+
+    //CharacterData references
+    //Used to avoid any change in base values in scriptable character object
+    [HideInInspector]
+    public double currentHealth;
+    [HideInInspector]
+    public double currentHealthRegen;
+    [HideInInspector]
+    public double currentAD;
+    [HideInInspector]
+    public double currentAS;
+    [HideInInspector]
+    public double currentArmor;
+    [HideInInspector]
+    public double currentMagicResistance;
+    [HideInInspector]
+    public double currentMovementSpeed;
+    [HideInInspector]
+    public double currentRange;
+    //[HideInInspector]
+    public double currentLevel = 1;
+    [HideInInspector]
+    public double currentXP;
+    [HideInInspector]
+    public double currentAP;
+    
+    //
     void Start()
     {
         //Temp 
@@ -68,8 +95,13 @@ public class Character : MonoBehaviour
 
         //We can use this data later
         characterData = characterScriptables.Find(x => x.characterModel.characterType == SelectedCharacterType);
+        SetUpValues();   //Setup values from base scriptable character
         if(characterData)
             characterData.DisplayStats();
+
+        //Update statistics with respect to charactes level
+        UpdateStatistics(2); //Temp: Level 2 set for testing
+        Debug.LogError("AD "+currentAD);
 
     }
     //True: Show character ,False: Hide character
@@ -83,7 +115,38 @@ public class Character : MonoBehaviour
     {
         currentCharacterModel.characterModel.SetActive(true);
     }
-
+    /// <summary>
+    /// Update statistics with respect to currentlevel
+    /// </summary>
+    /// <param name="_currentLevel">character's current level</param>
+    public void UpdateStatistics(int _currentLevel)
+    {
+        currentLevel = _currentLevel;
+        currentHealth = Champions.getStatistic(characterData.baseHealth,characterData.growthHealth,currentLevel);
+        currentHealthRegen = Champions.getStatistic(characterData.baseHealthRegen,characterData.growthHealthRegen,currentLevel);
+        currentAD = Champions.getStatistic(characterData.baseAD,characterData.growthAD,currentLevel);
+        currentAS = Champions.getStatistic(characterData.baseAS,characterData.growthAS,currentLevel);
+        currentArmor = Champions.getStatistic(characterData.baseArmor,characterData.growthAD,currentLevel);
+        currentMagicResistance = Champions.getStatistic(characterData.baseMagicResistance,characterData.growthMagicResistance,currentLevel);
+        currentRange = Champions.getStatistic(characterData.baseRange,characterData.growthRange,currentLevel);
+        
+    }
+    //Setup Values
+    //Set up values  of character
+    public void SetUpValues(int _currentLevel=1)
+    {
+        currentHealth = characterData.baseHealth;
+        currentHealthRegen = characterData.baseHealthRegen;
+        currentAD = characterData.baseAD;
+        currentAS = characterData.baseAS;
+        currentArmor = characterData.baseArmor;
+        currentMagicResistance = characterData.baseMagicResistance;
+        currentMovementSpeed = characterData.baseMovementSpeed;
+        currentRange = characterData.baseRange;
+        currentXP = Globals.level1;
+        currentLevel = _currentLevel;
+        currentAP = characterData.baseAP;
+    }
 }
 /// <summary>
 /// This class is used to hold the character type and character model object in the script

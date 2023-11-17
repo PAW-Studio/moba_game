@@ -25,12 +25,16 @@ MonoBehaviour:
     movementSpeedModifier: 2
   attackDamageDetails:
   - attackType: 4
+    attackSubType: 1
     DamageValue: 25
   - attackType: 2
+    attackSubType: 1
     DamageValue: 50
   - attackType: 3
+    attackSubType: 1
     DamageValue: 100
   - attackType: 1
+    attackSubType: 1
     DamageValue: 75
   attackCoolDownDetails:
   - attackType: 1
@@ -83,23 +87,23 @@ MonoBehaviour:
       cooldownValue: 85
   championName: Jahan
   summonerName: 
-  baseHealth: 670
-  growthHealth: 120
-  baseHealthRegen: 8.5
-  growthHealthRegen: 0.85
-  baseAD: 62
-  growthAD: 3.75
+  baseHealth: 590
+  growthHealth: 102
+  baseHealthRegen: 5.5
+  growthHealthRegen: 0.55
+  baseAD: 57
+  growthAD: 3
   baseAP: 0
   growthAP: 0
   baseAS: 0.625
-  growthAS: 0.02125
-  baseArmor: 44
+  growthAS: 0.0135
+  baseArmor: 22
   growthArmor: 4.7
-  baseMagicResistance: 32
-  growthMagicResistance: 2.05
-  baseMovementSpeed: 330
+  baseMagicResistance: 30
+  growthMagicResistance: 1.3
+  baseMovementSpeed: 340
   growthMovementSpeed: 0
-  baseRange: 125
+  baseRange: 550
   growthRange: 0
   currentHealth: 0
   currentHealthRegen: 0

@@ -27,12 +27,19 @@ MonoBehaviour:
     movementSpeedModifier: 1.5
   attackDamageDetails:
   - attackType: 4
+    attackSubType: 1
     DamageValue: 25
   - attackType: 2
+    attackSubType: 1
     DamageValue: 50
   - attackType: 3
+    attackSubType: 1
     DamageValue: 100
   - attackType: 1
+    attackSubType: 1
+    DamageValue: 75
+  - attackType: 0
+    attackSubType: 1
     DamageValue: 75
   attackCoolDownDetails:
   - attackType: 1
@@ -85,33 +92,33 @@ MonoBehaviour:
       cooldownValue: 60
   championName: Serina
   summonerName: 
-  baseHealth: 670
-  growthHealth: 120
-  baseHealthRegen: 8.5
-  growthHealthRegen: 0.85
-  baseAD: 62
-  growthAD: 3.75
+  baseHealth: 575
+  growthHealth: 106
+  baseHealthRegen: 3.5
+  growthHealthRegen: 0.55
+  baseAD: 61
+  growthAD: 3.65
   baseAP: 0
   growthAP: 0
-  baseAS: 0.625
-  growthAS: 0.02125
-  baseArmor: 44
-  growthArmor: 4.7
-  baseMagicResistance: 32
-  growthMagicResistance: 2.05
+  baseAS: 0.68
+  growthAS: 0.04
+  baseArmor: 28
+  growthArmor: 4.6
+  baseMagicResistance: 31
+  growthMagicResistance: 1.42
   baseMovementSpeed: 330
   growthMovementSpeed: 0
-  baseRange: 125
+  baseRange: 640
   growthRange: 0
-  currentHealth: 0
-  currentHealthRegen: 0
-  currentAD: 0
-  currentAS: 0
-  currentArmor: 0
-  currentMagicResistance: 0
+  currentHealth: 651.3199999999999
+  currentHealthRegen: 3.896
+  currentAD: 63.628
+  currentAS: 0.7088000000000001
+  currentArmor: 30.628
+  currentMagicResistance: 32.0224
   currentMovementSpeed: 0
-  currentRange: 0
-  currentLevel: 0
+  currentRange: 640
+  currentLevel: 1
   currentXP: 0
   currentAP: 0
   CharacterAnimatorName: SerinaAnimator

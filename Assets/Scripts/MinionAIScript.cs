@@ -170,8 +170,11 @@ public class MinionAIScript : MonoBehaviour
             targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth);
         }
     }
-
-    public void DealDamage(int damage) 
+    /// <summary>
+    /// Handle damage and update healthbar
+    /// </summary>
+    /// <param name="damage">damage value</param>
+    public void DealDamage(float damage) 
     {
         currentHealth -= damage;
         minionHealthBar.SetHealth(currentHealth);

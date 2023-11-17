@@ -1015,3 +1015,9 @@ public class PlayerScript : MonoBehaviour
 /// </summary>
 [System.Serializable]
 public enum AttackType { w, q, e, r, auto, left, right, rLeft, rRight, None, DieAnimation }
+
+/// <summary>
+/// Character attack types
+/// </summary>
+[System.Serializable]
+public enum AttackSubType { None, AD,AP}

@@ -72,7 +72,7 @@ public class CharacterScriptable : ScriptableObject
     public double currentMovementSpeed;
     [HideInInspector]
     public double currentRange;
-    [HideInInspector]
+    //[HideInInspector]
     public double currentLevel=1;
     [HideInInspector]
     public double currentXP;
@@ -254,13 +254,14 @@ public class AttackAnimationDetails
    // public int DamageValue=25;
 }
 /// <summary>
-/// Used to hold the values of attack type and damange that can be done 
+/// Used to hold the values of attack type and attack subType(AD,AP etc) 
 /// </summary>
 [System.Serializable]
 public class AttackDamageDetails
 {
     public AttackType attackType;
-    public int DamageValue = 25;
+    public AttackSubType attackSubType;
+    //public int DamageValue = 25;
 }
 /// <summary>
 /// Used to hold the values of attack type and cooldownFormula

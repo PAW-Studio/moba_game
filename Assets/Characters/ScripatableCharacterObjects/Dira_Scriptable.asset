@@ -83,23 +83,23 @@ MonoBehaviour:
       cooldownValue: 50
   championName: Dira
   summonerName: 
-  baseHealth: 670
-  growthHealth: 120
-  baseHealthRegen: 8.5
-  growthHealthRegen: 0.85
-  baseAD: 62
-  growthAD: 3.75
+  baseHealth: 590
+  growthHealth: 103
+  baseHealthRegen: 6.5
+  growthHealthRegen: 0.55
+  baseAD: 54.5
+  growthAD: 3
   baseAP: 0
   growthAP: 0
-  baseAS: 0.625
-  growthAS: 0.02125
-  baseArmor: 44
-  growthArmor: 4.7
-  baseMagicResistance: 32
-  growthMagicResistance: 2.05
+  baseAS: 0.63
+  growthAS: 0.021
+  baseArmor: 27
+  growthArmor: 4.4
+  baseMagicResistance: 30.5
+  growthMagicResistance: 1.7
   baseMovementSpeed: 330
   growthMovementSpeed: 0
-  baseRange: 125
+  baseRange: 535
   growthRange: 0
   currentHealth: 0
   currentHealthRegen: 0

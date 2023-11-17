@@ -23,12 +23,16 @@ MonoBehaviour:
     movementSpeedModifier: 1.5
   attackDamageDetails:
   - attackType: 4
+    attackSubType: 1
     DamageValue: 25
   - attackType: 2
+    attackSubType: 1
     DamageValue: 50
   - attackType: 3
+    attackSubType: 1
     DamageValue: 100
   - attackType: 1
+    attackSubType: 1
     DamageValue: 75
   attackCoolDownDetails:
   - attackType: 0
@@ -81,23 +85,23 @@ MonoBehaviour:
       cooldownValue: 50
   championName: Hakka
   summonerName: 
-  baseHealth: 670
-  growthHealth: 120
-  baseHealthRegen: 8.5
-  growthHealthRegen: 0.85
-  baseAD: 62
-  growthAD: 3.75
+  baseHealth: 645
+  growthHealth: 101
+  baseHealthRegen: 6.7
+  growthHealthRegen: 0.5
+  baseAD: 55
+  growthAD: 3.4
   baseAP: 0
   growthAP: 0
-  baseAS: 0.625
-  growthAS: 0.02125
-  baseArmor: 44
-  growthArmor: 4.7
-  baseMagicResistance: 32
-  growthMagicResistance: 2.05
+  baseAS: 0.657
+  growthAS: 0.026
+  baseArmor: 41
+  growthArmor: 4.9
+  baseMagicResistance: 31
+  growthMagicResistance: 2.1
   baseMovementSpeed: 330
   growthMovementSpeed: 0
-  baseRange: 125
+  baseRange: 180
   growthRange: 0
   currentHealth: 0
   currentHealthRegen: 0

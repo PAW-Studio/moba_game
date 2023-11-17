@@ -282,6 +282,13 @@ public class GameManager : MonoBehaviour
     {
         StopCoroutine(SpawnWave());   
     }
+    /// <summary>
+    /// Get AD for the current selected character
+    /// </summary>
+    public double GetCurrentAD() 
+    {
+      return  currentCharacter.currentAD;
+    }
 }
 //Handle attack buttton UI with this class
 [System.Serializable]

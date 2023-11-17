@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
             {
                 if(item.GetComponent<MinionAIScript>()) 
                 {
-                    item.GetComponent<MinionAIScript>().DealDamage(25);
+                    item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
                     hit = true;
                     break;
                 }
