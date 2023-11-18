@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
     public float lifeTime=2f;                                                  //Life time of projectile
     float timePassed = 0;                                                      //Time passed from shooting time
     public GameObject projectileColliderOjbect;                                //Collider object of this projectile to detect hit    
-   
+    public float collisionRadius=5f;
      
     /// <summary>
     /// Move projectile in forward direction and detect hit, destroy on hit or when life time is over
@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
         if(shoot)
         {
 
-           Collider[] hits = Physics.OverlapSphere(projectileColliderOjbect.transform.position,5f);
+           Collider[] hits = Physics.OverlapSphere(projectileColliderOjbect.transform.position,collisionRadius);
             bool hit = false;
             foreach(Collider item in hits)
             {

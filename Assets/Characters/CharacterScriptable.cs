@@ -288,7 +288,6 @@ public class AttackCoolDownDetails
         {
             cooldownValue = levelCoolDownValues.Find(x => x.level == characterLevel).cooldownValue;  //Find cooldown value with respect to input level
         }
-        Debug.LogError("Level " + characterLevel + "  Value " + cooldownValue);
         return  cooldownValue <0 ?0:cooldownValue;     //return zero if less then zero
     }
 }

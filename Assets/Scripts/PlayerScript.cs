@@ -35,6 +35,7 @@ public class PlayerScript : MonoBehaviour
     bool Attack_E_IsAtcitve = false;                                                                 //True if E attack is active 
     bool Attack_E_CoolDown = false;                                                                 //True if waiting for cool down after "E" attack
 
+    bool Attack_Auto_Allowed = true;                                                                //True if AS time passed after last auto attack
 
     [SerializeField]
     float R_Attack_ActiveTime = 5f;                                                                //Duration till the R attack is active
@@ -47,7 +48,8 @@ public class PlayerScript : MonoBehaviour
     //Animation movement speed will be increased using this modifier :Speed can be set from character scriptable object ,default speed can be adjusted from here
     float AnimationMovementSpeedModifier = 1.5f;
     float defaultModifierValue = 1.5f;
-
+    [SerializeField]
+    float AS_CapValue = 2.5f;                                                                       //Default cap value for AS
     // Set references 
     void Start()
     {
@@ -109,7 +111,6 @@ public class PlayerScript : MonoBehaviour
             vel.y = _rb.velocity.y;
             _rb.velocity = vel;
         }
-
     }
 
     /// <summary>
@@ -146,7 +147,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
@@ -160,12 +161,19 @@ public class PlayerScript : MonoBehaviour
             }
             else if(attackType == AttackType.auto)
             {
+                
+                if(!Attack_R_IsAtcitve) 
+                {
+                    if(!Attack_Auto_Allowed) return;
+                    Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+                }
+
                 if(Attack_R_IsAtcitve)
                 {
                     //Auto become R-left and R-right while R is active
                     attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
                     lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
-                }
+                }               
 
             }
             if(attackType == AttackType.q)
@@ -189,7 +197,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -205,7 +213,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -218,6 +226,11 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Moorg)
         {
+            if(attackType == AttackType.auto) 
+            {
+                if(!Attack_Auto_Allowed) return;
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -239,7 +252,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -255,7 +268,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -271,7 +284,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -284,8 +297,12 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Hakka)
         {
+
             if(attackType == AttackType.auto)
             {
+                if(!Attack_Auto_Allowed) return;
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+
                 attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
             }
@@ -325,7 +342,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -341,7 +358,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -354,6 +371,11 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Dira)
         {
+            if(attackType== AttackType.auto) 
+            {
+                if(!Attack_Auto_Allowed) return;
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -375,7 +397,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -391,7 +413,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -407,7 +429,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -420,6 +442,11 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Sura)
         {
+            if(attackType == AttackType.auto)
+            {
+                if(!Attack_Auto_Allowed) return;
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -441,7 +468,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -457,7 +484,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -473,7 +500,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -486,6 +513,11 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Ranzeb)
         {
+            if(attackType == AttackType.auto)
+            {
+                if(!Attack_Auto_Allowed) return;
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -507,7 +539,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -523,7 +555,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -539,7 +571,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -552,6 +584,11 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Jahan)
         {
+            if(attackType == AttackType.auto)
+            {
+                if(!Attack_Auto_Allowed) return;
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -573,7 +610,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -589,7 +626,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -605,7 +642,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -620,6 +657,9 @@ public class PlayerScript : MonoBehaviour
         {
             if(attackType == AttackType.auto)
             {
+                if(!Attack_Auto_Allowed) return;
+
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
                 attackType = lastAutoAttackWasLeft ? AttackType.right : AttackType.left;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
             }
@@ -645,7 +685,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -661,7 +701,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -677,7 +717,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -690,6 +730,12 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Serina)
         {
+            if(attackType == AttackType.auto)
+            {
+                if(!Attack_Auto_Allowed) return;
+
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -714,7 +760,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -730,7 +776,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -746,7 +792,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -759,6 +805,10 @@ public class PlayerScript : MonoBehaviour
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Udara)
         {
+            if(attackType == AttackType.auto)
+            {
+                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+            }
             if(attackType == AttackType.q)
             {
                 if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
@@ -780,7 +830,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -796,7 +846,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_E_IsAtcitve || Attack_E_CoolDown) return;
                 Attack_E_IsAtcitve = true;
                 Attack_E_CoolDown = true;
-                Debug.LogError("Start");
+                
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -812,7 +862,7 @@ public class PlayerScript : MonoBehaviour
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                Debug.LogError("Start");
+                
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -1008,6 +1058,28 @@ public class PlayerScript : MonoBehaviour
     {
         currentActiveAnimation = AttackType.None;
         AnimationMovementSpeedModifier = defaultModifierValue;
+    }
+    /// <summary>
+    /// Cooldown like timer for AutoAttack
+    /// </summary>
+    /// <param name="AS">Attack speed</param>
+    /// <returns></returns>
+    public IEnumerator AutoAttack_ASCoroutine(float AS)
+    {
+        Attack_Auto_Allowed = false;
+        yield return new  WaitForSeconds(AS);
+        Attack_Auto_Allowed = true;
+    }
+    /// <summary>
+    /// Check if auto attack is allowed,  if not allowed then return 
+    /// </summary>
+    public void Check_AutoAttackAllowed() 
+    {
+            //if(!Attack_Auto_Allowed)
+            //{
+            //    return;            //Wait while next attack is allowed
+            //}
+            StartCoroutine(AutoAttack_ASCoroutine(AS_CapValue));  //Wait for time equal to AS-2.5 seconds before next auto attack
     }
 }
 /// <summary>

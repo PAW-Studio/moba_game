@@ -25,13 +25,13 @@ MonoBehaviour:
     movementSpeedModifier: 2
   attackDamageDetails:
   - attackType: 4
-    DamageValue: 25
+    attackSubType: 2
   - attackType: 2
-    DamageValue: 50
+    attackSubType: 0
   - attackType: 3
-    DamageValue: 100
+    attackSubType: 0
   - attackType: 1
-    DamageValue: 75
+    attackSubType: 0
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2

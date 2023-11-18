@@ -15,8 +15,9 @@ public class AnimationMovementManager : MonoBehaviour
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
     public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
     [Header("Throw/Shootable projectile")]
-    public GameObject ArrowPrefab;                                          //Arrow prefab
-    public Transform spawnTrasform;                                         //Arrow spawn transform
+    public GameObject ArrowPrefab;                                          //Arrow/projectile prefab
+    public Transform spawnTrasform;                                         //Arrow/projectile spawn transform
+    public Transform spawnTrasformLeft;                                     //Arrow/projectile spawn transform for left hand
     public Projectile arrowProjectile;                                      //Reference script of arrow projectile
    
 
@@ -128,6 +129,14 @@ public class AnimationMovementManager : MonoBehaviour
     public void SpawnArrow() 
     {
         GameObject arrow = Instantiate(ArrowPrefab,spawnTrasform.parent);
+        arrowProjectile = arrow.GetComponent<Projectile>();
+    }
+    /// <summary>
+    /// Spawn arrow/other throwable /shootable projectile for left hand : This method is called from animation clip 
+    /// </summary>
+    public void SpawnArrowForLeftHand()
+    {
+        GameObject arrow = Instantiate(ArrowPrefab,spawnTrasformLeft.parent);
         arrowProjectile = arrow.GetComponent<Projectile>();
     }
     /// <summary>
