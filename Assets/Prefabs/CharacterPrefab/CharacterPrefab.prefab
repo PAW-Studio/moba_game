@@ -142,6 +142,7 @@ MonoBehaviour:
   smoothTime: 0.05
   currentVelocity: 0
   R_Attack_ActiveTime: 5
+  AS_CapValue: 2.5
   moving: 0
 --- !u!54 &884645105129681059
 Rigidbody:
@@ -223,6 +224,15 @@ MonoBehaviour:
   currentLevel: 1
   currentXP: 0
   currentAP: 0
+  attackLevels:
+  - level: 0
+    attackType: 1
+  - level: 0
+    attackType: 0
+  - level: 0
+    attackType: 2
+  - level: 0
+    attackType: 3
 --- !u!1 &1245115764611245168
 GameObject:
   m_ObjectHideFlags: 0

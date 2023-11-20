@@ -9,12 +9,14 @@ public class CharacterScriptable : ScriptableObject
 {
     [Tooltip("Character FBX model -Idle and character type")]
     public CharacterModels characterModel;                               //Character FBX model (Idle -fbx model)
-
+    
     public List<AttackAnimationDetails> attackAnimationDetails = new List<AttackAnimationDetails>();  //Attack type and movement speed details -used to set movement speed character as well as attack type wise dynamically 
     public List<AttackDamageDetails> attackDamageDetails = new List<AttackDamageDetails>();   //List of attack types and respective damages values that can be done
     //Base and growth
     public List<AttackCoolDownDetails> attackCoolDownDetails = new List<AttackCoolDownDetails>(); //Cooldown timings with resepect to attack type
 
+    
+   
     public string championName = "";                                    //Name of character
     public string summonerName = "";
 
@@ -220,10 +222,12 @@ public class CharacterScriptable : ScriptableObject
     /// </summary>
     /// <param name="attackType">attack type</param>
     /// <returns>cooldown time for the attack</returns>
-    public float GetCoolDownTime(AttackType attackType)
+    public float GetCoolDownTime(AttackType attackType,double _characterLevel=0)
     {
         float cooldowntime = 0;
-        cooldowntime = attackCoolDownDetails.Find(x => x.attackType == attackType).GetCoolDowntime(currentLevel);
+
+        Debug.LogError("Cooldown time " + attackCoolDownDetails.Find(x => x.attackType == attackType).GetCoolDowntime(_characterLevel) + " Level " + _characterLevel);
+        cooldowntime = attackCoolDownDetails.Find(x => x.attackType == attackType).GetCoolDowntime(_characterLevel);
         return cooldowntime;
     }
     /// <summary>
@@ -275,18 +279,19 @@ public class AttackCoolDownDetails
     /// <summary>
     /// Get cooldown timing for current level of chracter 
     /// </summary>
-    /// <param name="characterLevel">character level</param>
+    /// <param name="attackLevel">Q/W/E/R attack level</param>
     /// <returns>cooldown time for attack</returns>
-    public float GetCoolDowntime(double characterLevel) 
+    public float GetCoolDowntime(double attackLevel) 
     {
-        if(characterLevel == 0) 
-        {
-            characterLevel = 1;
-        }
+        
+        //if(attackLevel == 0) 
+        //{
+        //    attackLevel = 1;
+        //}
         float cooldownValue = 1;
-        if(levelCoolDownValues.Find(x=>x.level== characterLevel) != null) 
+        if(levelCoolDownValues.Find(x=>x.level== attackLevel) != null) 
         {
-            cooldownValue = levelCoolDownValues.Find(x => x.level == characterLevel).cooldownValue;  //Find cooldown value with respect to input level
+            cooldownValue = levelCoolDownValues.Find(x => x.level == attackLevel).cooldownValue;  //Find cooldown value with respect to input level
         }
         return  cooldownValue <0 ?0:cooldownValue;     //return zero if less then zero
     }
@@ -300,4 +305,16 @@ public class LevelCoolDownValue
     public int level;
     public float cooldownValue;
 }
+/// <summary>
+/// Used to hold QWER current level
+/// </summary>
+[System.Serializable]
+public class AttackLevel
+{
+    public int level;
+    public AttackType attackType;
+    public int MaxLevelUpLimit=5;
+    public List<int> LevelUpAllowedForCharacterLevels = new List<int>(); // If list not empty allow level up for the given list of values
+}
+
 

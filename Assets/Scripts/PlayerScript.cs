@@ -149,7 +149,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
                 attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
                 lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
@@ -183,7 +183,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -199,7 +199,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -215,7 +215,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -238,7 +238,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -254,7 +254,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -270,7 +270,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -286,7 +286,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -313,7 +313,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -328,7 +328,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -344,7 +344,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -360,7 +360,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -383,7 +383,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -399,7 +399,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -415,7 +415,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -431,7 +431,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -454,7 +454,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -470,7 +470,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -486,7 +486,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -502,7 +502,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -525,7 +525,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -541,7 +541,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -557,7 +557,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -573,7 +573,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -596,7 +596,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -612,7 +612,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -628,7 +628,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -644,7 +644,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -671,7 +671,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -687,7 +687,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -703,7 +703,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -719,7 +719,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -746,7 +746,7 @@ public class PlayerScript : MonoBehaviour
 
                 EnableDeactiveIndicator(attackType);
 
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -762,7 +762,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -778,7 +778,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -794,7 +794,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -816,7 +816,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_Q_IsAtcitve = true;
                 Attack_Q_CoolDown = true;
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -832,7 +832,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_W_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -848,7 +848,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_E_CoolDown = true;
                 
                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
@@ -864,7 +864,7 @@ public class PlayerScript : MonoBehaviour
                 Attack_R_CoolDown = true;
                 
                  EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 

@@ -48,7 +48,8 @@ public class Character : MonoBehaviour
     public double currentXP;
     [HideInInspector]
     public double currentAP;
-    
+   // [HideInInspector]
+    public List<AttackLevel> attackLevels = new List<AttackLevel>();
     //
     void Start()
     {
@@ -122,6 +123,8 @@ public class Character : MonoBehaviour
     public void UpdateStatistics(int _currentLevel)
     {
         currentLevel = _currentLevel;
+        attackLevels.Find(x => x.attackType == AttackType.q).level = 1;
+
         currentHealth = Champions.getStatistic(characterData.baseHealth,characterData.growthHealth,currentLevel);
         currentHealthRegen = Champions.getStatistic(characterData.baseHealthRegen,characterData.growthHealthRegen,currentLevel);
         currentAD = Champions.getStatistic(characterData.baseAD,characterData.growthAD,currentLevel);
@@ -146,6 +149,12 @@ public class Character : MonoBehaviour
         currentXP = Globals.level1;
         currentLevel = _currentLevel;
         currentAP = characterData.baseAP;
+    }
+    public float GetCurrentAD() 
+    {
+        float damage = 0;
+     
+        return damage;
     }
 }
 /// <summary>
