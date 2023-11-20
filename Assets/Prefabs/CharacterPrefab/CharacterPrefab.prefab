@@ -227,12 +227,20 @@ MonoBehaviour:
   attackLevels:
   - level: 0
     attackType: 1
+    MaxLevelUpLimit: 5
+    LevelUpAllowedForCharacterLevels: 
   - level: 0
     attackType: 0
+    MaxLevelUpLimit: 5
+    LevelUpAllowedForCharacterLevels: 
   - level: 0
     attackType: 2
+    MaxLevelUpLimit: 5
+    LevelUpAllowedForCharacterLevels: 
   - level: 0
     attackType: 3
+    MaxLevelUpLimit: 3
+    LevelUpAllowedForCharacterLevels: 060000000b0000000f000000
 --- !u!1 &1245115764611245168
 GameObject:
   m_ObjectHideFlags: 0

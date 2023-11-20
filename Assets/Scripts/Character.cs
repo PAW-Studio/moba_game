@@ -101,10 +101,35 @@ public class Character : MonoBehaviour
             characterData.DisplayStats();
 
         //Update statistics with respect to charactes level
+
         UpdateStatistics(2); //Temp: Level 2 set for testing
-        Debug.LogError("AD "+currentAD);
+        UpdateAttackButtons();
+        GameManager.instance.Show_QWER_LevelUpdatePanel();
+
+        Debug.LogError("AD " + currentAD);
 
     }
+    /// <summary>
+    /// Enable Q/W/E/R attack buttons with level greater then zero
+    /// </summary>
+    private void UpdateAttackButtons()
+    {
+        foreach(AttackButton item in GameManager.instance.AttackButtons)
+        {
+            if(item.attackType != AttackType.auto)
+            {
+                if(attackLevels.FindAll(x => x.attackType == item.attackType && x.level < 1).Count > 0)
+                {
+                    item.DeactiveIndicator.SetActive(true);
+                }
+                else
+                {
+                    item.DeactiveIndicator.SetActive(false);
+                }
+            }
+        }
+    }
+
     //True: Show character ,False: Hide character
     public void ShowModel(bool val)
     {
@@ -123,7 +148,6 @@ public class Character : MonoBehaviour
     public void UpdateStatistics(int _currentLevel)
     {
         currentLevel = _currentLevel;
-        attackLevels.Find(x => x.attackType == AttackType.q).level = 1;
 
         currentHealth = Champions.getStatistic(characterData.baseHealth,characterData.growthHealth,currentLevel);
         currentHealthRegen = Champions.getStatistic(characterData.baseHealthRegen,characterData.growthHealthRegen,currentLevel);
@@ -133,6 +157,21 @@ public class Character : MonoBehaviour
         currentMagicResistance = Champions.getStatistic(characterData.baseMagicResistance,characterData.growthMagicResistance,currentLevel);
         currentRange = Champions.getStatistic(characterData.baseRange,characterData.growthRange,currentLevel);
         
+    }
+    /// <summary>
+    /// Increase Q/W/E/R attack level by one (Max 5)
+    /// </summary>
+    /// <param name="attackType">attackType to levelup</param>
+    public void UpdateAttackLevel(AttackType attackType)
+    {
+        AttackLevel attackLevel = attackLevels.Find(x => x.attackType == attackType);
+        attackLevel.level += 1;
+        if(attackLevel.level > 5)
+        { attackLevel.level = 5; }
+        UpdateAttackButtons();
+        Debug.LogError("Increased " + attackLevel.level + attackType);
+
+        GameManager.instance.Hide_QWER_LevelUpdatePanel();
     }
     //Setup Values
     //Set up values  of character
