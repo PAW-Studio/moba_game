@@ -24,16 +24,12 @@ MonoBehaviour:
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1
-    DamageValue: 25
   - attackType: 2
     attackSubType: 1
-    DamageValue: 50
   - attackType: 3
     attackSubType: 1
-    DamageValue: 100
   - attackType: 1
     attackSubType: 1
-    DamageValue: 75
   attackCoolDownDetails:
   - attackType: 0
     ActiveTime: 2
@@ -83,6 +79,123 @@ MonoBehaviour:
       cooldownValue: 60
     - level: 3
       cooldownValue: 50
+  attackScalingConditions:
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 60
+        percentage: 80
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 100
+        percentage: 80
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 140
+        percentage: 80
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 180
+        percentage: 80
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 220
+        percentage: 80
+        effectTime: 0
+  - attackType: 0
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 100
+        effectTime: 1
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 100
+        effectTime: 1
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 100
+        effectTime: 1
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 100
+        effectTime: 1
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 100
+        effectTime: 1
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 10
+        percentage: 50
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 35
+        percentage: 50
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 60
+        percentage: 50
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 85
+        percentage: 50
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 110
+        percentage: 50
+        effectTime: 0
+  - attackType: 3
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 70
+        percentage: 60
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 120
+        percentage: 60
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 180
+        percentage: 60
+        effectTime: 0
   championName: Hakka
   summonerName: 
   baseHealth: 645

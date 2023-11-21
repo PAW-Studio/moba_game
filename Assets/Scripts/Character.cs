@@ -50,6 +50,7 @@ public class Character : MonoBehaviour
     public double currentAP;
    // [HideInInspector]
     public List<AttackLevel> attackLevels = new List<AttackLevel>();
+    public List<AttackScalingConditions> attackScalingConditions = new List<AttackScalingConditions>();
     //
     void Start()
     {
@@ -104,6 +105,7 @@ public class Character : MonoBehaviour
 
         UpdateStatistics(2); //Temp: Level 2 set for testing
         UpdateAttackButtons();
+
         GameManager.instance.Show_QWER_LevelUpdatePanel();
 
         Debug.LogError("AD " + currentAD);
@@ -156,6 +158,9 @@ public class Character : MonoBehaviour
         currentArmor = Champions.getStatistic(characterData.baseArmor,characterData.growthAD,currentLevel);
         currentMagicResistance = Champions.getStatistic(characterData.baseMagicResistance,characterData.growthMagicResistance,currentLevel);
         currentRange = Champions.getStatistic(characterData.baseRange,characterData.growthRange,currentLevel);
+
+        //Set scaling conditions
+        attackScalingConditions = characterData.attackScalingConditions;
         
     }
     /// <summary>
@@ -189,10 +194,61 @@ public class Character : MonoBehaviour
         currentLevel = _currentLevel;
         currentAP = characterData.baseAP;
     }
-    public float GetCurrentAD() 
+    /// <summary>
+    /// Calculate damage with resepect to attack level
+    /// </summary>
+    /// <param name="attackType">current attack type</param>
+    /// <returns></returns>
+    public float CalculateDamangeForAttack(AttackType attackType) 
     {
         float damage = 0;
-     
+        switch(attackType)
+        {
+            case AttackType.w:
+                break;
+            case AttackType.q:
+                float damageValue = 0;
+                AttackScalingConditions attackScalingCondition = attackScalingConditions.Find(x => x.attackType == attackType);
+             List<ConditionsDetails> conditions=   attackScalingCondition.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == attackType).level);
+                foreach(ConditionsDetails condition in conditions)
+                {
+                   List< ScaleConditionsAndFactors> scaleConditionsAndFactors = condition.scaleConditionsAndFactors;
+                    foreach(ScaleConditionsAndFactors item in scaleConditionsAndFactors)
+                    {
+                        switch(item.scalingCondition)
+                        {
+                            case ScalingConditionTypes.None:
+                                break;
+                            case ScalingConditionTypes.Value_Plus_Percentage_AD:
+                                damageValue += item.baseValue +(float) (currentAD * (item.percentage / 100));
+                                break;
+                            case ScalingConditionTypes.Value_Plus_Percentage_AP:
+                                break;
+                            case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
+                                break;
+                            case ScalingConditionTypes.SlowerForSomeTime:
+                                break;
+                            case ScalingConditionTypes.Percentage_DamageReduction:
+                                break;
+                            case ScalingConditionTypes.Percentage_AS_Up:
+                                break;
+                            case ScalingConditionTypes.Percentage_MS_Up:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                damage = damageValue;
+                break;
+            case AttackType.e:
+                break;
+            case AttackType.r:
+                break;
+           
+            default:
+                break;
+        }
         return damage;
     }
 }

@@ -14,9 +14,9 @@ public class CharacterScriptable : ScriptableObject
     public List<AttackDamageDetails> attackDamageDetails = new List<AttackDamageDetails>();   //List of attack types and respective damages values that can be done
     //Base and growth
     public List<AttackCoolDownDetails> attackCoolDownDetails = new List<AttackCoolDownDetails>(); //Cooldown timings with resepect to attack type
+    public List<AttackScalingConditions> attackScalingConditions = new List<AttackScalingConditions>();
 
-    
-   
+
     public string championName = "";                                    //Name of character
     public string summonerName = "";
 
@@ -315,6 +315,43 @@ public class AttackLevel
     public AttackType attackType;
     public int MaxLevelUpLimit=5;
     public List<int> LevelUpAllowedForCharacterLevels = new List<int>(); // If list not empty allow level up for the given list of values
+}
+[System.Serializable]
+/// <summary>
+/// Scaling conditions for the Q/W/E/R attacks
+/// </summary>
+public class AttackScalingConditions 
+{
+    public AttackType attackType;
+    public List<ConditionsDetails> conditions;
+}
+[System.Serializable]
+/// <summary>
+/// Attack Level and condition list
+/// </summary>
+public class ConditionsDetails 
+{
+    public int Level;
+    public List<ScaleConditionsAndFactors> scaleConditionsAndFactors;
+}
+[System.Serializable]
+/// <summary>
+/// Condition type and percentage/base values for the condition
+/// </summary>
+public class ScaleConditionsAndFactors 
+{
+    public ScalingConditionTypes scalingCondition;
+    public float baseValue;
+    public float percentage;
+    public float effectTime;
+ 
+}
+[System.Serializable]
+/// <summary>
+/// Conditions for Q/W/E/R scaling
+/// </summary>
+public enum ScalingConditionTypes 
+{  None,Value_Plus_Percentage_AD,Value_Plus_Percentage_AP,Value_Plus_Percentage_BonusAP,SlowerForSomeTime,Percentage_DamageReduction,Percentage_AS_Up,Percentage_MS_Up
 }
 
 

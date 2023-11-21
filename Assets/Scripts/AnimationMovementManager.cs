@@ -55,13 +55,19 @@ public class AnimationMovementManager : MonoBehaviour
             //Get value with respect to attack type from character data 
             //int damage = playerScript.GetComponent<Character>().characterData.attackDamageDetails.Find(x => x.attackType == playerScript.currentAttackType).DamageValue;
             int ADAttack = playerScript.GetComponent<Character>().characterData.attackDamageDetails.FindAll(x => x.attackType == playerScript.currentAttackType&& x.attackSubType== AttackSubType.AD ).Count;
+
+
             if(ADAttack == 0)
             { 
                 target.DealDamage(ADAttack); //0 damage as not atttack with AD subtype is found
             }
             else 
             {
-                target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+                float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+
+                //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+                Debug.LogError("Scale Damage " + damage);
+                target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
             }
         }
         playerScript.currentAttackType = AttackType.None;  //Reset attack type
