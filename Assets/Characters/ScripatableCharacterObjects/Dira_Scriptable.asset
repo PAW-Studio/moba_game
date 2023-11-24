@@ -81,6 +81,123 @@ MonoBehaviour:
       cooldownValue: 65
     - level: 3
       cooldownValue: 50
+  attackScalingConditions:
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 15
+        percentage: 70
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 30
+        percentage: 70
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 45
+        percentage: 70
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 60
+        percentage: 70
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 75
+        percentage: 70
+        effectTime: 0
+  - attackType: 0
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 5
+        percentage: 40
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 11
+        percentage: 40
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 17
+        percentage: 40
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 23
+        percentage: 40
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 29
+        percentage: 40
+        effectTime: 0
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 66
+        percentage: 35
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 121
+        percentage: 35
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 181
+        percentage: 35
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 226
+        percentage: 35
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 280
+        percentage: 35
+        effectTime: 0
+  - attackType: 3
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 50
+        percentage: 60
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 80
+        percentage: 60
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 120
+        percentage: 60
+        effectTime: 0
   championName: Dira
   summonerName: 
   baseHealth: 590

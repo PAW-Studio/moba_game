@@ -22,13 +22,10 @@ MonoBehaviour:
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1
-    DamageValue: 25
   - attackType: 2
     attackSubType: 1
-    DamageValue: 50
   - attackType: 1
     attackSubType: 1
-    DamageValue: 50
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
@@ -78,6 +75,103 @@ MonoBehaviour:
       cooldownValue: 165
     - level: 3
       cooldownValue: 150
+  attackScalingConditions:
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 30
+        percentage: 50
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 50
+        percentage: 50
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 70
+        percentage: 50
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 90
+        percentage: 50
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 110
+        percentage: 50
+        effectTime: 0
+  - attackType: 0
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 120
+        percentage: 0
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 200
+        percentage: 0
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 280
+        percentage: 0
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 360
+        percentage: 0
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 440
+        percentage: 0
+        effectTime: 0
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 50
+        percentage: 30
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 80
+        percentage: 30
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 120
+        percentage: 30
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 160
+        percentage: 30
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 200
+        percentage: 30
+        effectTime: 0
   championName: Moorg
   summonerName: 
   baseHealth: 645

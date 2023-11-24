@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+
+//MS-> Movement speed
+//AS-> Attack speed  for auto attacks
+//AD-> Attack damange
+//AP-> Ability power
+
 public class PlayerScript : MonoBehaviour
 {
     NavMeshAgent agent;
@@ -50,6 +56,8 @@ public class PlayerScript : MonoBehaviour
     float defaultModifierValue = 1.5f;
     [SerializeField]
     float AS_CapValue = 2.5f;                                                                       //Default cap value for AS
+    bool reducedMovementSpeed=false;                                                                //True indicates that movement speed is reduced 
+    float MS_ReducePercentage;                                                                      //Percentage value to be reduced from current MS
     // Set references 
     void Start()
     {

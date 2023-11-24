@@ -135,7 +135,7 @@ MonoBehaviour:
   rotateSpeedMovement: 3
   characterAnimator: {fileID: 7420889844451578831}
   currentActiveAnimation: 9
-  currentAttackType: 0
+  currentAttackType: 9
   _speed: 1
   _jumpForce: 200
   _rb: {fileID: 884645105129681059}
@@ -241,6 +241,7 @@ MonoBehaviour:
     attackType: 3
     MaxLevelUpLimit: 3
     LevelUpAllowedForCharacterLevels: 060000000b0000000f000000
+  attackScalingConditions: []
 --- !u!1 &1245115764611245168
 GameObject:
   m_ObjectHideFlags: 0

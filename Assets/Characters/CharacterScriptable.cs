@@ -351,7 +351,7 @@ public class ScaleConditionsAndFactors
 /// Conditions for Q/W/E/R scaling
 /// </summary>
 public enum ScalingConditionTypes 
-{  None,Value_Plus_Percentage_AD,Value_Plus_Percentage_AP,Value_Plus_Percentage_BonusAP,SlowerForSomeTime,Percentage_DamageReduction,Percentage_AS_Up,Percentage_MS_Up
+{  None,Value_Plus_Percentage_AD,Value_Plus_Percentage_AP,Value_Plus_Percentage_BonusAP,SlowerForSomeTime,Percentage_DamageReduction,Percentage_AS_Up,Percentage_MS_Up, Percentage_AS_Down, Percentage_MS_Down,Percentage_Heal,AD_Plus_Percentage_AP
 }
 
 

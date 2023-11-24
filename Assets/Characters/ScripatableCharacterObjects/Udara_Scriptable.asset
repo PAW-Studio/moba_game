@@ -26,16 +26,12 @@ MonoBehaviour:
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1
-    DamageValue: 25
   - attackType: 2
     attackSubType: 0
-    DamageValue: 50
   - attackType: 3
     attackSubType: 0
-    DamageValue: 100
   - attackType: 1
     attackSubType: 0
-    DamageValue: 75
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
@@ -85,6 +81,71 @@ MonoBehaviour:
       cooldownValue: 50
     - level: 3
       cooldownValue: 40
+  attackScalingConditions:
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 80
+        percentage: 90
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 135
+        percentage: 90
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 190
+        percentage: 90
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 245
+        percentage: 90
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 300
+        percentage: 90
+        effectTime: 0
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 17
+        percentage: 30
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 31
+        percentage: 30
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 45
+        percentage: 30
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 59
+        percentage: 30
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 73
+        percentage: 30
+        effectTime: 0
   championName: Udara
   summonerName: 
   baseHealth: 618

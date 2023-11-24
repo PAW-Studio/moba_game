@@ -10,7 +10,8 @@ public class Projectile : MonoBehaviour
     float timePassed = 0;                                                      //Time passed from shooting time
     public GameObject projectileColliderOjbect;                                //Collider object of this projectile to detect hit    
     public float collisionRadius=5f;
-     
+    public Character character;                                                //Character who originated this projectile 
+    public AttackType attackType;                                              //Attack type from which the projectile is instantiated
     /// <summary>
     /// Move projectile in forward direction and detect hit, destroy on hit or when life time is over
     /// </summary>
@@ -25,7 +26,10 @@ public class Projectile : MonoBehaviour
             {
                 if(item.GetComponent<MinionAIScript>()) 
                 {
-                    item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
+                  float damageValue=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                    //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
+                    item.GetComponent<MinionAIScript>().DealDamage(damageValue); // Get current charactes AD
+                    Debug.LogError(damageValue);
                     hit = true;
                     break;
                 }

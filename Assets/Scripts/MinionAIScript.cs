@@ -125,15 +125,14 @@ public class MinionAIScript : MonoBehaviour
     }
     void MoveToMinion()
     {
+        
         // Calculating distance between this minion and target
         if(Vector3.Distance(transform.position,targetMinion.transform.position) > attackRange)
         {
             agent.SetDestination(targetMinion.transform.position);
-
             // Minion stops at attackRange distance from target 
             agent.stoppingDistance = attackRange;
         }
-
         else
         {
             // If target minion is less than attackRange distance away, moves towards it

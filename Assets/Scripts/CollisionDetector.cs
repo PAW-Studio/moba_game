@@ -61,7 +61,6 @@ public class CollisionDetector : MonoBehaviour
             MinionAIScript hitItem = item.GetComponent<Collider>().gameObject.GetComponent<MinionAIScript>();
             if(hitItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position) < distanceAllowed)
             {
-
                 if(!AnimationMovementManager.HitList.Contains(hitItem))
                 {
                     AnimationMovementManager.HitList.Add(hitItem);

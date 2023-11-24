@@ -20,10 +20,8 @@ MonoBehaviour:
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1
-    DamageValue: 0
   - attackType: 3
     attackSubType: 1
-    DamageValue: 0
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
@@ -73,6 +71,123 @@ MonoBehaviour:
       cooldownValue: 105
     - level: 3
       cooldownValue: 90
+  attackScalingConditions:
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 80
+        percentage: 30
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 110
+        percentage: 30
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 150
+        percentage: 30
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 200
+        percentage: 30
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 2
+        baseValue: 300
+        percentage: 30
+        effectTime: 0
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 70
+        percentage: 115
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 100
+        percentage: 115
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 130
+        percentage: 115
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 160
+        percentage: 115
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 190
+        percentage: 115
+        effectTime: 0
+  - attackType: 3
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 200
+        percentage: 180
+        effectTime: 5
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 325
+        percentage: 180
+        effectTime: 5
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 3
+        baseValue: 450
+        percentage: 180
+        effectTime: 5
+  - attackType: 0
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 11
+        baseValue: 0
+        percentage: 10
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 11
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 11
+        baseValue: 0
+        percentage: 30
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 11
+        baseValue: 0
+        percentage: 40
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 11
+        baseValue: 0
+        percentage: 50
+        effectTime: 0
   championName: Otrill
   summonerName: 
   baseHealth: 650

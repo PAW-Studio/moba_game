@@ -15,6 +15,8 @@ public class Character : MonoBehaviour
     [SerializeField]
     List<CharacterScriptable> characterScriptables = new List<CharacterScriptable>();   //Character scriptable data
 
+  
+
     public CharacterType SelectedCharacterType;                                    //Selected character type
     public int SelectedCharacterIndex = 0;                                         //Selected character index to set the current selected character
 
@@ -23,6 +25,7 @@ public class Character : MonoBehaviour
     public CharacterModels currentCharacterModel;                                  //Current selected character set to this reference variable
     public float invisibleTime = 5f;
     public CharacterScriptable characterData;                                      //Scriptable object of character to reference the selected character details
+    
 
     //CharacterData references
     //Used to avoid any change in base values in scriptable character object
@@ -199,7 +202,7 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="attackType">current attack type</param>
     /// <returns></returns>
-    public float CalculateDamangeForAttack(AttackType attackType) 
+    public float CalculateDamangeForAttack(AttackType attackType)
     {
         float damage = 0;
         switch(attackType)
@@ -209,10 +212,10 @@ public class Character : MonoBehaviour
             case AttackType.q:
                 float damageValue = 0;
                 AttackScalingConditions attackScalingCondition = attackScalingConditions.Find(x => x.attackType == attackType);
-             List<ConditionsDetails> conditions=   attackScalingCondition.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == attackType).level);
+                List<ConditionsDetails> conditions = attackScalingCondition.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == attackType).level);
                 foreach(ConditionsDetails condition in conditions)
                 {
-                   List< ScaleConditionsAndFactors> scaleConditionsAndFactors = condition.scaleConditionsAndFactors;
+                    List<ScaleConditionsAndFactors> scaleConditionsAndFactors = condition.scaleConditionsAndFactors;
                     foreach(ScaleConditionsAndFactors item in scaleConditionsAndFactors)
                     {
                         switch(item.scalingCondition)
@@ -220,11 +223,14 @@ public class Character : MonoBehaviour
                             case ScalingConditionTypes.None:
                                 break;
                             case ScalingConditionTypes.Value_Plus_Percentage_AD:
-                                damageValue += item.baseValue +(float) (currentAD * (item.percentage / 100));
+                                damageValue += item.baseValue + (float)(currentAD * (item.percentage / 100));
+                                Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
                                 break;
+                            //Treat AP and Bonus AP same for now
                             case ScalingConditionTypes.Value_Plus_Percentage_AP:
-                                break;
                             case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
+                                damageValue += item.baseValue + (float)(currentAP * (item.percentage / 100));
+                                Debug.LogError("AP  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAP * (item.percentage / 100)));
                                 break;
                             case ScalingConditionTypes.SlowerForSomeTime:
                                 break;
@@ -233,6 +239,11 @@ public class Character : MonoBehaviour
                             case ScalingConditionTypes.Percentage_AS_Up:
                                 break;
                             case ScalingConditionTypes.Percentage_MS_Up:
+                                break;
+                            case ScalingConditionTypes.Percentage_Heal:
+                                break;
+                            case ScalingConditionTypes.AD_Plus_Percentage_AP:
+                                damageValue += (float)currentAD + (float)(currentAP * (item.percentage / 100));
                                 break;
                             default:
                                 break;
@@ -245,7 +256,7 @@ public class Character : MonoBehaviour
                 break;
             case AttackType.r:
                 break;
-           
+
             default:
                 break;
         }

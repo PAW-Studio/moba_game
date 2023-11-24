@@ -26,19 +26,14 @@ MonoBehaviour:
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1
-    DamageValue: 25
   - attackType: 2
     attackSubType: 1
-    DamageValue: 50
   - attackType: 3
     attackSubType: 1
-    DamageValue: 100
   - attackType: 1
     attackSubType: 1
-    DamageValue: 75
   - attackType: 0
     attackSubType: 1
-    DamageValue: 75
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
@@ -88,6 +83,163 @@ MonoBehaviour:
       cooldownValue: 100
     - level: 3
       cooldownValue: 80
+  attackScalingConditions:
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 10
+        percentage: 11
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 20
+        percentage: 12
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 30
+        percentage: 13
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 40
+        percentage: 14
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 50
+        percentage: 15
+        effectTime: 0
+  - attackType: 0
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 65
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 25
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 115
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 30
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 165
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 35
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 215
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 40
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 265
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 45
+        effectTime: 0
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 10
+        effectTime: 0
+      - scalingCondition: 10
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+      - scalingCondition: 10
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 25
+        effectTime: 0
+      - scalingCondition: 10
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 30
+        effectTime: 0
+      - scalingCondition: 10
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 35
+        effectTime: 0
+      - scalingCondition: 10
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+  - attackType: 3
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 6
+        baseValue: 0
+        percentage: 20
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 6
+        baseValue: 0
+        percentage: 30
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 6
+        baseValue: 0
+        percentage: 50
+        effectTime: 0
   championName: Sura
   summonerName: 
   baseHealth: 660

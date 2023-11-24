@@ -54,21 +54,13 @@ public class AnimationMovementManager : MonoBehaviour
             //Debug.LogError("*Minion Hit :");
             //Get value with respect to attack type from character data 
             //int damage = playerScript.GetComponent<Character>().characterData.attackDamageDetails.Find(x => x.attackType == playerScript.currentAttackType).DamageValue;
-            int ADAttack = playerScript.GetComponent<Character>().characterData.attackDamageDetails.FindAll(x => x.attackType == playerScript.currentAttackType&& x.attackSubType== AttackSubType.AD ).Count;
-
-
-            if(ADAttack == 0)
-            { 
-                target.DealDamage(ADAttack); //0 damage as not atttack with AD subtype is found
-            }
-            else 
-            {
-                float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+            //int ADAttack = playerScript.GetComponent<Character>().characterData.attackDamageDetails.FindAll(x => x.attackType == playerScript.currentAttackType&& x.attackSubType== AttackSubType.AD ).Count;
+            float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+            damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
 
                 //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
                 Debug.LogError("Scale Damage " + damage);
                 target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
-            }
         }
         playerScript.currentAttackType = AttackType.None;  //Reset attack type
         HitList.Clear();
@@ -136,6 +128,9 @@ public class AnimationMovementManager : MonoBehaviour
     {
         GameObject arrow = Instantiate(ArrowPrefab,spawnTrasform.parent);
         arrowProjectile = arrow.GetComponent<Projectile>();
+        arrowProjectile.character = GetComponentInParent<Character>();
+        arrowProjectile.attackType = playerScript.currentAttackType;
+        Debug.LogError(arrowProjectile.attackType + " From " + arrowProjectile.character.currentCharacterModel.characterType);
     }
     /// <summary>
     /// Spawn arrow/other throwable /shootable projectile for left hand : This method is called from animation clip 
@@ -144,6 +139,9 @@ public class AnimationMovementManager : MonoBehaviour
     {
         GameObject arrow = Instantiate(ArrowPrefab,spawnTrasformLeft.parent);
         arrowProjectile = arrow.GetComponent<Projectile>();
+        arrowProjectile.character = GetComponentInParent<Character>();
+        arrowProjectile.attackType = playerScript.currentAttackType;
+        Debug.LogError(arrowProjectile.attackType+ " From "+ arrowProjectile.character.currentCharacterModel.characterType);
     }
     /// <summary>
     /// Set shoot boolean in projectile script and shoot : This method is called from animation clip 
