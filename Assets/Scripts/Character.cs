@@ -224,6 +224,21 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.Value_Plus_Percentage_AD:
                                 damageValue += item.baseValue + (float)(currentAD * (item.percentage / 100));
+                                if(characterData.characterModel.characterType== CharacterType.Sura) 
+                                {
+                                    //Sure Specific :
+                                    //current character champion is "Sura" then check for Ult/R attack level, If R level is greate then 0 then add extra damange to current damange
+                                    float extraDamageOfUlt = 0;
+                                    int RLevel = attackLevels.Find(x => x.attackType == AttackType.r).level;
+                                    if(RLevel > 0)
+                                    {
+                                        List<ConditionsDetails> conditionsDetailsForUlt = attackScalingCondition.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == AttackType.r).level);
+                                        ScaleConditionsAndFactors scaleConditions = conditionsDetailsForUlt.Find(x => x.Level == RLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.Value_Plus_Percentage_AD);
+                                        extraDamageOfUlt = scaleConditions.baseValue + (float)(currentAD * (scaleConditions.percentage / 100));
+                                        Debug.LogError("ExtraDamage from Ult Specific for Sura");
+                                        damageValue += extraDamageOfUlt;
+                                    }
+                                }
                                 Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
                                 break;
                             //Treat AP and Bonus AP same for now

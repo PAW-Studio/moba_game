@@ -49,18 +49,27 @@ public class AnimationMovementManager : MonoBehaviour
     /// </summary>
     public void DetectHit()
     {
+      Character character=  playerScript.GetComponent<Character>();
         foreach(MinionAIScript target in HitList)
         {
-            //Debug.LogError("*Minion Hit :");
-            //Get value with respect to attack type from character data 
-            //int damage = playerScript.GetComponent<Character>().characterData.attackDamageDetails.Find(x => x.attackType == playerScript.currentAttackType).DamageValue;
-            //int ADAttack = playerScript.GetComponent<Character>().characterData.attackDamageDetails.FindAll(x => x.attackType == playerScript.currentAttackType&& x.attackSubType== AttackSubType.AD ).Count;
-            float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
-            damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+            if(character.characterData.characterModel.characterType == CharacterType.Jahan) 
+            {
+                if(playerScript.currentAttackType== AttackType.e) 
+                {
+                  int E_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.e).level;
+                    ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.e).conditions.Find(y => y.Level == E_attackLevel).scaleConditionsAndFactors.Find(x=>x.scalingCondition== ScalingConditionTypes.SlowerForSomeTime);
 
+                    target.SetSlowerSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage);
+                }
+            }
+            else 
+            {
+                float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+                damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
                 //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
                 Debug.LogError("Scale Damage " + damage);
                 target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+            }
         }
         playerScript.currentAttackType = AttackType.None;  //Reset attack type
         HitList.Clear();

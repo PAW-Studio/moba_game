@@ -178,6 +178,38 @@ MonoBehaviour:
         baseValue: 0
         percentage: 50
         effectTime: 0
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 4
+        percentage: 80
+        effectTime: 1.75
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
   championName: Jahan
   summonerName: 
   baseHealth: 590

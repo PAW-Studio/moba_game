@@ -325,6 +325,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245115764611245168}
   m_Mesh: {fileID: 4300000, guid: 344b3b3750c41df429e8b3c371834b10, type: 2}
+--- !u!1 &1827489740584444350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3011795403391061765}
+  - component: {fileID: 3352670702435772738}
+  m_Layer: 7
+  m_Name: AreaCollisionDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3011795403391061765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827489740584444350}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.28571427, y: 0.28571427, z: 0.28571427}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8871852998803357017}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3352670702435772738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827489740584444350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15aa55ee59e90814fa21460c72d70645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationMovementManager: {fileID: 214404161998026755}
+  DistanceBetweenPlayerAndHitsMaxAllowed: 50
+  AreadDamageDistance: 30
 --- !u!1 &2484796403973555922
 GameObject:
   m_ObjectHideFlags: 0
@@ -3852,7 +3899,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 010db8c982f6e4b46ac6a38e7e65f95a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 010db8c982f6e4b46ac6a38e7e65f95a,
         type: 3}
@@ -3887,7 +3934,9 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
-  collisionDetectorObjects: []
+  collisionDetectorObjects:
+  - collisionDetector: {fileID: 3352670702435772738}
+    damageType: 2
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
