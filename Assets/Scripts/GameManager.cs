@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
 
     //Temp
     public Vector3 CharacterLastPosition;                                           //Last position of character before death
-
+    public GameObject QWER_LevelUpPanel;                                            //Panel with "Q" ,"W", "E" and "R" buttons to choose any one for level up
+    public List<AttackTypeReference> attackTypeReferences = new List<AttackTypeReference>();      //List of buttons with attack types in QWER_LevelUp panel
   
 
     [SerializeField]
@@ -265,17 +266,147 @@ public class GameManager : MonoBehaviour
         }
       StartCoroutine(SpawnWave());                              //Continue spawn coroutine                                             
     }
-
+    /// <summary>
+    /// Starts coroutine for attack cooldown timer and image update
+    /// </summary>
+    /// <param name="activeTime">attack active time</param>
+    /// <param name="timerValue">cooldown time</param>
+    /// <param name="attackType">current attack type</param>
+    public void StartTimeTextUpdate(float activeTime,float timerValue,AttackType attackType) 
+    {
+       StartCoroutine( AttackButtons.Find(x => x.attackType == attackType).UpdateTimerText(activeTime,timerValue));
+    }
+    //Stop coroutine
+    public void StopTimeTextUpdate(float activeTime,float timerValue,AttackType attackType)
+    {
+        StopCoroutine(AttackButtons.Find(x => x.attackType == attackType).UpdateTimerText(activeTime,timerValue));
+        AttackButtons.Find(x => x.attackType == attackType).ResetCoolDown();
+    }
+    /// <summary>
+    /// Stop coroutine on disable
+    /// </summary>
     private void OnDisable()
     {
         StopCoroutine(SpawnWave());   
+    }
+    /// <summary>
+    /// Get AD for the current selected character
+    /// </summary>
+    public double GetCurrentAD() 
+    {
+      return  currentCharacter.currentAD;
+    }
+    /// <summary>
+    /// Show level up screen for Q/W/E/R levelup
+    /// </summary>
+    public void Show_QWER_LevelUpdatePanel()
+    {
+        Debug.LogError(currentCharacter.characterData.characterModel.characterType);
+        foreach(AttackTypeReference item in attackTypeReferences)
+        {
+            //Allow button to be interactable only if attack level is less then max(5) attack level
+            AttackLevel attackLevel = currentCharacter.attackLevels.Find(x => x.attackType == item.attackType);
+            item.currentLevel.text = attackLevel.level.ToString();
+            if(attackLevel.level < attackLevel.MaxLevelUpLimit && (attackLevel.LevelUpAllowedForCharacterLevels.Count==0|| attackLevel.LevelUpAllowedForCharacterLevels.Count>0 && attackLevel.LevelUpAllowedForCharacterLevels.Contains((int)currentCharacter.currentLevel)))
+            {
+                item.EnableButton(true);
+            }
+            else 
+            {
+                item.EnableButton(false);
+            }
+        }
+        QWER_LevelUpPanel.SetActive(true);
+    }
+    /// <summary>
+    /// Hide level up screen for Q/W/E/R levelup
+    /// </summary>
+    public void Hide_QWER_LevelUpdatePanel()
+    {
+        QWER_LevelUpPanel.SetActive(false);
     }
 }
 //Handle attack buttton UI with this class
 [System.Serializable]
 public class AttackButton 
 {
-    public AttackType attackType;
-    public Button button;
-    public Image ActiveIndicator;
+    public AttackType attackType;                           //Type of attack
+    public Button button;                                   //Button object for this attack
+    public Image ActiveIndicator;                           //Image that indicates that attack is active    
+    public GameObject DeactiveIndicator;                    //Gameobject that covers attack button while the attack is on cooldown
+    public TMPro.TextMeshProUGUI coolDownTimer;             //Remaining time display object while cooldown is on
+    public TMPro.TextMeshProUGUI attackName;                //Object reference for attack name text 
+   
+    /// <summary>
+    /// Update remaining time text on button while attack button is on cooldown
+    /// </summary>
+    /// <param name="val">coolddown time</param>
+    public void UpdateTime(float val) 
+    {
+        string timerText = "";
+        if(val > 1)
+        {
+            timerText =System.Convert.ToInt32(val).ToString();
+        }
+        else
+        {          
+            timerText = val.ToString("F1");
+        }
+        coolDownTimer.text = timerText.ToString();
+    }
+    /// <summary>
+    /// Method to trigger coroutine for continuously update remaining time and image fill amount 
+    /// </summary>
+    /// <param name="activeTime">activet time of attack</param>
+    /// <param name="timerValue">cooldown time value</param>
+    public void StartTimerUpdateCoroutine(float activeTime,float timerValue) 
+    {
+        GameManager.instance.StartTimeTextUpdate(activeTime,timerValue,attackType);     
+    }
+    /// <summary>
+    /// Method to trigger stop coroutine
+    /// </summary>
+    /// <param name="activeTime">activet time of attack</param>
+    /// <param name="timerValue">cooldown time value</param>
+    public void StopTimerUpdateCoroutine(float activeTime,float timerValue)
+    {
+        GameManager.instance.StopTimeTextUpdate(activeTime,timerValue,attackType);
+    }
+    /// <summary>
+    /// Updates timer text and image fill amount of attack button while button is on cooldown mode
+    /// </summary>
+    /// <param name="activeTime">active time of attack</param>
+    /// <param name="delay">coold down time</param>
+    /// <returns></returns>
+    public IEnumerator UpdateTimerText(float activeTime,float delay)
+    {
+        yield return new WaitForSeconds(activeTime);
+        attackName.gameObject.SetActive(false);
+        coolDownTimer.gameObject.SetActive(true);
+        Image InactiveImage = DeactiveIndicator.GetComponent<Image>();
+        InactiveImage.fillAmount = 1;
+        float time = delay;
+        while(time > 0)
+        {
+           // float timeRemaining = Mathf.Lerp(time,0,time / delay);
+            float InactiveImageFill = Mathf.Lerp(0,1,time / delay);
+            InactiveImage.fillAmount = InactiveImageFill;
+            time -= Time.deltaTime;
+            UpdateTime(time);
+            yield return null;
+        }
+        UpdateTime(0);
+        InactiveImage.fillAmount = 0;
+        coolDownTimer.gameObject.SetActive(false);
+        attackName.gameObject.SetActive(true);
+    }
+    public void ResetCoolDown() 
+    {
+        UpdateTime(0);
+        Image InactiveImage = DeactiveIndicator.GetComponent<Image>();
+        InactiveImage.fillAmount = 0;
+        coolDownTimer.gameObject.SetActive(false);
+        attackName.gameObject.SetActive(true);
+        DeactiveIndicator.gameObject.SetActive(false);
+    }
 }

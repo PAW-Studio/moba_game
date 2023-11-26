@@ -10,16 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a38dcba6723f8b7478bae4af159ce7db, type: 3}
-  m_Name: Hakka_Scriptable
+  m_Name: Serina_Scriptable
   m_EditorClassIdentifier: 
   characterModel:
-    characterType: 6
-    characterModel: {fileID: 919132149155446097, guid: 417e9776a91bf224eae37873939d6ea4,
+    characterType: 12
+    characterModel: {fileID: 919132149155446097, guid: a926e1564c14b7f429cb7fe9fbd76680,
       type: 3}
   attackAnimationDetails:
   - attackType: 1
-    movementSpeedModifier: 2
+    movementSpeedModifier: 1.5
   - attackType: 3
+    movementSpeedModifier: 1.5
+  - attackType: 0
+    movementSpeedModifier: 2
+  - attackType: 2
     movementSpeedModifier: 1.5
   attackDamageDetails:
   - attackType: 4
@@ -30,40 +34,42 @@ MonoBehaviour:
     attackSubType: 1
   - attackType: 1
     attackSubType: 1
-  attackCoolDownDetails:
   - attackType: 0
-    ActiveTime: 2
-    levelCoolDownValues:
-    - level: 1
-      cooldownValue: 28
-    - level: 2
-      cooldownValue: 25
-    - level: 3
-      cooldownValue: 22.5
-    - level: 4
-      cooldownValue: 20
-    - level: 5
-      cooldownValue: 18
+    attackSubType: 1
+  attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 14
-    - level: 2
-      cooldownValue: 13
-    - level: 3
-      cooldownValue: 12
-    - level: 4
-      cooldownValue: 11
-    - level: 5
       cooldownValue: 10
+    - level: 2
+      cooldownValue: 9
+    - level: 3
+      cooldownValue: 8
+    - level: 4
+      cooldownValue: 7
+    - level: 5
+      cooldownValue: 6
+  - attackType: 0
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 0
+    - level: 2
+      cooldownValue: 0
+    - level: 3
+      cooldownValue: 0
+    - level: 4
+      cooldownValue: 0
+    - level: 5
+      cooldownValue: 0
   - attackType: 2
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 8
-    - level: 2
       cooldownValue: 6
+    - level: 2
+      cooldownValue: 5.5
     - level: 3
       cooldownValue: 5
     - level: 4
@@ -74,157 +80,177 @@ MonoBehaviour:
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 80
+      cooldownValue: 90
     - level: 2
-      cooldownValue: 60
+      cooldownValue: 75
     - level: 3
-      cooldownValue: 50
+      cooldownValue: 60
   attackScalingConditions:
   - attackType: 1
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 60
-        percentage: 80
+        baseValue: 50
+        percentage: 125
         effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 100
-        percentage: 80
+        baseValue: 90
+        percentage: 145
         effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 140
-        percentage: 80
+        baseValue: 130
+        percentage: 165
         effectTime: 0
     - Level: 4
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 180
-        percentage: 80
+        baseValue: 170
+        percentage: 185
         effectTime: 0
     - Level: 5
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 220
-        percentage: 80
+        baseValue: 210
+        percentage: 205
         effectTime: 0
   - attackType: 0
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 1
+        baseValue: 7
+        percentage: 35
+        effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 1
+        baseValue: 12
+        percentage: 35
+        effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 1
+        baseValue: 17
+        percentage: 35
+        effectTime: 0
     - Level: 4
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 1
+        baseValue: 22
+        percentage: 35
+        effectTime: 0
     - Level: 5
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 1
+        baseValue: 27
+        percentage: 35
+        effectTime: 0
   - attackType: 2
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 10
+        baseValue: 75
         percentage: 50
         effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 70
+        effectTime: 1
     - Level: 2
-      scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 35
-        percentage: 50
-        effectTime: 0
-    - Level: 3
-      scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 60
-        percentage: 50
-        effectTime: 0
-    - Level: 4
       scaleConditionsAndFactors:
       - scalingCondition: 1
         baseValue: 85
         percentage: 50
         effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 70
+        effectTime: 1
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 95
+        percentage: 50
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 70
+        effectTime: 1
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 105
+        percentage: 50
+        effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 70
+        effectTime: 1
     - Level: 5
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 110
+        baseValue: 115
         percentage: 50
         effectTime: 0
+      - scalingCondition: 9
+        baseValue: 0
+        percentage: 70
+        effectTime: 1
   - attackType: 3
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 70
-        percentage: 60
+        baseValue: 300
+        percentage: 200
         effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 120
-        percentage: 60
+        baseValue: 525
+        percentage: 200
         effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
       - scalingCondition: 1
-        baseValue: 180
-        percentage: 60
+        baseValue: 750
+        percentage: 200
         effectTime: 0
-  championName: Hakka
+  championName: Serina
   summonerName: 
-  baseHealth: 645
-  growthHealth: 101
-  baseHealthRegen: 6.7
-  growthHealthRegen: 0.5
-  baseAD: 55
-  growthAD: 3.4
+  baseHealth: 575
+  growthHealth: 106
+  baseHealthRegen: 3.5
+  growthHealthRegen: 0.55
+  baseAD: 61
+  growthAD: 3.65
   baseAP: 0
   growthAP: 0
-  baseAS: 0.657
-  growthAS: 0.026
-  baseArmor: 41
-  growthArmor: 4.9
+  baseAS: 0.68
+  growthAS: 0.04
+  baseArmor: 28
+  growthArmor: 4.6
   baseMagicResistance: 31
-  growthMagicResistance: 2.1
+  growthMagicResistance: 1.42
   baseMovementSpeed: 330
   growthMovementSpeed: 0
-  baseRange: 180
+  baseRange: 640
   growthRange: 0
-  currentHealth: 0
-  currentHealthRegen: 0
-  currentAD: 0
-  currentAS: 0
-  currentArmor: 0
-  currentMagicResistance: 0
+  currentHealth: 651.3199999999999
+  currentHealthRegen: 3.896
+  currentAD: 63.628
+  currentAS: 0.7088000000000001
+  currentArmor: 30.628
+  currentMagicResistance: 32.0224
   currentMovementSpeed: 0
-  currentRange: 0
-  currentLevel: 0
+  currentRange: 640
+  currentLevel: 1
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: HakkaAnimator
+  CharacterAnimatorName: SerinaAnimator

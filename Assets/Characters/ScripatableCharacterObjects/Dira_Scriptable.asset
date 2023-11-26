@@ -10,73 +10,75 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a38dcba6723f8b7478bae4af159ce7db, type: 3}
-  m_Name: Hakka_Scriptable
+  m_Name: Dira_Scriptable
   m_EditorClassIdentifier: 
   characterModel:
-    characterType: 6
-    characterModel: {fileID: 919132149155446097, guid: 417e9776a91bf224eae37873939d6ea4,
+    characterType: 7
+    characterModel: {fileID: 919132149155446097, guid: 98dab6f281ceafb42a66c03a325f1498,
       type: 3}
   attackAnimationDetails:
   - attackType: 1
-    movementSpeedModifier: 2
+    movementSpeedModifier: 1.5
   - attackType: 3
     movementSpeedModifier: 1.5
+  - attackType: 0
+    movementSpeedModifier: 2
   attackDamageDetails:
   - attackType: 4
-    attackSubType: 1
+    attackSubType: 2
   - attackType: 2
-    attackSubType: 1
+    attackSubType: 0
   - attackType: 3
-    attackSubType: 1
+    attackSubType: 0
   - attackType: 1
-    attackSubType: 1
+    attackSubType: 0
   attackCoolDownDetails:
+  - attackType: 1
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 5
+    - level: 2
+      cooldownValue: 4.5
+    - level: 3
+      cooldownValue: 4
+    - level: 4
+      cooldownValue: 3.5
+    - level: 5
+      cooldownValue: 3
   - attackType: 0
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 28
+      cooldownValue: 6
     - level: 2
-      cooldownValue: 25
+      cooldownValue: 6
     - level: 3
-      cooldownValue: 22.5
+      cooldownValue: 6
     - level: 4
-      cooldownValue: 20
+      cooldownValue: 6
     - level: 5
-      cooldownValue: 18
-  - attackType: 1
-    ActiveTime: 2
-    levelCoolDownValues:
-    - level: 1
-      cooldownValue: 14
-    - level: 2
-      cooldownValue: 13
-    - level: 3
-      cooldownValue: 12
-    - level: 4
-      cooldownValue: 11
-    - level: 5
-      cooldownValue: 10
+      cooldownValue: 6
   - attackType: 2
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
-      cooldownValue: 8
+      cooldownValue: 9
     - level: 2
-      cooldownValue: 6
+      cooldownValue: 8
     - level: 3
-      cooldownValue: 5
+      cooldownValue: 7
     - level: 4
-      cooldownValue: 4.5
+      cooldownValue: 6.5
     - level: 5
-      cooldownValue: 4
+      cooldownValue: 6
   - attackType: 3
     ActiveTime: 2
     levelCoolDownValues:
     - level: 1
       cooldownValue: 80
     - level: 2
-      cooldownValue: 60
+      cooldownValue: 65
     - level: 3
       cooldownValue: 50
   attackScalingConditions:
@@ -84,137 +86,137 @@ MonoBehaviour:
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 60
-        percentage: 80
+      - scalingCondition: 2
+        baseValue: 15
+        percentage: 70
         effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 100
-        percentage: 80
+      - scalingCondition: 2
+        baseValue: 30
+        percentage: 70
         effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 140
-        percentage: 80
+      - scalingCondition: 2
+        baseValue: 45
+        percentage: 70
         effectTime: 0
     - Level: 4
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 180
-        percentage: 80
+      - scalingCondition: 2
+        baseValue: 60
+        percentage: 70
         effectTime: 0
     - Level: 5
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 220
-        percentage: 80
+      - scalingCondition: 2
+        baseValue: 75
+        percentage: 70
         effectTime: 0
   - attackType: 0
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 2
+        baseValue: 5
+        percentage: 40
+        effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 2
+        baseValue: 11
+        percentage: 40
+        effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 2
+        baseValue: 17
+        percentage: 40
+        effectTime: 0
     - Level: 4
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 2
+        baseValue: 23
+        percentage: 40
+        effectTime: 0
     - Level: 5
       scaleConditionsAndFactors:
-      - scalingCondition: 5
-        baseValue: 0
-        percentage: 100
-        effectTime: 1
+      - scalingCondition: 2
+        baseValue: 29
+        percentage: 40
+        effectTime: 0
   - attackType: 2
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 10
-        percentage: 50
+      - scalingCondition: 2
+        baseValue: 66
+        percentage: 35
         effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 35
-        percentage: 50
+      - scalingCondition: 2
+        baseValue: 121
+        percentage: 35
         effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 60
-        percentage: 50
+      - scalingCondition: 2
+        baseValue: 181
+        percentage: 35
         effectTime: 0
     - Level: 4
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 85
-        percentage: 50
+      - scalingCondition: 2
+        baseValue: 226
+        percentage: 35
         effectTime: 0
     - Level: 5
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 110
-        percentage: 50
+      - scalingCondition: 2
+        baseValue: 280
+        percentage: 35
         effectTime: 0
   - attackType: 3
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 70
+      - scalingCondition: 2
+        baseValue: 50
         percentage: 60
         effectTime: 0
     - Level: 2
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 120
+      - scalingCondition: 2
+        baseValue: 80
         percentage: 60
         effectTime: 0
     - Level: 3
       scaleConditionsAndFactors:
-      - scalingCondition: 1
-        baseValue: 180
+      - scalingCondition: 2
+        baseValue: 120
         percentage: 60
         effectTime: 0
-  championName: Hakka
+  championName: Dira
   summonerName: 
-  baseHealth: 645
-  growthHealth: 101
-  baseHealthRegen: 6.7
-  growthHealthRegen: 0.5
-  baseAD: 55
-  growthAD: 3.4
+  baseHealth: 590
+  growthHealth: 103
+  baseHealthRegen: 6.5
+  growthHealthRegen: 0.55
+  baseAD: 54.5
+  growthAD: 3
   baseAP: 0
   growthAP: 0
-  baseAS: 0.657
-  growthAS: 0.026
-  baseArmor: 41
-  growthArmor: 4.9
-  baseMagicResistance: 31
-  growthMagicResistance: 2.1
+  baseAS: 0.63
+  growthAS: 0.021
+  baseArmor: 27
+  growthArmor: 4.4
+  baseMagicResistance: 30.5
+  growthMagicResistance: 1.7
   baseMovementSpeed: 330
   growthMovementSpeed: 0
-  baseRange: 180
+  baseRange: 535
   growthRange: 0
   currentHealth: 0
   currentHealthRegen: 0
@@ -227,4 +229,4 @@ MonoBehaviour:
   currentLevel: 0
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: HakkaAnimator
+  CharacterAnimatorName: DiraAnimator

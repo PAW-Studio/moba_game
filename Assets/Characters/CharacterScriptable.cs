@@ -9,10 +9,14 @@ public class CharacterScriptable : ScriptableObject
 {
     [Tooltip("Character FBX model -Idle and character type")]
     public CharacterModels characterModel;                               //Character FBX model (Idle -fbx model)
-
+    
     public List<AttackAnimationDetails> attackAnimationDetails = new List<AttackAnimationDetails>();  //Attack type and movement speed details -used to set movement speed character as well as attack type wise dynamically 
     public List<AttackDamageDetails> attackDamageDetails = new List<AttackDamageDetails>();   //List of attack types and respective damages values that can be done
     //Base and growth
+    public List<AttackCoolDownDetails> attackCoolDownDetails = new List<AttackCoolDownDetails>(); //Cooldown timings with resepect to attack type
+    public List<AttackScalingConditions> attackScalingConditions = new List<AttackScalingConditions>();
+
+
     public string championName = "";                                    //Name of character
     public string summonerName = "";
 
@@ -70,8 +74,8 @@ public class CharacterScriptable : ScriptableObject
     public double currentMovementSpeed;
     [HideInInspector]
     public double currentRange;
-    [HideInInspector]
-    public double currentLevel;
+    //[HideInInspector]
+    public double currentLevel=1;
     [HideInInspector]
     public double currentXP;
     [HideInInspector]
@@ -213,6 +217,30 @@ public class CharacterScriptable : ScriptableObject
             + "Current Health: " + currentHealth + ";"
             + "Current AD: " + currentAD + "\n ");
     }
+    /// <summary>
+    /// Get cooldown time for the attack
+    /// </summary>
+    /// <param name="attackType">attack type</param>
+    /// <returns>cooldown time for the attack</returns>
+    public float GetCoolDownTime(AttackType attackType,double _characterLevel=0)
+    {
+        float cooldowntime = 0;
+
+        Debug.LogError("Cooldown time " + attackCoolDownDetails.Find(x => x.attackType == attackType).GetCoolDowntime(_characterLevel) + " Level " + _characterLevel);
+        cooldowntime = attackCoolDownDetails.Find(x => x.attackType == attackType).GetCoolDowntime(_characterLevel);
+        return cooldowntime;
+    }
+    /// <summary>
+    /// Get actvie time of the attack
+    /// </summary>
+    /// <param name="attackType">attack type</param>
+    /// <returns>Active time for the attack</returns>
+    public float GetActiveTime(AttackType attackType)
+    {
+        float ActiveTime = 1f;
+        ActiveTime = attackCoolDownDetails.Find(x => x.attackType == attackType).ActiveTime;
+        return ActiveTime;
+    }
 }
 /// <summary>
 /// characters : this enum is used to decide the character and model is set based on this type
@@ -230,11 +258,100 @@ public class AttackAnimationDetails
    // public int DamageValue=25;
 }
 /// <summary>
-/// Used to hold the values of attack type and damange that can be done 
+/// Used to hold the values of attack type and attack subType(AD,AP etc) 
 /// </summary>
 [System.Serializable]
 public class AttackDamageDetails
 {
     public AttackType attackType;
-    public int DamageValue = 25;
+    public AttackSubType attackSubType;
+    //public int DamageValue = 25;
 }
+/// <summary>
+/// Used to hold the values of attack type and cooldownFormula
+/// </summary>
+[System.Serializable]
+public class AttackCoolDownDetails
+{
+    public AttackType attackType;
+    public float ActiveTime = 2f;
+    public List<LevelCoolDownValue> levelCoolDownValues = new List<LevelCoolDownValue>();   //List of cooldown values with respect to levels   
+    /// <summary>
+    /// Get cooldown timing for current level of chracter 
+    /// </summary>
+    /// <param name="attackLevel">Q/W/E/R attack level</param>
+    /// <returns>cooldown time for attack</returns>
+    public float GetCoolDowntime(double attackLevel) 
+    {
+        
+        //if(attackLevel == 0) 
+        //{
+        //    attackLevel = 1;
+        //}
+        float cooldownValue = 1;
+        if(levelCoolDownValues.Find(x=>x.level== attackLevel) != null) 
+        {
+            cooldownValue = levelCoolDownValues.Find(x => x.level == attackLevel).cooldownValue;  //Find cooldown value with respect to input level
+        }
+        return  cooldownValue <0 ?0:cooldownValue;     //return zero if less then zero
+    }
+}
+/// <summary>
+/// Cooldown value and level
+/// </summary>
+[System.Serializable]
+public class LevelCoolDownValue
+{
+    public int level;
+    public float cooldownValue;
+}
+/// <summary>
+/// Used to hold QWER current level
+/// </summary>
+[System.Serializable]
+public class AttackLevel
+{
+    public int level;
+    public AttackType attackType;
+    public int MaxLevelUpLimit=5;
+    public List<int> LevelUpAllowedForCharacterLevels = new List<int>(); // If list not empty allow level up for the given list of values
+}
+[System.Serializable]
+/// <summary>
+/// Scaling conditions for the Q/W/E/R attacks
+/// </summary>
+public class AttackScalingConditions 
+{
+    public AttackType attackType;
+    public List<ConditionsDetails> conditions;
+}
+[System.Serializable]
+/// <summary>
+/// Attack Level and condition list
+/// </summary>
+public class ConditionsDetails 
+{
+    public int Level;
+    public List<ScaleConditionsAndFactors> scaleConditionsAndFactors;
+}
+[System.Serializable]
+/// <summary>
+/// Condition type and percentage/base values for the condition
+/// </summary>
+public class ScaleConditionsAndFactors 
+{
+    public ScalingConditionTypes scalingCondition;
+    public float baseValue;
+    public float percentage;
+    public float effectTime;
+ 
+}
+[System.Serializable]
+/// <summary>
+/// Conditions for Q/W/E/R scaling
+/// </summary>
+public enum ScalingConditionTypes 
+{  None,Value_Plus_Percentage_AD,Value_Plus_Percentage_AP,Value_Plus_Percentage_BonusAP,SlowerForSomeTime,Percentage_DamageReduction,Percentage_AS_Up,Percentage_MS_Up, Percentage_AS_Down, Percentage_MS_Down,Percentage_Heal,AD_Plus_Percentage_AP
+}
+
+

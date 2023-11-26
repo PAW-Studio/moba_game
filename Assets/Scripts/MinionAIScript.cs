@@ -30,9 +30,15 @@ public class MinionAIScript : MonoBehaviour
 
     Camera cam;
     Transform healthBarTransform;
+    float OriginalSpeed;
+    float DecreasedSpeed;
+    bool DecreasedSpeedEffect;
+    float TimePassed = 0;
+    float SlowEffectTime;
     // Start is called before the first frame update
     void Start()
     {
+      
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
         GameObject Healthbar = Instantiate(GameManager.instance.MinioinHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.transform.localScale = Vector3.one;
@@ -44,11 +50,14 @@ public class MinionAIScript : MonoBehaviour
         // Caching references
         renderer = GetComponent<Renderer>();
         agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
-
-        // Setting minion health bar
+       // Save original speed for reference
+          OriginalSpeed = agent.speed ;
+       // Decreased speed effect false on start
+          DecreasedSpeedEffect = false;
+       // Setting minion health bar
         currentHealth = maxHealth;
         minionHealthBar.SetMaxHealth(maxHealth);
-        Healthbar.gameObject.SetActive(true); 
+        Healthbar.gameObject.SetActive(true);
 
         // Setting type of minion based on layer
         if(isBlue)
@@ -65,11 +74,30 @@ public class MinionAIScript : MonoBehaviour
 
         agent.SetDestination(destination);
     }
-
+    /// <summary>
+    /// Set original speed and reset decreased speed effect
+    /// </summary>
+    private void SetOriginalSpeed()
+    {
+        DecreasedSpeedEffect = false;
+        agent.speed = OriginalSpeed;
+        SlowEffectTime = 0;
+        TimePassed = 0;
+        descreasedOne = false;
+    }
+    bool descreasedOne = false; //To ensure only one time decrease the speed 
     // Update is called once per frame
     void Update()
     {
-
+        if(DecreasedSpeedEffect)
+        {
+            TimePassed += Time.deltaTime;
+            if(TimePassed > SlowEffectTime)
+            {
+                SetOriginalSpeed();
+                Debug.LogError("Original Speed set");
+            }
+        }
         if(hasTarget && targetMinion != null)
         {
             if(targetMinion.layer == 11 || targetMinion.layer == 12)
@@ -113,6 +141,7 @@ public class MinionAIScript : MonoBehaviour
             Destroy(minionHealthBar.gameObject);
             Destroy(this.gameObject);
         }
+
     }
 
     private void FixedUpdate()
@@ -125,15 +154,14 @@ public class MinionAIScript : MonoBehaviour
     }
     void MoveToMinion()
     {
+        
         // Calculating distance between this minion and target
         if(Vector3.Distance(transform.position,targetMinion.transform.position) > attackRange)
         {
             agent.SetDestination(targetMinion.transform.position);
-
             // Minion stops at attackRange distance from target 
             agent.stoppingDistance = attackRange;
         }
-
         else
         {
             // If target minion is less than attackRange distance away, moves towards it
@@ -170,10 +198,27 @@ public class MinionAIScript : MonoBehaviour
             targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth);
         }
     }
-
-    public void DealDamage(int damage) 
+    /// <summary>
+    /// Handle damage and update healthbar
+    /// </summary>
+    /// <param name="damage">damage value</param>
+    public void DealDamage(float damage) 
     {
+        Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
         minionHealthBar.SetHealth(currentHealth);
+    }
+    /// <summary>
+    /// Set slower movement speed for the given time
+    /// </summary>
+    /// <param name="slowerEffectTime">effect time</param>
+    /// <param name="percentage">speed decrease percentage with resepect to current speed</param>
+    public void SetSlowerSpeedEffect(float slowerEffectTime, float percentage) 
+    {
+        DecreasedSpeedEffect = true;
+        descreasedOne = true;
+        DecreasedSpeed = agent.speed - (agent.speed * (percentage / 100));
+        SlowEffectTime = slowerEffectTime;
+        agent.speed = DecreasedSpeed;
     }
 }

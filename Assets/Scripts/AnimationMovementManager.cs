@@ -13,6 +13,14 @@ public class AnimationMovementManager : MonoBehaviour
     public List<MinionAIScript> HitList = new List<MinionAIScript>();    
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
+    public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
+    [Header("Throw/Shootable projectile")]
+    public GameObject ArrowPrefab;                                          //Arrow/projectile prefab
+    public Transform spawnTrasform;                                         //Arrow/projectile spawn transform
+    public Transform spawnTrasformLeft;                                     //Arrow/projectile spawn transform for left hand
+    public Projectile arrowProjectile;                                      //Reference script of arrow projectile
+   
+
     private void OnEnable()
     {
         // startPosition = transform.position;
@@ -35,23 +43,36 @@ public class AnimationMovementManager : MonoBehaviour
         playerScript.ResetAnimationMovementSpeedModifier();
         // transform.position = startPosition;
         //DetectHit();
-
     }
     /// <summary>
     /// Damages the list of targets hit by player
     /// </summary>
     public void DetectHit()
     {
+      Character character=  playerScript.GetComponent<Character>();
         foreach(MinionAIScript target in HitList)
         {
-            Debug.LogError("*Minion Hit :");
-            //Get value with respect to attack type from character data 
-            int damage = playerScript.GetComponent<Character>().characterData.attackDamageDetails.Find(x => x.attackType == playerScript.currentAttackType).DamageValue;
-            target.DealDamage(damage);
+            if(character.characterData.characterModel.characterType == CharacterType.Jahan) 
+            {
+                if(playerScript.currentAttackType== AttackType.e) 
+                {
+                  int E_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.e).level;
+                    ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.e).conditions.Find(y => y.Level == E_attackLevel).scaleConditionsAndFactors.Find(x=>x.scalingCondition== ScalingConditionTypes.SlowerForSomeTime);
+
+                    target.SetSlowerSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage);
+                }
+            }
+            else 
+            {
+                float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+                damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+                //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+                Debug.LogError("Scale Damage " + damage);
+                target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+            }
         }
         playerScript.currentAttackType = AttackType.None;  //Reset attack type
         HitList.Clear();
-
     }
 
     /// <summary>
@@ -109,6 +130,39 @@ public class AnimationMovementManager : MonoBehaviour
     {
       return  collisionDetectorObjects.Find(x => x.damageType == currentAttackDamangeType).collisionDetector;
     }
+    /// <summary>
+    /// Spawn arrow/other throwable /shootable projectile : This method is called from animation clip 
+    /// </summary>
+    public void SpawnArrow() 
+    {
+        GameObject arrow = Instantiate(ArrowPrefab,spawnTrasform.parent);
+        arrowProjectile = arrow.GetComponent<Projectile>();
+        arrowProjectile.character = GetComponentInParent<Character>();
+        arrowProjectile.attackType = playerScript.currentAttackType;
+        Debug.LogError(arrowProjectile.attackType + " From " + arrowProjectile.character.currentCharacterModel.characterType);
+    }
+    /// <summary>
+    /// Spawn arrow/other throwable /shootable projectile for left hand : This method is called from animation clip 
+    /// </summary>
+    public void SpawnArrowForLeftHand()
+    {
+        GameObject arrow = Instantiate(ArrowPrefab,spawnTrasformLeft.parent);
+        arrowProjectile = arrow.GetComponent<Projectile>();
+        arrowProjectile.character = GetComponentInParent<Character>();
+        arrowProjectile.attackType = playerScript.currentAttackType;
+        Debug.LogError(arrowProjectile.attackType+ " From "+ arrowProjectile.character.currentCharacterModel.characterType);
+    }
+    /// <summary>
+    /// Set shoot boolean in projectile script and shoot : This method is called from animation clip 
+    /// </summary>
+    public void ShootArrow() 
+    {
+        if(arrowProjectile) 
+        {
+            arrowProjectile.transform.SetParent(playerScript.transform.parent);
+            arrowProjectile.Shoot();
+        }
+    }
 }
 [System.Serializable]
 /// <summary>
@@ -118,6 +172,15 @@ public class CollisionDetectorObject
 {
   public CollisionDetector collisionDetector;  //reference script of collision detector object
   public DamageType damageType;               //damage type on collision
+}
+/// <summary>
+/// Used to set different spawn positions and projectiles with respect to attack
+/// </summary>
+public class ProjectileSpawnDetails
+{
+    public Transform projectileSpawnPosition;  //spawn position of projectile 
+    public GameObject projectilePrefab;        //Projectile to  shoot
+    public AttackType AttackType;               //damage type on collision
 }
 [System.Serializable]
 /// <summary>

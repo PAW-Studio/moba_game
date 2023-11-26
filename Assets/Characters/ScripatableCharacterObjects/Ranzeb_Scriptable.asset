@@ -23,32 +23,210 @@ MonoBehaviour:
     movementSpeedModifier: 1.5
   attackDamageDetails:
   - attackType: 4
-    DamageValue: 25
+    attackSubType: 1
   - attackType: 2
-    DamageValue: 50
+    attackSubType: 1
   - attackType: 3
-    DamageValue: 100
+    attackSubType: 1
   - attackType: 1
-    DamageValue: 75
+    attackSubType: 1
+  attackCoolDownDetails:
+  - attackType: 1
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 3
+    - level: 2
+      cooldownValue: 3
+    - level: 3
+      cooldownValue: 3
+    - level: 4
+      cooldownValue: 3
+    - level: 5
+      cooldownValue: 3
+  - attackType: 0
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 22
+    - level: 2
+      cooldownValue: 21
+    - level: 3
+      cooldownValue: 20
+    - level: 4
+      cooldownValue: 19
+    - level: 5
+      cooldownValue: 18
+  - attackType: 2
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 12
+    - level: 2
+      cooldownValue: 11
+    - level: 3
+      cooldownValue: 10
+    - level: 4
+      cooldownValue: 9
+    - level: 5
+      cooldownValue: 8
+  - attackType: 3
+    ActiveTime: 2
+    levelCoolDownValues:
+    - level: 1
+      cooldownValue: 85
+    - level: 2
+      cooldownValue: 85
+    - level: 3
+      cooldownValue: 85
+  attackScalingConditions:
+  - attackType: 1
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 20
+        percentage: 100
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 45
+        percentage: 100
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 70
+        percentage: 100
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 95
+        percentage: 100
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 120
+        percentage: 100
+        effectTime: 0
+  - attackType: 0
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 70
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 70
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 4
+        percentage: 70
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 70
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 5
+        baseValue: 0
+        percentage: 70
+        effectTime: 0
+  - attackType: 3
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 6
+        baseValue: 0
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 7
+        baseValue: 0
+        percentage: 50
+        effectTime: 0
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 6
+        baseValue: 0
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 7
+        baseValue: 0
+        percentage: 50
+        effectTime: 0
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 6
+        baseValue: 0
+        percentage: 40
+        effectTime: 0
+      - scalingCondition: 7
+        baseValue: 0
+        percentage: 50
+        effectTime: 0
+  - attackType: 2
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 4
+        percentage: 80
+        effectTime: 1.75
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 80
+        effectTime: 1.75
   championName: Ranzeb
   summonerName: 
   baseHealth: 670
-  growthHealth: 120
-  baseHealthRegen: 8.5
-  growthHealthRegen: 0.85
-  baseAD: 62
-  growthAD: 3.75
+  growthHealth: 99
+  baseHealthRegen: 7.5
+  growthHealthRegen: 0.65
+  baseAD: 63
+  growthAD: 2.05
   baseAP: 0
   growthAP: 0
-  baseAS: 0.625
-  growthAS: 0.02125
-  baseArmor: 44
-  growthArmor: 4.7
+  baseAS: 0.68
+  growthAS: 0.021
+  baseArmor: 33
+  growthArmor: 4.25
   baseMagicResistance: 32
   growthMagicResistance: 2.05
-  baseMovementSpeed: 330
+  baseMovementSpeed: 350
   growthMovementSpeed: 0
-  baseRange: 125
+  baseRange: 180
   growthRange: 0
   currentHealth: 0
   currentHealthRegen: 0
@@ -61,4 +239,4 @@ MonoBehaviour:
   currentLevel: 0
   currentXP: 0
   currentAP: 0
-  CharacterAnimatorName: OtrillAnimator
+  CharacterAnimatorName: RanzebAnimator
