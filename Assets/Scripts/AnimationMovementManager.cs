@@ -10,7 +10,8 @@ public class AnimationMovementManager : MonoBehaviour
     Vector3 startPosition;
 
     public bool Attacking = false;
-    public List<MinionAIScript> HitList = new List<MinionAIScript>();    
+    public List<MinionAIScript> HitList = new List<MinionAIScript>();
+    public List<Character> HitListChampions = new List<Character>();
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
     public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
@@ -65,7 +66,27 @@ public class AnimationMovementManager : MonoBehaviour
             else 
             {
                 float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
-                damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+                //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+                Debug.LogError("Scale Damage " + damage);
+                target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+            }
+        }
+
+        foreach(Character target in HitListChampions)
+        {
+            if(character.characterData.characterModel.characterType == CharacterType.Jahan)
+            {
+                if(playerScript.currentAttackType == AttackType.e)
+                {
+                    int E_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.e).level;
+                    ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.e).conditions.Find(y => y.Level == E_attackLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.SlowerForSomeTime);
+
+                    target.playerScript.SetSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage,false);
+                }
+            }
+            else
+            {
+                float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
                 //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
                 Debug.LogError("Scale Damage " + damage);
                 target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
@@ -73,6 +94,7 @@ public class AnimationMovementManager : MonoBehaviour
         }
         playerScript.currentAttackType = AttackType.None;  //Reset attack type
         HitList.Clear();
+        HitListChampions.Clear();
     }
 
     /// <summary>

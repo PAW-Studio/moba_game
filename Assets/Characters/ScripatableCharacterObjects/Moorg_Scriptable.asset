@@ -172,6 +172,8 @@ MonoBehaviour:
         baseValue: 200
         percentage: 30
         effectTime: 0
+  - attackType: 3
+    conditions: []
   championName: Moorg
   summonerName: 
   baseHealth: 645

@@ -92,12 +92,12 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884645105129681068}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 1.0286632
-  m_Height: 4.090948
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.74745166
+  m_Height: 5.9188223
   m_Direction: 1
-  m_Center: {x: 0.52866316, y: 2.130474, z: 0}
+  m_Center: {x: 0.054118752, y: 3.0444112, z: 0}
 --- !u!195 &884645105129681057
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -143,6 +143,8 @@ MonoBehaviour:
   currentVelocity: 0
   R_Attack_ActiveTime: 5
   AS_CapValue: 2.5
+  AS_DefaultCapValue: 2.5
+  MS_DefaultValue: 20
   moving: 0
 --- !u!54 &884645105129681059
 Rigidbody:
@@ -240,7 +242,7 @@ MonoBehaviour:
   - level: 0
     attackType: 3
     MaxLevelUpLimit: 3
-    LevelUpAllowedForCharacterLevels: 060000000b0000000f000000
+    LevelUpAllowedForCharacterLevels: 020000000b0000000f000000
   attackScalingConditions: []
 --- !u!1 &1245115764611245168
 GameObject:
@@ -987,6 +989,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects:
   - collisionDetector: {fileID: 8035651218415530156}
     damageType: 3
@@ -1141,6 +1144,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects: []
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 5930267339647767615, guid: 8cf5dcb6ecb9a904d942e26c9c27cbb1,
@@ -1285,6 +1289,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects: []
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
@@ -1417,6 +1422,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects:
   - collisionDetector: {fileID: 8022530767950850480}
     damageType: 3
@@ -1592,6 +1598,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects:
   - collisionDetector: {fileID: 5753265828921056802}
     damageType: 1
@@ -1726,6 +1733,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects:
   - collisionDetector: {fileID: 5649841155432849658}
     damageType: 1
@@ -3543,6 +3551,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects: []
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 5930267339647767615, guid: 2cff47b14528b08409859b57d20c5198,
@@ -3676,6 +3685,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects: []
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
@@ -3808,6 +3818,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects: []
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
@@ -3934,6 +3945,7 @@ MonoBehaviour:
   playerScript: {fileID: 884645105129681058}
   Attacking: 0
   HitList: []
+  HitListChampions: []
   collisionDetectorObjects:
   - collisionDetector: {fileID: 3352670702435772738}
     damageType: 2

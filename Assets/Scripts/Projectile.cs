@@ -33,6 +33,15 @@ public class Projectile : MonoBehaviour
                     hit = true;
                     break;
                 }
+                if(item.GetComponent<Character>() && character.gameObject!= item.gameObject) // Avoid self hit
+                {
+                    float damageValue = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                    //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
+                    item.GetComponent<Character>().DealDamage(damageValue); // Get current charactes AD
+                    Debug.LogError(damageValue);
+                    hit = true;
+                    break;
+                }
             }
             transform.Translate(transform.forward*speed*Time.deltaTime,Space.World);
             timePassed += Time.deltaTime;

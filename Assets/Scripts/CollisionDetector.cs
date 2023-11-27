@@ -58,6 +58,7 @@ public class CollisionDetector : MonoBehaviour
     {
         foreach(Collider item in hits)
         {
+            //Detects Minions hit
             MinionAIScript hitItem = item.GetComponent<Collider>().gameObject.GetComponent<MinionAIScript>();
             if(hitItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position) < distanceAllowed)
             {
@@ -67,6 +68,19 @@ public class CollisionDetector : MonoBehaviour
                     // hitItem.DealDamage(25);
                     Debug.LogError("*Minion Hit :");
                     Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position));
+                }
+            }
+            //Detects Champions hit
+            Character hitItemChampions = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
+            //Avoid self hit
+            if(hitItemChampions && hitItemChampions != AnimationMovementManager.GetComponentInParent<Character>() && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItemChampions.transform.position) < distanceAllowed)
+            {
+                if(!AnimationMovementManager.HitListChampions.Contains(hitItemChampions))
+                {
+                    AnimationMovementManager.HitListChampions.Add(hitItemChampions);
+                    // hitItem.DealDamage(25);
+                    Debug.LogError("*Champion Hit :");
+                    Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItemChampions.transform.position));
                 }
             }
         }

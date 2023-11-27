@@ -95,7 +95,6 @@ public class MinionAIScript : MonoBehaviour
             if(TimePassed > SlowEffectTime)
             {
                 SetOriginalSpeed();
-                Debug.LogError("Original Speed set");
             }
         }
         if(hasTarget && targetMinion != null)
