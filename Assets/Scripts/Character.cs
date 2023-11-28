@@ -54,6 +54,10 @@ public class Character : MonoBehaviour
     // [HideInInspector]
     public List<AttackLevel> attackLevels = new List<AttackLevel>();
     public List<AttackScalingConditions> attackScalingConditions = new List<AttackScalingConditions>();
+    public MinionHealthBar championHealthBar;                                                               //Healthbar reference for character
+    public GameObject referenceObject;                                                                      //Position reference for healthbar
+    Transform healthBarTransform;                                                                    //Reference transform of healthbar
+    Camera cam;
     //
     void Start()
     {
@@ -62,9 +66,32 @@ public class Character : MonoBehaviour
         characterOtrill.CheckLevel();
         characterOtrill.DisplayStats();
 
+
+        //Instntiate healthbar for the minion and set it in canvas and set proper scale 
+        GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
+        Healthbar.name = "Champion HealthBar";
+        Healthbar.transform.localScale = Vector3.one;
+        championHealthBar = Healthbar.GetComponent<MinionHealthBar>();
+        healthBarTransform = championHealthBar.transform;
+        cam = FindObjectOfType<Camera>();
+       // Debug.LogError("Object created " + Healthbar.name);
+        //
         //Set Default character on start
         ChangeCharacter();
         // SelectCharacter((int) SelectedCharacterIndex);
+        // Healthbar.gameObject.SetActive(true);
+        if(referenceObject)         //Handle exception for null reference 
+        {
+            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+        }
+        Invoke(nameof(ShowHealthBar),0.3f);
+    }
+    /// <summary>
+    /// Set active healthvar object on
+    /// </summary>
+    public void ShowHealthBar()
+    {
+        championHealthBar.gameObject.SetActive(true);
     }
     /// <summary>
     /// Changes character model and set next model and animator
@@ -164,6 +191,9 @@ public class Character : MonoBehaviour
 
         //Set scaling conditions
         attackScalingConditions = characterData.attackScalingConditions;
+        //Set slider value
+        championHealthBar.SetMaxHealth((float)currentHealth);
+        championHealthBar.SetHealth((float)currentHealth);
 
     }
     /// <summary>
@@ -348,7 +378,9 @@ public class Character : MonoBehaviour
         {
             currentHealth = 0;
         }
+        championHealthBar.SetHealth((float)currentHealth);
     }
+    
 }
 /// <summary>
 /// This class is used to hold the character type and character model object in the script

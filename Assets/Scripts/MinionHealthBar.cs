@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 public class MinionHealthBar : MonoBehaviour
 {
+    [SerializeField]
+    bool local = false;
+    Camera camera;
     // Referencing slider component; rest is straightforward
     public Slider slider;                                       //Healthbar slider
-    Camera cam;                                                 //Scene camera referemce   
-   
     private void OnEnable()
     {
-        cam = FindObjectOfType<Camera>();
+        camera = Camera.main;
     }
     public void SetMaxHealth(float health)
     {
@@ -21,5 +22,10 @@ public class MinionHealthBar : MonoBehaviour
     public void SetHealth(float health)
     {
         slider.value = health;
+    }
+    private void Update()
+    {
+        if(local)
+        transform.parent.LookAt(camera.transform);
     }
 }

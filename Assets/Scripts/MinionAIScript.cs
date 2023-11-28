@@ -57,7 +57,11 @@ public class MinionAIScript : MonoBehaviour
        // Setting minion health bar
         currentHealth = maxHealth;
         minionHealthBar.SetMaxHealth(maxHealth);
-        Healthbar.gameObject.SetActive(true);
+        if(referenceObject)         //Handle exception for null reference 
+        {
+            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+        }
+        Invoke(nameof(ShowHealthBar),0.3f);
 
         // Setting type of minion based on layer
         if(isBlue)
@@ -73,6 +77,13 @@ public class MinionAIScript : MonoBehaviour
         }
 
         agent.SetDestination(destination);
+    }
+    /// <summary>
+    /// Set active healthvar object on
+    /// </summary>
+    public void ShowHealthBar() 
+    {
+        minionHealthBar.gameObject.SetActive(true);
     }
     /// <summary>
     /// Set original speed and reset decreased speed effect
@@ -147,7 +158,7 @@ public class MinionAIScript : MonoBehaviour
     {
         if(referenceObject)         //Handle exception for null reference 
         {
-            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+           healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
         }
 
     }

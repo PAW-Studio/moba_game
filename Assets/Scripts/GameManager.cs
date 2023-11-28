@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform characterSpawnTranform;
     public GameObject MinioinHealthBar;                                                 //Healthbar prefab for minions
+    public GameObject ChampionHealthBar;                                                 //Healthbar prefab for Champion
     public Transform MinionHealthbarsParent;                                            //Parent transform for minion healthbars
     public Transform MeleeMinionParentContainer;                                        //Parent transform for melee minions
     public Transform CasterMinionParentContainer;                                        //Parent transform for caster minions
