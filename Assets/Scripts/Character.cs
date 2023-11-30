@@ -304,9 +304,61 @@ public class Character : MonoBehaviour
                 break;
             case AttackType.r:
                 break;
+            case AttackType.auto:
+                float damageValueAuto = 0;
+                AttackScalingConditions attackScalingConditionAuto = attackScalingConditions.Find(x => x.attackType == attackType);
+                //List<ConditionsDetails> conditionsAuto = attackScalingConditionAuto.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == attackType).level);
+                List<ConditionsDetails> conditionsAuto = attackScalingConditionAuto.conditions.FindAll(x => x.Level == 1); // Auto does not have levels so default 1
+
+
+                foreach(ConditionsDetails condition in conditionsAuto)
+                {
+                    List<ScaleConditionsAndFactors> scaleConditionsAndFactors = condition.scaleConditionsAndFactors;
+                    foreach(ScaleConditionsAndFactors item in scaleConditionsAndFactors)
+                    {
+                        switch(item.scalingCondition)
+                        {
+                            case ScalingConditionTypes.None:
+                                break;
+                            case ScalingConditionTypes.Value_Plus_Percentage_AD:
+                                damageValueAuto += (float)currentAD;// //item.baseValue + (float)(currentAD * (item.percentage / 100));
+                                break;
+                            //Treat AP and Bonus AP same for now
+                            case ScalingConditionTypes.Value_Plus_Percentage_AP:
+                            case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
+                                //damageValueAuto += item.baseValue + (float)(currentAP * (item.percentage / 100));
+                                damageValueAuto +=  (float)currentAP;
+                                break;
+                            case ScalingConditionTypes.SlowerForSomeTime:
+                                break;
+                            case ScalingConditionTypes.Percentage_DamageReduction:
+                                break;
+                            case ScalingConditionTypes.Percentage_AS_Up:
+
+                                break;
+                            case ScalingConditionTypes.Percentage_MS_Up:
+                                break;
+                            case ScalingConditionTypes.Percentage_Heal:
+                                break;
+                            case ScalingConditionTypes.AD_Plus_Percentage_AP:
+                                damageValueAuto += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                damage = damageValueAuto;
+                break;
 
             default:
                 break;
+        }
+        //Check if shield is on then reduce the damage 
+        if(playerScript.Shield_Effect) 
+        {
+            Debug.LogError("Shield :" + playerScript.Shield_UpdatedPercentage + "Damange Reduction :"+(damage * (playerScript.Shield_UpdatedPercentage / 100))) ;
+            damage -=  (damage* (playerScript.Shield_UpdatedPercentage / 100));  
         }
         return damage;
     }
@@ -338,6 +390,8 @@ public class Character : MonoBehaviour
                     case ScalingConditionTypes.SlowerForSomeTime:
                         break;
                     case ScalingConditionTypes.Percentage_DamageReduction:
+                        ScaleConditionsAndFactors scaleConditionsShield = condition.scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.Percentage_DamageReduction);
+                        playerScript.Set_Shield_Effect(scaleConditionsShield.effectTime,scaleConditionsShield.percentage,true); //True: indicates increase shield
                         break;
                     case ScalingConditionTypes.Percentage_AS_Up:
                         ScaleConditionsAndFactors scaleConditionsAS = condition.scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.Percentage_AS_Up);

@@ -64,7 +64,7 @@ public class PlayerScript : MonoBehaviour
     float OriginalSpeed;                                                                            //Character's original movement speed
     float UpdatedSpeed;                                                                           //Updated movement speed
     bool UpdatedSpeedEffect;                                                                      //True if speed effect is on
-    float TimePassed = 0,TimePassed_AS=0;                                                         //Time passed from the time of effect started
+    float TimePassed = 0,TimePassed_AS=0,TimePassed_Shield=0;                                      //Time passed from the time of effect started
     float SlowEffectTime;                                                                           //Time duration for effect        
     bool UpdateOnce = false;                                                                      //To ensure only one time decrease the speed 
     //
@@ -76,6 +76,15 @@ public class PlayerScript : MonoBehaviour
     float AS_SlowEffectTime;                                                                         //Time duration for effect        
     bool AS_UpdateOnce = false;                                                                      //To ensure only one time start effect
     //
+    //AS Up_Down references  
+    float Shield_Percentage=0;                                                                        //Character's original shield percentage
+    public float Shield_UpdatedPercentage;                                                                   //Updated shield percentage
+    public  bool Shield_Effect;                                                                               //True if shield effect is on
+    float Shield_TimePassed = 0;                                                                      //Time passed from the time of effect started
+    float Shield_EffectTime;                                                                         //Time duration for effect        
+    bool Shield_UpdateOnce = false;                                                                  //To ensure only one time start effect
+    //
+
 
     // Set references 
     void Start()
@@ -123,6 +132,14 @@ public class PlayerScript : MonoBehaviour
                 if(TimePassed_AS > AS_SlowEffectTime)
                 {
                     SetOriginalAS_Speed();
+                }
+            }
+            if(Shield_Effect) //Decreased shield effect timer 
+            {
+                TimePassed_Shield += Time.deltaTime;
+                if(TimePassed_Shield > Shield_EffectTime)
+                {
+                    ResetOriginalShieldPercentage();
                 }
             }
             if(joyStick.Direction.sqrMagnitude == 0)
@@ -378,6 +395,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                character.ApplyEffectOnPlayerForAttack(attackType);
             }
             if(attackType == AttackType.e)
             {
@@ -668,6 +686,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                character.ApplyEffectOnPlayerForAttack(attackType);  //Apply shield effect
             }
             if(attackType == AttackType.e)
             {
@@ -1160,6 +1179,18 @@ public class PlayerScript : MonoBehaviour
         AS_UpdateOnce = false;
     }
     /// <summary>
+    /// Set original shield effect
+    /// </summary>
+    private void ResetOriginalShieldPercentage()
+    {
+        Debug.LogError("Shield Off");
+        Shield_Effect = false;
+        Shield_UpdatedPercentage = Shield_Percentage;
+        Shield_EffectTime = 0;
+        TimePassed_Shield = 0;
+        Shield_UpdateOnce = false;
+    }
+    /// <summary>
     /// Set slower movement speed for the given time
     /// </summary>
     /// <param name="slowerEffectTime">effect time</param>
@@ -1211,7 +1242,33 @@ public class PlayerScript : MonoBehaviour
         AS_CapValue = AS_UpdatedSpeed;
         Debug.LogError("Updated AS" + AS_CapValue);
     }
-    
+    /// <summary>
+    /// Set shield effect to decrease the damage
+    /// </summary>
+    /// <param name="effectTime">Effect time while shield is on</param>
+    /// <param name="percentage">Damage reduce percentage</param>
+    /// <param name="increase">Ture: Increase shield percentage, False : Decrease shield percentage </param>
+    public void Set_Shield_Effect(float effectTime,float percentage,bool increase)
+    {
+        Debug.LogError("Shield On");
+        Shield_Effect = true;
+        Shield_UpdateOnce = true;
+        if(increase)
+        {
+            Shield_UpdatedPercentage = Shield_Percentage + (Shield_Percentage * (percentage / 100));
+        }
+        else
+        {
+            Shield_UpdatedPercentage = Shield_Percentage - (Shield_Percentage * (percentage / 100));
+        }
+        if(Shield_UpdatedPercentage <= 0)
+        {
+            Shield_UpdatedPercentage = 0f; //Do not allow < 0
+        }
+        Shield_EffectTime = effectTime;
+        Debug.LogError("Shield Percentage " + Shield_UpdatedPercentage);
+    }
+
 }
 /// <summary>
 /// Character attack types
