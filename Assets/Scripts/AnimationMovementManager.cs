@@ -18,6 +18,7 @@ public class AnimationMovementManager : MonoBehaviour
     [Header("Throw/Shootable projectile")]
     public GameObject ArrowPrefab;                                          //Arrow/projectile prefab
     public Transform spawnTrasform;                                         //Arrow/projectile spawn transform
+    public Transform spawnTransforSerinaAuto;                               //Serina Autor arrow spawn reference
     public Transform spawnTrasformLeft;                                     //Arrow/projectile spawn transform for left hand
     public Projectile arrowProjectile;                                      //Reference script of arrow projectile
    
@@ -88,7 +89,7 @@ public class AnimationMovementManager : MonoBehaviour
             {
                 float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
                 //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-                Debug.LogError("Scale Damage " + damage);
+                Debug.LogError("*"+target.name+  " Target : Scale Damage " + damage );
                 target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
             }
         }
@@ -157,9 +158,15 @@ public class AnimationMovementManager : MonoBehaviour
     /// </summary>
     public void SpawnArrow() 
     {
-        GameObject arrow = Instantiate(ArrowPrefab,spawnTrasform.parent);
+        Character character = GetComponentInParent<Character>();
+        bool SerinaAutoAttack = false;
+        //if(character.currentCharacterModel.characterType== CharacterType.Serina && character.playerScript.currentAttackType== AttackType.auto) 
+        //{
+        //    SerinaAutoAttack = true; 
+        //}
+        GameObject arrow = Instantiate(ArrowPrefab,SerinaAutoAttack? spawnTransforSerinaAuto: spawnTrasform.parent);
         arrowProjectile = arrow.GetComponent<Projectile>();
-        arrowProjectile.character = GetComponentInParent<Character>();
+        arrowProjectile.character = character ;
         arrowProjectile.attackType = playerScript.currentAttackType;
         Debug.LogError(arrowProjectile.attackType + " From " + arrowProjectile.character.currentCharacterModel.characterType);
     }

@@ -147,6 +147,8 @@ MonoBehaviour:
   AS_CapValue: 2.5
   AS_DefaultCapValue: 2.5
   MS_DefaultValue: 20
+  Shield_UpdatedPercentage: 0
+  Shield_Effect: 0
   moving: 0
 --- !u!54 &884645105129681059
 Rigidbody:
@@ -569,6 +571,89 @@ Transform:
   m_Father: {fileID: 884645105129681056}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4269295727379205095
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9177924042545166461}
+  - component: {fileID: 8952377183636819726}
+  - component: {fileID: 7990474403814013843}
+  m_Layer: 0
+  m_Name: SerinaArrowHolderAuto
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &9177924042545166461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269295727379205095}
+  m_LocalRotation: {x: -0.77145755, y: -0.10278107, z: -0.1290285, w: 0.61452496}
+  m_LocalPosition: {x: 0.022, y: 0.241, z: -0.011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3887308993131754793}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: -102.92, y: -18.99, z: 0}
+--- !u!23 &8952377183636819726
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269295727379205095}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: f0c5afb4958df2e45b4dc47cc2808df6, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &7990474403814013843
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269295727379205095}
+  m_Mesh: {fileID: 4300000, guid: 344b3b3750c41df429e8b3c371834b10, type: 2}
 --- !u!1 &4620617027607703232
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,6 +979,53 @@ MonoBehaviour:
   AnimationMovementManager: {fileID: 756094172098334673}
   DistanceBetweenPlayerAndHitsMaxAllowed: 4
   AreadDamageDistance: 10
+--- !u!1 &6755905409780692760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1458102890067607651}
+  - component: {fileID: 4287508092294340475}
+  m_Layer: 7
+  m_Name: AreaCollisionDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1458102890067607651
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6755905409780692760}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.28571427, y: 0.28571427, z: 0.28571427}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 252508122035148378}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4287508092294340475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6755905409780692760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15aa55ee59e90814fa21460c72d70645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationMovementManager: {fileID: 1932003938036177155}
+  DistanceBetweenPlayerAndHitsMaxAllowed: 4
+  AreadDamageDistance: 32.5
 --- !u!1 &7442653536462319475
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,9 +1557,12 @@ MonoBehaviour:
     damageType: 3
   - collisionDetector: {fileID: 6017715413879117655}
     damageType: 4
+  - collisionDetector: {fileID: 4287508092294340475}
+    damageType: 2
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!4 &4328584905180890313 stripped
@@ -1580,6 +1715,7 @@ MonoBehaviour:
   ArrowPrefab: {fileID: 5930267339647767615, guid: 8cf5dcb6ecb9a904d942e26c9c27cbb1,
     type: 3}
   spawnTrasform: {fileID: 3963434557964700849}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 7237377183966186427}
   arrowProjectile: {fileID: 0}
 --- !u!4 &5264934650028764859 stripped
@@ -1724,6 +1860,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!1001 &2218970909229180027
@@ -1863,6 +2000,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!4 &1819989936925475728 stripped
@@ -2035,6 +2173,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!95 &7420889844451578831 stripped
@@ -2170,6 +2309,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!4 &4532378974732409760 stripped
@@ -3134,7 +3274,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a926e1564c14b7f429cb7fe9fbd76680,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1092408308860062549, guid: a926e1564c14b7f429cb7fe9fbd76680,
         type: 3}
@@ -3987,6 +4127,7 @@ MonoBehaviour:
   ArrowPrefab: {fileID: 5930267339647767615, guid: 2cff47b14528b08409859b57d20c5198,
     type: 3}
   spawnTrasform: {fileID: 6193244990308294924}
+  spawnTransforSerinaAuto: {fileID: 9177924042545166461}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!1001 &7468136153488186255
@@ -4120,6 +4261,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!1001 &8339409132080079518
@@ -4253,6 +4395,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!1001 &8977255367194254002
@@ -4340,7 +4483,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 010db8c982f6e4b46ac6a38e7e65f95a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 010db8c982f6e4b46ac6a38e7e65f95a,
         type: 3}
@@ -4382,6 +4525,7 @@ MonoBehaviour:
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
+  spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
 --- !u!4 &8871852998803357017 stripped

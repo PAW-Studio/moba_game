@@ -121,31 +121,31 @@ MonoBehaviour:
       - scalingCondition: 5
         baseValue: 0
         percentage: 70
-        effectTime: 0
+        effectTime: 2
     - Level: 2
       scaleConditionsAndFactors:
       - scalingCondition: 5
         baseValue: 0
         percentage: 70
-        effectTime: 0
+        effectTime: 2
     - Level: 3
       scaleConditionsAndFactors:
       - scalingCondition: 5
         baseValue: 4
         percentage: 70
-        effectTime: 0
+        effectTime: 2
     - Level: 4
       scaleConditionsAndFactors:
       - scalingCondition: 5
         baseValue: 0
         percentage: 70
-        effectTime: 0
+        effectTime: 2
     - Level: 5
       scaleConditionsAndFactors:
       - scalingCondition: 5
         baseValue: 0
         percentage: 70
-        effectTime: 0
+        effectTime: 2
   - attackType: 3
     conditions:
     - Level: 1

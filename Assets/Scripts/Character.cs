@@ -301,6 +301,65 @@ public class Character : MonoBehaviour
                 damage = damageValue;
                 break;
             case AttackType.e:
+                float damageValueE= 0;
+                AttackScalingConditions attackScalingConditionE = attackScalingConditions.Find(x => x.attackType == attackType);
+                List<ConditionsDetails> conditionsE = attackScalingConditionE.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == attackType).level);
+                foreach(ConditionsDetails condition in conditionsE)
+                {
+                    List<ScaleConditionsAndFactors> scaleConditionsAndFactors = condition.scaleConditionsAndFactors;
+                    foreach(ScaleConditionsAndFactors item in scaleConditionsAndFactors)
+                    {
+                        switch(item.scalingCondition)
+                        {
+                            case ScalingConditionTypes.None:
+                                break;
+                            case ScalingConditionTypes.Value_Plus_Percentage_AD:
+                                damageValueE += item.baseValue + (float)(currentAD * (item.percentage / 100));
+                                if(characterData.characterModel.characterType == CharacterType.Sura)
+                                {
+                                    //Sura Specific :
+                                    //current character champion is "Sura" then check for Ult/R attack level, If R level is greate then 0 then add extra damange to current damange
+                                    float extraDamageOfUlt = 0;
+                                    int RLevel = attackLevels.Find(x => x.attackType == AttackType.r).level;
+                                    if(RLevel > 0)
+                                    {
+                                        List<ConditionsDetails> conditionsDetailsForUlt = attackScalingConditionE.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == AttackType.r).level);
+                                        ScaleConditionsAndFactors scaleConditions = conditionsDetailsForUlt.Find(x => x.Level == RLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.Value_Plus_Percentage_AD);
+                                        extraDamageOfUlt = scaleConditions.baseValue + (float)(currentAD * (scaleConditions.percentage / 100));
+
+                                        Debug.LogError("ExtraDamage from Ult Specific for Sura");
+
+                                        damageValueE += extraDamageOfUlt;
+                                    }
+                                }
+                                Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
+                                break;
+                            //Treat AP and Bonus AP same for now
+                            case ScalingConditionTypes.Value_Plus_Percentage_AP:
+                            case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
+                                damageValueE += item.baseValue + (float)(currentAP * (item.percentage / 100));
+                                Debug.LogError("AP  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAP * (item.percentage / 100)));
+                                break;
+                            case ScalingConditionTypes.SlowerForSomeTime:
+                                break;
+                            case ScalingConditionTypes.Percentage_DamageReduction:
+                                break;
+                            case ScalingConditionTypes.Percentage_AS_Up:
+
+                                break;
+                            case ScalingConditionTypes.Percentage_MS_Up:
+                                break;
+                            case ScalingConditionTypes.Percentage_Heal:
+                                break;
+                            case ScalingConditionTypes.AD_Plus_Percentage_AP:
+                                damageValueE += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                damage = damageValueE;
                 break;
             case AttackType.r:
                 break;
