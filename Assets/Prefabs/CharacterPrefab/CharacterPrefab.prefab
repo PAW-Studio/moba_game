@@ -1131,6 +1131,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   local: 1
   slider: {fileID: 8613152941288060610}
+--- !u!1 &7717626828933755598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6488374837619146743}
+  - component: {fileID: 783383130260093401}
+  m_Layer: 7
+  m_Name: AreaCollisionDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6488374837619146743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7717626828933755598}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.28571427, y: 0.28571427, z: 0.28571427}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8372527155316606325}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &783383130260093401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7717626828933755598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15aa55ee59e90814fa21460c72d70645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationMovementManager: {fileID: 981027905287559244}
+  DistanceBetweenPlayerAndHitsMaxAllowed: 4
+  AreadDamageDistance: 12.5
 --- !u!1 &7848315012700048725
 GameObject:
   m_ObjectHideFlags: 0
@@ -4349,7 +4396,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 98dab6f281ceafb42a66c03a325f1498,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 98dab6f281ceafb42a66c03a325f1498,
         type: 3}
@@ -4391,7 +4438,9 @@ MonoBehaviour:
   Attacking: 0
   HitList: []
   HitListChampions: []
-  collisionDetectorObjects: []
+  collisionDetectorObjects:
+  - collisionDetector: {fileID: 783383130260093401}
+    damageType: 2
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
   spawnTrasform: {fileID: 0}
