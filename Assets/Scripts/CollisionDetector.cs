@@ -31,6 +31,7 @@ public class CollisionDetector : MonoBehaviour
                 break;
             case DamageType.Area:
                 hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,AreadDamageDistance);  // Sphere area covered
+                //hits = FilterTargetsWithinArc(hits);
                 break;
             case DamageType.LeftNormal:
                 hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,3f);
@@ -84,5 +85,33 @@ public class CollisionDetector : MonoBehaviour
                 }
             }
         }
+    }
+    public Collider[] FilterTargetsWithinArc(Collider[] hits) 
+    {
+        List< Collider> TargetsWithInArc=new List<Collider>();
+        //The Cos of the maximum angle accepted (-1 is 0 degrees 0 is 90 degrees, -0.5 is 45 degrees, etc...)
+        float maxAngle=45;
+        for(int i = 0 ; i < hits.Length ; i++)
+        {
+            Vector3 difference = AnimationMovementManager.GetCollionsDetectorObject().transform.position - hits[i].transform.position;
+
+            //Check if it's within range of the arc
+            if(difference.magnitude < AreadDamageDistance)
+            {
+                //Checks to see if the object is within a 90 degree Cone in front of the player.
+                if(Vector3.Dot(AnimationMovementManager.GetCollionsDetectorObject().transform.forward,difference.normalized) > maxAngle)
+                {
+                    //This object is within the Cone
+                    Debug.LogError("In Arc" + hits[i].name);
+                    TargetsWithInArc.Add(hits[i]);
+                }
+                else 
+                {
+                 
+                    Debug.LogError("Outside Arc" + hits[i].name);
+                }
+            }
+        }
+        return TargetsWithInArc.ToArray();        
     }
 }

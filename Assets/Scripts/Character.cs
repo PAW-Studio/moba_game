@@ -84,6 +84,7 @@ public class Character : MonoBehaviour
         {
             healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
         }
+        GameManager.instance.Hide_QWER_LevelUpdatePanel();
         Invoke(nameof(ShowHealthBar),0.3f);
     }
     /// <summary>
@@ -208,7 +209,7 @@ public class Character : MonoBehaviour
         { attackLevel.level = 5; }
         UpdateAttackButtons();
         //Debug.LogError("Increased " + attackLevel.level + attackType);
-
+        GameManager.instance.attackTypeReferences.Find(x => x.attackType == attackType).UpdateLevelText(attackLevel.level);
         GameManager.instance.Hide_QWER_LevelUpdatePanel();
     }
     //Setup Values
