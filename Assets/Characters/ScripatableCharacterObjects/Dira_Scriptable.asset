@@ -32,6 +32,8 @@ MonoBehaviour:
     attackSubType: 0
   - attackType: 1
     attackSubType: 0
+  - attackType: 0
+    attackSubType: 2
   attackCoolDownDetails:
   - attackType: 1
     ActiveTime: 2
@@ -186,18 +188,30 @@ MonoBehaviour:
         baseValue: 50
         percentage: 60
         effectTime: 0
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 50
+        effectTime: 2
     - Level: 2
       scaleConditionsAndFactors:
       - scalingCondition: 2
         baseValue: 80
         percentage: 60
         effectTime: 0
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 50
+        effectTime: 2
     - Level: 3
       scaleConditionsAndFactors:
       - scalingCondition: 2
         baseValue: 120
         percentage: 60
         effectTime: 0
+      - scalingCondition: 4
+        baseValue: 0
+        percentage: 50
+        effectTime: 2
   - attackType: 4
     conditions:
     - Level: 1

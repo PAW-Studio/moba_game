@@ -499,6 +499,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                
             }
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Sura)

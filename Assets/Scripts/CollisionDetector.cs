@@ -22,31 +22,34 @@ public class CollisionDetector : MonoBehaviour
     public void DetectTarget()
     {
         Collider[] hits = null;
+        CollisionDetector collisionDetector = AnimationMovementManager.GetCollionsDetectorObject();
         switch(AnimationMovementManager.currentAttackDamangeType)
         {
             case DamageType.None:
                 break;
             case DamageType.Normal:
-                hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,5f);
+                hits = Physics.OverlapSphere(collisionDetector.transform.position,5f);
                 break;
             case DamageType.Area:
-                hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,AreadDamageDistance);  // Sphere area covered
+                Debug.LogError("Area " + collisionDetector.AreadDamageDistance);
+                hits = Physics.OverlapSphere(collisionDetector.transform.position,collisionDetector.AreadDamageDistance);  // Sphere area covered
                 //hits = FilterTargetsWithinArc(hits);
                 break;
             case DamageType.LeftNormal:
-                hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,3f);
+                hits = Physics.OverlapSphere(collisionDetector.transform.position,3f);
                 break;
             case DamageType.RightNormal:
-                hits = Physics.OverlapSphere(AnimationMovementManager.GetCollionsDetectorObject().transform.position,3f);
+                hits = Physics.OverlapSphere(collisionDetector.transform.position,3f);
                 break;
             default:
                 break;
         }
-        Debug.DrawRay(AnimationMovementManager.GetCollionsDetectorObject().transform.position,AnimationMovementManager.GetCollionsDetectorObject().transform.forward * AreadDamageDistance,Color.blue,5f);
+        Debug.DrawRay(collisionDetector.transform.position,collisionDetector.transform.forward * collisionDetector.AreadDamageDistance,Color.blue,5f);
 
         //Debug.DrawRay(AnimationMovementManager.collisionDetector.transform.position,AnimationMovementManager.collisionDetector.transform.position+Vector3.one,Color.blue,10);
+        Debug.LogError("** hits null  :" + (hits == null) + " Distance Allowed : " + (AnimationMovementManager.currentAttackDamangeType == DamageType.Normal ? collisionDetector.DistanceBetweenPlayerAndHitsMaxAllowed : collisionDetector.AreadDamageDistance));
         if(hits == null) return;
-        DetectTargetsAndAddToHitList(hits,AnimationMovementManager.currentAttackDamangeType == DamageType.Normal ? DistanceBetweenPlayerAndHitsMaxAllowed : AreadDamageDistance);
+        DetectTargetsAndAddToHitList(hits,AnimationMovementManager.currentAttackDamangeType == DamageType.Normal ? collisionDetector. DistanceBetweenPlayerAndHitsMaxAllowed : collisionDetector.AreadDamageDistance);
 
     }
 
