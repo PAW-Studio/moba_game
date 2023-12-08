@@ -69,6 +69,7 @@ public class AnimationMovementManager : MonoBehaviour
             {
                 if(playerScript.currentAttackType == AttackType.r)
                 {
+                    
                     int R_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.r).level;
                     ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.r).conditions.Find(y => y.Level == R_attackLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.SlowerForSomeTime);
 

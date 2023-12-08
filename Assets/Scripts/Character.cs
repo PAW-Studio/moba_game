@@ -589,9 +589,10 @@ public class Character : MonoBehaviour
                         playerScript.SetSpeedEffect(scaleConditionsDown.effectTime,scaleConditionsDown.percentage,false); //False:  Decrease speed
                         break;
                     case ScalingConditionTypes.Percentage_Heal:
+                        ScaleConditionsAndFactors scaleConditionsHeal = condition.scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.Percentage_Heal);
+                        StartCoroutine(RegainHealthEffect(scaleConditionsHeal.effectTime,scaleConditionsHeal.baseValue + (scaleConditionsHeal.percentage / 100),GetMaxHealthForcurrentLevel()));
                         break;
                     case ScalingConditionTypes.AD_Plus_Percentage_AP:
-                      
                         break;
                     default:
                         break;
@@ -612,7 +613,53 @@ public class Character : MonoBehaviour
         }
         championHealthBar.SetHealth((float)currentHealth);
     }
-    
+    /// <summary>
+    /// Regain health and update healthbar
+    /// </summary>
+    public void RegainHealth(float regainValue,float maxHealth) 
+    {
+        currentHealth += regainValue;
+       
+        if(currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        championHealthBar.SetHealth((float)currentHealth);
+    }
+    /// <summary>
+    /// Get original health value for current level
+    /// </summary>
+    /// <returns></returns>
+    private float GetMaxHealthForcurrentLevel() 
+    {
+        return (float)Champions.getStatistic(characterData.baseHealth,characterData.growthHealth,currentLevel);
+    }
+    /// <summary>
+    /// Increase healthbar in given time
+    /// </summary>
+    /// <param name="effectTime"></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public IEnumerator RegainHealthEffect(float effectTime,float regainValue,float maxHealth) 
+    {
+        currentHealth = currentHealth / 2f;
+        float time = 0, duration = effectTime;
+        float startValue = (float)currentHealth;
+        float finalValue = (float)currentHealth + regainValue;
+        if(finalValue > maxHealth) finalValue = maxHealth;
+        while(time < duration)
+        {
+            currentHealth = Mathf.Lerp(startValue,finalValue,time / duration);
+
+            championHealthBar.SetHealth((float)currentHealth);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        currentHealth = finalValue;
+        championHealthBar.SetHealth((float)currentHealth);
+
+    }
+   
 }
 /// <summary>
 /// This class is used to hold the character type and character model object in the script

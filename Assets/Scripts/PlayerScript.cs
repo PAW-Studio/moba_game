@@ -321,6 +321,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                character.ApplyEffectOnPlayerForAttack(attackType);
             }
             if(attackType == AttackType.e)
             {
@@ -337,6 +338,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+
             }
             if(attackType == AttackType.r)
             {
@@ -1268,6 +1270,10 @@ public class PlayerScript : MonoBehaviour
         }
         Shield_EffectTime = effectTime;
         Debug.LogError("Shield Percentage " + Shield_UpdatedPercentage);
+    }
+    public void Heal_RegainHealth(float effectTime,float baseValue,float percentage) 
+    {
+    
     }
 
 }

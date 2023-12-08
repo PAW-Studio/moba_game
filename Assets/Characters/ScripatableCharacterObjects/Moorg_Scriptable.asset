@@ -41,7 +41,7 @@ MonoBehaviour:
     - level: 5
       cooldownValue: 3.5
   - attackType: 0
-    ActiveTime: 2
+    ActiveTime: 3
     levelCoolDownValues:
     - level: 1
       cooldownValue: 9
@@ -112,34 +112,34 @@ MonoBehaviour:
     conditions:
     - Level: 1
       scaleConditionsAndFactors:
-      - scalingCondition: 1
+      - scalingCondition: 10
         baseValue: 120
         percentage: 0
-        effectTime: 0
+        effectTime: 3
     - Level: 2
       scaleConditionsAndFactors:
-      - scalingCondition: 1
+      - scalingCondition: 10
         baseValue: 200
         percentage: 0
-        effectTime: 0
+        effectTime: 3
     - Level: 3
       scaleConditionsAndFactors:
-      - scalingCondition: 1
+      - scalingCondition: 10
         baseValue: 280
         percentage: 0
-        effectTime: 0
+        effectTime: 3
     - Level: 4
       scaleConditionsAndFactors:
-      - scalingCondition: 1
+      - scalingCondition: 10
         baseValue: 360
         percentage: 0
-        effectTime: 0
+        effectTime: 3
     - Level: 5
       scaleConditionsAndFactors:
-      - scalingCondition: 1
+      - scalingCondition: 10
         baseValue: 440
         percentage: 0
-        effectTime: 0
+        effectTime: 3
   - attackType: 2
     conditions:
     - Level: 1

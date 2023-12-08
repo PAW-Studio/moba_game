@@ -88580,7 +88580,7 @@ AnimationClip:
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 4
+    intParameter: 3
     messageOptions: 0
   - time: 1.2333333
     functionName: SetAttackIndicator
