@@ -242,6 +242,7 @@ public class Character : MonoBehaviour
                 float damageValueW = 0;
                 AttackScalingConditions attackScalingConditionW = attackScalingConditions.Find(x => x.attackType == attackType);
                 List<ConditionsDetails> conditionsW = attackScalingConditionW.conditions.FindAll(x => x.Level == attackLevels.Find(y => y.attackType == attackType).level);
+                
                 foreach(ConditionsDetails condition in conditionsW)
                 {
                     List<ScaleConditionsAndFactors> scaleConditionsAndFactorsW = condition.scaleConditionsAndFactors;
