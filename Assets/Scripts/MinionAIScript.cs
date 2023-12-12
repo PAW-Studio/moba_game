@@ -146,21 +146,20 @@ public class MinionAIScript : MonoBehaviour
         }
 
 
-        if(currentHealth <= 0)
-        {
-            Destroy(minionHealthBar.gameObject);
-            Destroy(this.gameObject);
-        }
+        //if(currentHealth <= 0)
+        //{
+        //    Destroy(minionHealthBar.gameObject);
+        //    Destroy(this.gameObject);
+        //}
 
     }
 
     private void FixedUpdate()
     {
-        if(referenceObject)         //Handle exception for null reference 
+        if(referenceObject && healthBarTransform)         //Handle exception for null reference 
         {
            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
         }
-
     }
     void MoveToMinion()
     {
@@ -216,7 +215,7 @@ public class MinionAIScript : MonoBehaviour
     {
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth);
+        minionHealthBar.SetHealth(currentHealth,gameObject);
     }
     /// <summary>
     /// Set slower movement speed for the given time

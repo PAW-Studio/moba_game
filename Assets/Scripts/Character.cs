@@ -194,7 +194,7 @@ public class Character : MonoBehaviour
         attackScalingConditions = characterData.attackScalingConditions;
         //Set slider value
         championHealthBar.SetMaxHealth((float)currentHealth);
-        championHealthBar.SetHealth((float)currentHealth);
+        championHealthBar.SetHealth((float)currentHealth,false);
 
     }
     /// <summary>
@@ -236,6 +236,7 @@ public class Character : MonoBehaviour
     public float CalculateDamangeForAttack(AttackType attackType)
     {
         float damage = 0;
+        DamageDetails damageDetails=new DamageDetails();
         switch(attackType)
         {
             case AttackType.w:
@@ -539,6 +540,7 @@ public class Character : MonoBehaviour
             Debug.LogError("Shield :" + playerScript.Shield_UpdatedPercentage + "Damange Reduction :"+(damage * (playerScript.Shield_UpdatedPercentage / 100))) ;
             damage -=  (damage* (playerScript.Shield_UpdatedPercentage / 100));  
         }
+        damageDetails.damangeValue = damage;
         return damage;
     }
 
@@ -671,3 +673,15 @@ public class CharacterModels
     public CharacterType characterType;
     public GameObject characterModel;
 }
+/// <summary>
+/// This class is used to hold the Damage type (AD/AP) etc and damage value ,which we can use to display text color with respect to damange type
+/// </summary>
+public class DamageDetails 
+{
+    public ScalingConditionTypes damageType;
+    public float damangeValue;
+}
+/// <summary>
+/// Used to set damage type 
+/// </summary>
+public enum DamageTypeDetails{ AD, AP }
