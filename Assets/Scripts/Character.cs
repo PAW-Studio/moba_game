@@ -58,10 +58,13 @@ public class Character : MonoBehaviour
     public GameObject referenceObject;                                                                      //Position reference for healthbar
     Transform healthBarTransform;                                                                    //Reference transform of healthbar
     Camera cam;
+    public TeamType teamType;
     //
     void Start()
     {
+
         //Temp 
+        teamType = TeamType.Blue;
         characterOtrill = new Otrill();
         characterOtrill.CheckLevel();
         characterOtrill.DisplayStats();
@@ -614,7 +617,7 @@ public class Character : MonoBehaviour
         {
             currentHealth = 0;
         }
-        championHealthBar.SetHealth((float)currentHealth);
+        championHealthBar.SetHealth((float)currentHealth,true,gameObject);
     }
     /// <summary>
     /// Regain health and update healthbar
@@ -653,7 +656,6 @@ public class Character : MonoBehaviour
         while(time < duration)
         {
             currentHealth = Mathf.Lerp(startValue,finalValue,time / duration);
-
             championHealthBar.SetHealth((float)currentHealth);
             time += Time.deltaTime;
             yield return null;

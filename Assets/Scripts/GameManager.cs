@@ -144,12 +144,14 @@ public class GameManager : MonoBehaviour
 
             // Blue minions
             casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+            casterMinions[i].GetComponent<MinionAIScript>().teamType =  TeamType.Blue;
 
             casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
             casterMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
 
             // Red minions
             casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
 
         }
     }
@@ -164,10 +166,12 @@ public class GameManager : MonoBehaviour
             cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = true;
+            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
 
             cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = blueSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
+            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Red;
 
             // Resetting wave count for next cannon minion wave
             waveCount = 0;
@@ -417,3 +421,5 @@ public class AttackButton
         DeactiveIndicator.gameObject.SetActive(false);
     }
 }
+[System.Serializable]
+public enum TeamType { Blue, Red}

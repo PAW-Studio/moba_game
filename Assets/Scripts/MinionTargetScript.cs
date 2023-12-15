@@ -11,6 +11,7 @@ public class MinionTargetScript : MonoBehaviour
     public GameObject closestTarget;
 
     public bool isBlue;
+    public TeamType targetTeamType;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,7 @@ public class MinionTargetScript : MonoBehaviour
         minionScript = this.GetComponentInParent<MinionAIScript>();
         minionAgent = this.GetComponentInParent<NavMeshAgent>();
         isBlue = minionScript.isBlue;
+        targetTeamType = isBlue ? TeamType.Red : TeamType.Blue;
     }
 
     // Update is called once per frame

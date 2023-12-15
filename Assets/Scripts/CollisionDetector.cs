@@ -8,6 +8,12 @@ public class CollisionDetector : MonoBehaviour
     AnimationMovementManager AnimationMovementManager;
     [SerializeField]
     float DistanceBetweenPlayerAndHitsMaxAllowed = 4f, AreadDamageDistance = 10f;
+    Character character;
+    private void OnEnable()
+    {
+        character = AnimationMovementManager.playerScript.GetComponent<Character>();
+        Debug.LogError("Character set");
+    }
     private void Update()
     {
         //When the attack/punch animation is ON detect all colliders that collided with character arm reference object
@@ -64,27 +70,37 @@ public class CollisionDetector : MonoBehaviour
         {
             //Detects Minions hit
             MinionAIScript hitItem = item.GetComponent<Collider>().gameObject.GetComponent<MinionAIScript>();
-            if(hitItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position) < distanceAllowed)
+            if(hitItem)
             {
-                if(!AnimationMovementManager.HitList.Contains(hitItem))
+                if(hitItem.teamType != character.teamType)
                 {
-                    AnimationMovementManager.HitList.Add(hitItem);
-                    // hitItem.DealDamage(25);
-                    Debug.LogError("*Minion Hit :");
-                    Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position));
+                    if(hitItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position) < distanceAllowed)
+                    {
+                        if(!AnimationMovementManager.HitList.Contains(hitItem))
+                        {
+                            AnimationMovementManager.HitList.Add(hitItem);
+                            // hitItem.DealDamage(25);
+                            Debug.LogError("*Minion Hit :");
+                            Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position));
+                        }
+                    }
                 }
-            }
-            //Detects Champions hit
-            Character hitItemChampions = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
-            //Avoid self hit
-            if(hitItemChampions && hitItemChampions != AnimationMovementManager.GetComponentInParent<Character>() && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItemChampions.transform.position) < distanceAllowed)
-            {
-                if(!AnimationMovementManager.HitListChampions.Contains(hitItemChampions))
+
+                //Detects Champions hit
+                if(hitItem.teamType != character.teamType)
                 {
-                    AnimationMovementManager.HitListChampions.Add(hitItemChampions);
-                    // hitItem.DealDamage(25);
-                    Debug.LogError("*Champion Hit :");
-                    Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItemChampions.transform.position));
+                    Character hitItemChampions = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
+                    //Avoid self hit
+                    if(hitItemChampions && hitItemChampions != AnimationMovementManager.GetComponentInParent<Character>() && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItemChampions.transform.position) < distanceAllowed)
+                    {
+                        if(!AnimationMovementManager.HitListChampions.Contains(hitItemChampions))
+                        {
+                            AnimationMovementManager.HitListChampions.Add(hitItemChampions);
+                            // hitItem.DealDamage(25);
+                            Debug.LogError("*Champion Hit :");
+                            Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItemChampions.transform.position));
+                        }
+                    }
                 }
             }
         }

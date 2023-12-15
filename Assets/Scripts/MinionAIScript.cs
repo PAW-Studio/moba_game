@@ -20,14 +20,14 @@ public class MinionAIScript : MonoBehaviour
     public float damage = 30f;
     public float attackRange = 10f;
     public Vector3 offset = new Vector3(5,0,5);
-
+    public TeamType teamType;                    //Minion team type
     UnityEngine.AI.NavMeshAgent agent;
     Renderer renderer;
     [SerializeField]
     public GameObject referenceObject;                                      //Healthbar display reference object for the minion
 
     public MinionHealthBar minionHealthBar;
-
+    public GameObject TargetIndicator;
     Camera cam;
     Transform healthBarTransform;
     float OriginalSpeed;
@@ -197,14 +197,14 @@ public class MinionAIScript : MonoBehaviour
             targetMinion.GetComponent<TowerAIScript>().currentHealth -= damage;
 
             // Reduces tower health from current health bar
-            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth);
+            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,targetMinion.gameObject);
         }
 
         else
         {
             // Attacks opposite minion and reduces minion health from current health bar
             targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-            targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth);
+            targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
         }
     }
     /// <summary>
@@ -215,7 +215,7 @@ public class MinionAIScript : MonoBehaviour
     {
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth,gameObject);
+        minionHealthBar.SetHealth(currentHealth,true,gameObject);
     }
     /// <summary>
     /// Set slower movement speed for the given time
