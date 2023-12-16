@@ -83,6 +83,7 @@ Transform:
   - {fileID: 4982989039745872578}
   - {fileID: 3226569910415400248}
   - {fileID: 1645746480600133260}
+  - {fileID: 6289417771553890016}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -250,6 +251,7 @@ MonoBehaviour:
   attackScalingConditions: []
   championHealthBar: {fileID: 3554483515433445697}
   referenceObject: {fileID: 4179291662875737115}
+  teamType: 0
 --- !u!1 &1053586027030269514
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,6 +797,37 @@ MonoBehaviour:
   AnimationMovementManager: {fileID: 1932003938036177155}
   DistanceBetweenPlayerAndHitsMaxAllowed: 4
   AreadDamageDistance: 10
+--- !u!1 &4777382934562605823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6289417771553890016}
+  m_Layer: 0
+  m_Name: Damage points reference
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6289417771553890016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4777382934562605823}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.3, z: -2.81}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 884645105129681056}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5223569653970940137
 GameObject:
   m_ObjectHideFlags: 0
@@ -1366,6 +1399,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   local: 1
   slider: {fileID: 8613152941288060610}
+  effectBar: {fileID: 0}
+  damageText: {fileID: 0}
 --- !u!1 &7597496393336482990
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,7 +2318,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 417e9776a91bf224eae37873939d6ea4,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 417e9776a91bf224eae37873939d6ea4,
         type: 3}
@@ -4687,7 +4722,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: c91e30d0b877c8c4e96f96f7090880a9,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: c91e30d0b877c8c4e96f96f7090880a9,
         type: 3}

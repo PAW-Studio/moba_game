@@ -121,7 +121,6 @@ public class Character : MonoBehaviour
         for(int i = 0 ; i < characterModels.Count ; i++)
         {
             characterModels[i].characterModel.SetActive(i == index ? true : false);
-
         }
         SelectedCharacterType = characterModels[index].characterType;
         currentCharacterModel = characterModels.Find(x => x.characterType == SelectedCharacterType);
@@ -139,11 +138,8 @@ public class Character : MonoBehaviour
 
         UpdateStatistics(2); //Temp: Level 2 set for testing
         UpdateAttackButtons();
-
         GameManager.instance.Show_QWER_LevelUpdatePanel();
-
         Debug.LogError("AD " + currentAD);
-
     }
     /// <summary>
     /// Enable Q/W/E/R attack buttons with level greater then zero

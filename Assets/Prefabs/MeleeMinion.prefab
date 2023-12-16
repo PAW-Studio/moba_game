@@ -112,12 +112,12 @@ GameObject:
   - component: {fileID: 7344355006183054662}
   - component: {fileID: 7398008927993791487}
   m_Layer: 0
-  m_Name: TargetIndication
+  m_Name: TargetIndicatior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7344355006183054662
 Transform:
   m_ObjectHideFlags: 0
@@ -318,6 +318,7 @@ MonoBehaviour:
   teamType: 0
   referenceObject: {fileID: 9175692136361091935}
   minionHealthBar: {fileID: 3122900433084742560}
+  TargetIndicator: {fileID: 3449969136300517598}
 --- !u!195 &-1914293143120551198
 NavMeshAgent:
   m_ObjectHideFlags: 0
