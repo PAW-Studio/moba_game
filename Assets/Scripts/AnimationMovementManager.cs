@@ -10,13 +10,15 @@ public class AnimationMovementManager : MonoBehaviour
     Vector3 startPosition;
 
     public bool Attacking = false;
-    public List<MinionAIScript> HitList = new List<MinionAIScript>();    
+    public List<MinionAIScript> HitList = new List<MinionAIScript>();
+    public List<Character> HitListChampions = new List<Character>();
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
     public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
     [Header("Throw/Shootable projectile")]
     public GameObject ArrowPrefab;                                          //Arrow/projectile prefab
     public Transform spawnTrasform;                                         //Arrow/projectile spawn transform
+    public Transform spawnTransforSerinaAuto;                               //Serina Autor arrow spawn reference
     public Transform spawnTrasformLeft;                                     //Arrow/projectile spawn transform for left hand
     public Projectile arrowProjectile;                                      //Reference script of arrow projectile
    
@@ -49,6 +51,7 @@ public class AnimationMovementManager : MonoBehaviour
     /// </summary>
     public void DetectHit()
     {
+        
       Character character=  playerScript.GetComponent<Character>();
         foreach(MinionAIScript target in HitList)
         {
@@ -62,19 +65,97 @@ public class AnimationMovementManager : MonoBehaviour
                     target.SetSlowerSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage);
                 }
             }
+            else if(character.characterData.characterModel.characterType == CharacterType.Dira)
+            {
+                if(playerScript.currentAttackType == AttackType.r)
+                {
+                    
+                    int R_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.r).level;
+                    ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.r).conditions.Find(y => y.Level == R_attackLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.SlowerForSomeTime);
+
+                    target.SetSlowerSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage);
+                    // damange
+                    MinionTargetDamage(target);
+                    //
+                }
+                if(playerScript.currentAttackType == AttackType.q)
+                {
+                    // damange
+                    MinionTargetDamage(target);
+                    //
+                }
+                if(playerScript.currentAttackType == AttackType.w)
+                {
+                    // damange
+                    MinionTargetDamage(target);
+                    //
+                }
+                if(playerScript.currentAttackType == AttackType.e)
+                {
+                    // damange
+                    MinionTargetDamage(target);
+                    //
+                }
+            }
             else 
             {
-                float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
-                damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
-                //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-                Debug.LogError("Scale Damage " + damage);
-                target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+                MinionTargetDamage(target);
+            }
+        }
+
+        foreach(Character target in HitListChampions)
+        {
+            if(character.characterData.characterModel.characterType == CharacterType.Jahan)
+            {
+                if(playerScript.currentAttackType == AttackType.e)
+                {
+                    int E_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.e).level;
+                    ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.e).conditions.Find(y => y.Level == E_attackLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.SlowerForSomeTime);
+
+                    target.playerScript.SetSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage,false);
+                }
+            }
+            else if(character.characterData.characterModel.characterType == CharacterType.Dira)
+            {
+                if(playerScript.currentAttackType == AttackType.r)
+                {
+                    int E_attackLevel = character.attackLevels.Find(x => x.attackType == AttackType.r).level;
+                    ScaleConditionsAndFactors scaleConditionsAndFactors = character.characterData.attackScalingConditions.Find(x => x.attackType == AttackType.r).conditions.Find(y => y.Level == E_attackLevel).scaleConditionsAndFactors.Find(x => x.scalingCondition == ScalingConditionTypes.SlowerForSomeTime);
+
+                    target.playerScript.SetSpeedEffect(scaleConditionsAndFactors.effectTime,scaleConditionsAndFactors.percentage,false);
+                }
+            }
+            else
+            {
+                MinionChampionDamage(target);
             }
         }
         playerScript.currentAttackType = AttackType.None;  //Reset attack type
         HitList.Clear();
+        HitListChampions.Clear();
     }
-
+    /// <summary>
+    /// Damage Minion target
+    /// </summary>
+    /// <param name="target"></param>
+    public void MinionTargetDamage(MinionAIScript target) 
+    {
+        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+        Debug.LogError("Scale Damage " + damage);
+        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+    }
+    // <summary>
+    /// Damage Chamipon target
+    /// </summary>
+    /// <param name="target"></param>
+    public void MinionChampionDamage(Character target)
+    {
+        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+        Debug.LogError("*" + target.name + " Target : Scale Damage " + damage);
+        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+    }
     /// <summary>
     /// Set current attack type and bool variable to indicate that player is attacking -This method is called from animation clips 
     /// </summary>
@@ -128,16 +209,23 @@ public class AnimationMovementManager : MonoBehaviour
     /// <returns>Collision object</returns>
     public CollisionDetector GetCollionsDetectorObject()
     {
-      return  collisionDetectorObjects.Find(x => x.damageType == currentAttackDamangeType).collisionDetector;
+        Debug.LogError("**Current Attack Type " + playerScript.currentAttackType);
+      return  collisionDetectorObjects.Find(x => x.damageType == currentAttackDamangeType &&  x.attackTypeForThisDetector== playerScript.currentAttackType).collisionDetector;
     }
     /// <summary>
     /// Spawn arrow/other throwable /shootable projectile : This method is called from animation clip 
     /// </summary>
     public void SpawnArrow() 
     {
-        GameObject arrow = Instantiate(ArrowPrefab,spawnTrasform.parent);
+        Character character = GetComponentInParent<Character>();
+        bool SerinaAutoAttack = false;
+        //if(character.currentCharacterModel.characterType== CharacterType.Serina && character.playerScript.currentAttackType== AttackType.auto) 
+        //{
+        //    SerinaAutoAttack = true; 
+        //}
+        GameObject arrow = Instantiate(ArrowPrefab,SerinaAutoAttack? spawnTransforSerinaAuto: spawnTrasform.parent);
         arrowProjectile = arrow.GetComponent<Projectile>();
-        arrowProjectile.character = GetComponentInParent<Character>();
+        arrowProjectile.character = character ;
         arrowProjectile.attackType = playerScript.currentAttackType;
         Debug.LogError(arrowProjectile.attackType + " From " + arrowProjectile.character.currentCharacterModel.characterType);
     }
@@ -161,6 +249,7 @@ public class AnimationMovementManager : MonoBehaviour
         {
             arrowProjectile.transform.SetParent(playerScript.transform.parent);
             arrowProjectile.Shoot();
+           
         }
     }
 }
@@ -172,6 +261,12 @@ public class CollisionDetectorObject
 {
   public CollisionDetector collisionDetector;  //reference script of collision detector object
   public DamageType damageType;               //damage type on collision
+  public AttackType attackTypeForThisDetector; //Attack type for which this object should be selected
+    public OverlapType collisionDetectionShapeType; //Shape type to detect collisions
+}
+public enum OverlapType 
+{
+    Box,Sphere
 }
 /// <summary>
 /// Used to set different spawn positions and projectiles with respect to attack

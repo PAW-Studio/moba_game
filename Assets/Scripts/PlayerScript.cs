@@ -55,9 +55,37 @@ public class PlayerScript : MonoBehaviour
     float AnimationMovementSpeedModifier = 1.5f;
     float defaultModifierValue = 1.5f;
     [SerializeField]
-    float AS_CapValue = 2.5f;                                                                       //Default cap value for AS
+    public float AS_CapValue = 2.5f,AS_DefaultCapValue=2.5f;                                        //Default cap value for AS
     bool reducedMovementSpeed=false;                                                                //True indicates that movement speed is reduced 
     float MS_ReducePercentage;                                                                      //Percentage value to be reduced from current MS
+    [SerializeField]
+    float MS_DefaultValue = 20f;                                                                    //Default value for MS
+    //MS Up_Down references  
+    float OriginalSpeed;                                                                            //Character's original movement speed
+    float UpdatedSpeed;                                                                           //Updated movement speed
+    bool UpdatedSpeedEffect;                                                                      //True if speed effect is on
+    float TimePassed = 0,TimePassed_AS=0,TimePassed_Shield=0;                                      //Time passed from the time of effect started
+    float SlowEffectTime;                                                                           //Time duration for effect        
+    bool UpdateOnce = false;                                                                      //To ensure only one time decrease the speed 
+    //
+    //AS Up_Down references  
+    float AS_OriginalSpeed;                                                                          //Character's original auto attack speed
+    float AS_UpdatedSpeed;                                                                           //Updated attack speed
+    bool AS_UpdatedSpeedEffect;                                                                      //True if AS increase/decrease effect is on
+    float AS_TimePassed = 0;                                                                         //Time passed from the time of effect started
+    float AS_SlowEffectTime;                                                                         //Time duration for effect        
+    bool AS_UpdateOnce = false;                                                                      //To ensure only one time start effect
+    //
+    //AS Up_Down references  
+    float Shield_Percentage=0;                                                                        //Character's original shield percentage
+    public float Shield_UpdatedPercentage;                                                                   //Updated shield percentage
+    public  bool Shield_Effect;                                                                               //True if shield effect is on
+    float Shield_TimePassed = 0;                                                                      //Time passed from the time of effect started
+    float Shield_EffectTime;                                                                         //Time duration for effect        
+    bool Shield_UpdateOnce = false;                                                                  //To ensure only one time start effect
+    //
+
+
     // Set references 
     void Start()
     {
@@ -90,6 +118,30 @@ public class PlayerScript : MonoBehaviour
         //Character movement and rotation
         if(characterAnimator)
         {
+            if(UpdatedSpeedEffect) //Decreased speed effect timer 
+            {
+                TimePassed += Time.deltaTime;
+                if(TimePassed > SlowEffectTime)
+                {
+                    SetOriginalSpeed();
+                }
+            }
+            if(AS_UpdatedSpeedEffect) //Decreased speed effect timer 
+            {
+                TimePassed_AS += Time.deltaTime;
+                if(TimePassed_AS > AS_SlowEffectTime)
+                {
+                    SetOriginalAS_Speed();
+                }
+            }
+            if(Shield_Effect) //Decreased shield effect timer 
+            {
+                TimePassed_Shield += Time.deltaTime;
+                if(TimePassed_Shield > Shield_EffectTime)
+                {
+                    ResetOriginalShieldPercentage();
+                }
+            }
             if(joyStick.Direction.sqrMagnitude == 0)
             {
                 characterAnimator.SetBool("run",false);
@@ -269,6 +321,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                character.ApplyEffectOnPlayerForAttack(attackType);
             }
             if(attackType == AttackType.e)
             {
@@ -285,6 +338,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+
             }
             if(attackType == AttackType.r)
             {
@@ -343,6 +397,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                character.ApplyEffectOnPlayerForAttack(attackType);
             }
             if(attackType == AttackType.e)
             {
@@ -446,6 +501,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                
             }
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Sura)
@@ -517,6 +573,9 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                 //Sura Specific:
+                character.ApplyEffectOnPlayerForAttack(attackType);  // AS, MS speed up ,damange reductions, heal effects
+                //
             }
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Ranzeb)
@@ -588,6 +647,9 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                //Ranzeb Specific:
+                character.ApplyEffectOnPlayerForAttack(attackType);  // AS, MS speed up ,damange reductions, heal effects
+                //
             }
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Jahan)
@@ -627,6 +689,7 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                character.ApplyEffectOnPlayerForAttack(attackType);  //Apply shield effect
             }
             if(attackType == AttackType.e)
             {
@@ -659,6 +722,9 @@ public class PlayerScript : MonoBehaviour
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                //Jahan Specific:
+                character.ApplyEffectOnPlayerForAttack(attackType);
+                //
             }
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Tapani)
@@ -923,10 +989,14 @@ public class PlayerScript : MonoBehaviour
     /// Set character walking speed
     /// </summary>
     /// <param name="speed">character movement speed</param>
-    public void SetSpeed(float speed)
+    public void SetSpeed(float speed,bool forceUpdate=false)
     {
         //Temp
-        speed = 20f;
+        if(!forceUpdate)
+        {
+            speed = MS_DefaultValue;
+            OriginalSpeed = MS_DefaultValue;
+        }
         _speed = speed;
     }
     //Reset indicator boolean of R attack
@@ -1089,6 +1159,123 @@ public class PlayerScript : MonoBehaviour
             //}
             StartCoroutine(AutoAttack_ASCoroutine(AS_CapValue));  //Wait for time equal to AS-2.5 seconds before next auto attack
     }
+    /// <summary>
+    /// Set original speed and reset decreased speed effect
+    /// </summary>
+    private void SetOriginalSpeed()
+    {
+        UpdatedSpeedEffect = false;
+        SetSpeed(OriginalSpeed,true);
+        SlowEffectTime = 0;
+        TimePassed = 0;
+        UpdateOnce = false;
+    }
+    /// <summary>
+    /// Set original speed and reset decreased speed effect
+    /// </summary>
+    private void SetOriginalAS_Speed()
+    {
+        AS_UpdatedSpeedEffect = false;
+        AS_CapValue =AS_DefaultCapValue;
+        AS_SlowEffectTime= 0;
+        TimePassed_AS = 0;
+        AS_UpdateOnce = false;
+    }
+    /// <summary>
+    /// Set original shield effect
+    /// </summary>
+    private void ResetOriginalShieldPercentage()
+    {
+        Debug.LogError("Shield Off");
+        Shield_Effect = false;
+        Shield_UpdatedPercentage = Shield_Percentage;
+        Shield_EffectTime = 0;
+        TimePassed_Shield = 0;
+        Shield_UpdateOnce = false;
+    }
+    /// <summary>
+    /// Set slower movement speed for the given time
+    /// </summary>
+    /// <param name="slowerEffectTime">effect time</param>
+    /// <param name="percentage">speed decrease percentage with resepect to current speed</param>
+    /// <param name="increase">Ture: Increase speed, False : Decrease speed </param>
+    public void SetSpeedEffect(float slowerEffectTime,float percentage,bool increase)
+    {
+        UpdatedSpeedEffect = true;
+        UpdateOnce = true;
+        if(increase) 
+        {
+            UpdatedSpeed = _speed + (_speed * (percentage / 100));
+        }
+        else 
+        {
+            UpdatedSpeed = _speed - (_speed * (percentage / 100));
+        }
+        if(UpdatedSpeed <= 0) 
+        {
+            UpdatedSpeed = 1f; //Do not allow 0 speed
+        }
+        SlowEffectTime = slowerEffectTime;
+        SetSpeed(UpdatedSpeed,true);
+        Debug.LogError(UpdatedSpeed);
+    }
+    /// <summary>
+    /// Set slower movement speed for the given time
+    /// </summary>
+    /// <param name="slowerEffectTime">effect time</param>
+    /// <param name="percentage">AS decrease percentage with resepect to current AS speed</param>
+    /// <param name="increase">Ture: Increase speed, False : Decrease speed </param>
+    public void Set_AS_SpeedEffect(float slowerEffectTime,float percentage,bool increase)
+    {
+        AS_UpdatedSpeedEffect = true;
+        AS_UpdateOnce = true;
+        if(increase)
+        {
+            AS_UpdatedSpeed  = AS_CapValue + (AS_CapValue * (percentage / 100));
+        }
+        else
+        {
+            AS_UpdatedSpeed = AS_CapValue - (AS_CapValue * (percentage / 100));
+        }
+        if(AS_UpdatedSpeed <= 0)
+        {
+            AS_UpdatedSpeed = .5f; //Do not allow 0 speed
+        }
+        AS_SlowEffectTime = slowerEffectTime;
+        AS_CapValue = AS_UpdatedSpeed;
+        Debug.LogError("Updated AS" + AS_CapValue);
+    }
+    /// <summary>
+    /// Set shield effect to decrease the damage
+    /// </summary>
+    /// <param name="effectTime">Effect time while shield is on</param>
+    /// <param name="percentage">Damage reduce percentage</param>
+    /// <param name="increase">Ture: Increase shield percentage, False : Decrease shield percentage </param>
+    public void Set_Shield_Effect(float effectTime,float percentage,bool increase)
+    {
+        Debug.LogError("Shield On");
+        Shield_Effect = true;
+        Shield_UpdateOnce = true;
+        if(increase)
+        {
+            Shield_UpdatedPercentage = Shield_Percentage + (Shield_Percentage * (percentage / 100));
+        }
+        else
+        {
+            Shield_UpdatedPercentage = Shield_Percentage - (Shield_Percentage * (percentage / 100));
+        }
+        if(Shield_UpdatedPercentage <= 0)
+        {
+            Shield_UpdatedPercentage = 0f; //Do not allow < 0
+        }
+        Shield_EffectTime = effectTime;
+        Debug.LogError("Shield Percentage " + Shield_UpdatedPercentage);
+    }
+    public void Heal_RegainHealth(float effectTime,float baseValue,float percentage) 
+    {
+    
+    }
+
 }
 /// <summary>
 /// Character attack types

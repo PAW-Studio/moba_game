@@ -151,31 +151,31 @@ MonoBehaviour:
       - scalingCondition: 6
         baseValue: 0
         percentage: 40
-        effectTime: 0
+        effectTime: 5
       - scalingCondition: 7
         baseValue: 0
         percentage: 50
-        effectTime: 0
-    - Level: 1
+        effectTime: 5
+    - Level: 2
       scaleConditionsAndFactors:
       - scalingCondition: 6
         baseValue: 0
         percentage: 40
-        effectTime: 0
+        effectTime: 5
       - scalingCondition: 7
         baseValue: 0
         percentage: 50
-        effectTime: 0
-    - Level: 1
+        effectTime: 5
+    - Level: 3
       scaleConditionsAndFactors:
       - scalingCondition: 6
         baseValue: 0
         percentage: 40
-        effectTime: 0
+        effectTime: 5
       - scalingCondition: 7
         baseValue: 0
         percentage: 50
-        effectTime: 0
+        effectTime: 5
   - attackType: 2
     conditions:
     - Level: 1
@@ -208,6 +208,38 @@ MonoBehaviour:
         baseValue: 0
         percentage: 80
         effectTime: 1.75
+  - attackType: 4
+    conditions:
+    - Level: 1
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 0
+        effectTime: 0
+    - Level: 2
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 0
+        effectTime: 0
+    - Level: 3
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 0
+        effectTime: 0
+    - Level: 4
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 0
+        effectTime: 0
+    - Level: 5
+      scaleConditionsAndFactors:
+      - scalingCondition: 1
+        baseValue: 0
+        percentage: 0
+        effectTime: 0
   championName: Ranzeb
   summonerName: 
   baseHealth: 670

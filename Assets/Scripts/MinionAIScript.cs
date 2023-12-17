@@ -20,14 +20,14 @@ public class MinionAIScript : MonoBehaviour
     public float damage = 30f;
     public float attackRange = 10f;
     public Vector3 offset = new Vector3(5,0,5);
-
+    public TeamType teamType;                    //Minion team type
     UnityEngine.AI.NavMeshAgent agent;
     Renderer renderer;
     [SerializeField]
     public GameObject referenceObject;                                      //Healthbar display reference object for the minion
 
     public MinionHealthBar minionHealthBar;
-
+    public GameObject TargetIndicator;
     Camera cam;
     Transform healthBarTransform;
     float OriginalSpeed;
@@ -57,7 +57,11 @@ public class MinionAIScript : MonoBehaviour
        // Setting minion health bar
         currentHealth = maxHealth;
         minionHealthBar.SetMaxHealth(maxHealth);
-        Healthbar.gameObject.SetActive(true);
+        if(referenceObject)         //Handle exception for null reference 
+        {
+            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+        }
+        Invoke(nameof(ShowHealthBar),0.3f);
 
         // Setting type of minion based on layer
         if(isBlue)
@@ -73,6 +77,13 @@ public class MinionAIScript : MonoBehaviour
         }
 
         agent.SetDestination(destination);
+    }
+    /// <summary>
+    /// Set active healthvar object on
+    /// </summary>
+    public void ShowHealthBar() 
+    {
+        minionHealthBar.gameObject.SetActive(true);
     }
     /// <summary>
     /// Set original speed and reset decreased speed effect
@@ -95,7 +106,6 @@ public class MinionAIScript : MonoBehaviour
             if(TimePassed > SlowEffectTime)
             {
                 SetOriginalSpeed();
-                Debug.LogError("Original Speed set");
             }
         }
         if(hasTarget && targetMinion != null)
@@ -136,21 +146,20 @@ public class MinionAIScript : MonoBehaviour
         }
 
 
-        if(currentHealth <= 0)
-        {
-            Destroy(minionHealthBar.gameObject);
-            Destroy(this.gameObject);
-        }
+        //if(currentHealth <= 0)
+        //{
+        //    Destroy(minionHealthBar.gameObject);
+        //    Destroy(this.gameObject);
+        //}
 
     }
 
     private void FixedUpdate()
     {
-        if(referenceObject)         //Handle exception for null reference 
+        if(referenceObject && healthBarTransform)         //Handle exception for null reference 
         {
-            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+           healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
         }
-
     }
     void MoveToMinion()
     {
@@ -188,14 +197,14 @@ public class MinionAIScript : MonoBehaviour
             targetMinion.GetComponent<TowerAIScript>().currentHealth -= damage;
 
             // Reduces tower health from current health bar
-            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth);
+            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,targetMinion.gameObject);
         }
 
         else
         {
             // Attacks opposite minion and reduces minion health from current health bar
             targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-            targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth);
+            targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
         }
     }
     /// <summary>
@@ -206,7 +215,7 @@ public class MinionAIScript : MonoBehaviour
     {
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth);
+        minionHealthBar.SetHealth(currentHealth,true,gameObject);
     }
     /// <summary>
     /// Set slower movement speed for the given time

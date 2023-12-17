@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform characterSpawnTranform;
     public GameObject MinioinHealthBar;                                                 //Healthbar prefab for minions
+    public GameObject ChampionHealthBar;                                                 //Healthbar prefab for Champion
     public Transform MinionHealthbarsParent;                                            //Parent transform for minion healthbars
     public Transform MeleeMinionParentContainer;                                        //Parent transform for melee minions
     public Transform CasterMinionParentContainer;                                        //Parent transform for caster minions
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     //Temp
     public Vector3 CharacterLastPosition;                                           //Last position of character before death
     public GameObject QWER_LevelUpPanel;                                            //Panel with "Q" ,"W", "E" and "R" buttons to choose any one for level up
+   
     public List<AttackTypeReference> attackTypeReferences = new List<AttackTypeReference>();      //List of buttons with attack types in QWER_LevelUp panel
   
 
@@ -142,12 +144,14 @@ public class GameManager : MonoBehaviour
 
             // Blue minions
             casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+            casterMinions[i].GetComponent<MinionAIScript>().teamType =  TeamType.Blue;
 
             casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
             casterMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
 
             // Red minions
             casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
 
         }
     }
@@ -162,10 +166,12 @@ public class GameManager : MonoBehaviour
             cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = true;
+            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
 
             cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             cannonMinion1.GetComponent<MinionAIScript>().destination = blueSpawnLocation;
             cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
+            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Red;
 
             // Resetting wave count for next cannon minion wave
             waveCount = 0;
@@ -316,14 +322,19 @@ public class GameManager : MonoBehaviour
                 item.EnableButton(false);
             }
         }
-        QWER_LevelUpPanel.SetActive(true);
+       // QWER_LevelUpPanel.SetActive(true);
     }
     /// <summary>
     /// Hide level up screen for Q/W/E/R levelup
     /// </summary>
     public void Hide_QWER_LevelUpdatePanel()
     {
-        QWER_LevelUpPanel.SetActive(false);
+        foreach(AttackButton item in  AttackButtons)
+        {
+            if(item.ScaleUpButton)
+            { item.ScaleUpButton.gameObject.SetActive(false); }
+        }
+        //QWER_LevelUpPanel.SetActive(false);
     }
 }
 //Handle attack buttton UI with this class
@@ -336,7 +347,7 @@ public class AttackButton
     public GameObject DeactiveIndicator;                    //Gameobject that covers attack button while the attack is on cooldown
     public TMPro.TextMeshProUGUI coolDownTimer;             //Remaining time display object while cooldown is on
     public TMPro.TextMeshProUGUI attackName;                //Object reference for attack name text 
-   
+    public Button ScaleUpButton;                            //Scale up button for Attack
     /// <summary>
     /// Update remaining time text on button while attack button is on cooldown
     /// </summary>
@@ -410,3 +421,5 @@ public class AttackButton
         DeactiveIndicator.gameObject.SetActive(false);
     }
 }
+[System.Serializable]
+public enum TeamType { Blue, Red}
