@@ -35,10 +35,10 @@ public class MinionAIScript : MonoBehaviour
     bool DecreasedSpeedEffect;
     float TimePassed = 0;
     float SlowEffectTime;
+    
     // Start is called before the first frame update
     void Start()
-    {
-      
+    { 
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
         GameObject Healthbar = Instantiate(GameManager.instance.MinioinHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.transform.localScale = Vector3.one;
@@ -75,7 +75,7 @@ public class MinionAIScript : MonoBehaviour
             renderer.material = redMinionMat;
             this.gameObject.layer = 10;
         }
-
+    
         agent.SetDestination(destination);
     }
     /// <summary>
@@ -145,7 +145,7 @@ public class MinionAIScript : MonoBehaviour
             agent.SetDestination(destination);
         }
 
-
+       
         //if(currentHealth <= 0)
         //{
         //    Destroy(minionHealthBar.gameObject);
@@ -229,5 +229,14 @@ public class MinionAIScript : MonoBehaviour
         DecreasedSpeed = agent.speed - (agent.speed * (percentage / 100));
         SlowEffectTime = slowerEffectTime;
         agent.speed = DecreasedSpeed;
+    }
+    /// <summary>
+    /// Show/Hide indicator objects
+    /// </summary>
+    /// <param name="show">Show indicator</param>
+    public void ShowIndicator(bool show) 
+    {
+        TargetIndicator.SetActive(show);
+        minionHealthBar.ShowOutline(show);
     }
 }

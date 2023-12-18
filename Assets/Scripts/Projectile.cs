@@ -19,7 +19,6 @@ public class Projectile : MonoBehaviour
     {
         if(shoot)
         {
-
            Collider[] hits = Physics.OverlapSphere(projectileColliderOjbect.transform.position,collisionRadius);
             bool hit = false;
             foreach(Collider item in hits)
@@ -58,7 +57,6 @@ public class Projectile : MonoBehaviour
     {
         shoot = true;
         Debug.DrawRay(transform.position,transform.forward * 130,Color.blue,10f);
-
     }
 }
 

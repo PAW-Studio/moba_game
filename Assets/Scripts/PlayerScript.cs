@@ -100,6 +100,25 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Collider[] hits = Physics.OverlapSphere(transform.position,10);
+        foreach(Collider item in hits)
+        {
+            MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
+            if(minionAIScript && minionAIScript.teamType!= character.teamType) 
+            {
+                
+                if(Vector3.Distance(transform.position,minionAIScript.transform.position) < 10) 
+                {
+                    minionAIScript.ShowIndicator(true);
+                    
+                }
+                else
+                {
+                    minionAIScript.ShowIndicator(false);
+                }
+                
+            }
+        }
         if(Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
@@ -111,7 +130,6 @@ public class PlayerScript : MonoBehaviour
                 Quaternion rotationToLookAt = Quaternion.LookRotation(hit.point - transform.position);
                 float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y,rotationToLookAt.eulerAngles.y,
                 ref rotateVelocity,rotateSpeedMovement * (Time.deltaTime * 5));
-
                 transform.eulerAngles = new Vector3(0,rotationY,0);
             }
         }

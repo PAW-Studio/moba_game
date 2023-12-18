@@ -13,6 +13,8 @@ public class MinionHealthBar : MonoBehaviour
     public Slider slider;                                       //Healthbar slider
     public Slider effectBar;                                    //Effect bar to create decrease effect in helatbar     
     public TMPro.TextMeshProUGUI damageText;                    //Damage text
+    [SerializeField]
+    GameObject indicator;
     private void OnEnable()
     {
         camera = Camera.main;
@@ -68,5 +70,13 @@ public class MinionHealthBar : MonoBehaviour
     {
         if(local)
         transform.parent.LookAt(camera.transform);
+    }
+    /// <summary>
+    /// Show indicator on healthbar
+    /// </summary>
+    /// <param name="show">Show outline highlight</param>
+    public void ShowOutline(bool show) 
+    {
+        indicator.gameObject.SetActive(show);
     }
 }
