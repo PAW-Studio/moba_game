@@ -44,8 +44,13 @@ public class TowerAIScript : MonoBehaviour
             if (attackTimer <= 0)
             {
                 attackTimer = attackReset;
-                targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-                targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+                
+                if(targetMinion.GetComponent<MinionAIScript>()) 
+                {
+                    targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
+                    targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+                }
+                
             }
         }
 

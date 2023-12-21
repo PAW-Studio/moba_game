@@ -100,25 +100,25 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position,10);
-        foreach(Collider item in hits)
-        {
-            MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
-            if(minionAIScript && minionAIScript.teamType!= character.teamType) 
-            {
+        //Collider[] hits = Physics.OverlapSphere(transform.position,10);
+        //foreach(Collider item in hits)
+        //{
+        //    MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
+        //    if(minionAIScript && minionAIScript.teamType!= character.teamType) 
+        //    {
                 
-                if(Vector3.Distance(transform.position,minionAIScript.transform.position) < 10) 
-                {
-                    minionAIScript.ShowIndicator(true);
+        //        if(Vector3.Distance(transform.position,minionAIScript.transform.position) < 10) 
+        //        {
+        //            minionAIScript.ShowIndicator(true);
                     
-                }
-                else
-                {
-                    minionAIScript.ShowIndicator(false);
-                }
+        //        }
+        //        else
+        //        {
+        //            minionAIScript.ShowIndicator(false);
+        //        }
                 
-            }
-        }
+        //    }
+        //}
         if(Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;

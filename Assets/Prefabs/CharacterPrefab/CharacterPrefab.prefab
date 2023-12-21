@@ -252,6 +252,9 @@ MonoBehaviour:
   championHealthBar: {fileID: 3554483515433445697}
   referenceObject: {fileID: 4179291662875737115}
   teamType: 0
+  minionInRange: 0
+  distance: 0
+  targetMinion: {fileID: 0}
 --- !u!1 &1053586027030269514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1401,6 +1404,7 @@ MonoBehaviour:
   slider: {fileID: 8613152941288060610}
   effectBar: {fileID: 0}
   damageText: {fileID: 0}
+  indicator: {fileID: 0}
 --- !u!1 &7597496393336482990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1919,15 +1923,15 @@ MonoBehaviour:
   collisionDetectorObjects:
   - collisionDetector: {fileID: 8035651218415530156}
     damageType: 3
-    attackTypeForThisDetector: 0
+    attackTypeForThisDetector: 4
     collisionDetectionShapeType: 0
   - collisionDetector: {fileID: 6017715413879117655}
     damageType: 4
-    attackTypeForThisDetector: 0
+    attackTypeForThisDetector: 4
     collisionDetectionShapeType: 0
   - collisionDetector: {fileID: 4287508092294340475}
     damageType: 2
-    attackTypeForThisDetector: 0
+    attackTypeForThisDetector: 2
     collisionDetectionShapeType: 0
   currentAttackDamangeType: 0
   ArrowPrefab: {fileID: 0}
@@ -2318,7 +2322,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 417e9776a91bf224eae37873939d6ea4,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 417e9776a91bf224eae37873939d6ea4,
         type: 3}
@@ -2657,7 +2661,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: c8e1905ced3a7854da95c9c661553e06,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: c8e1905ced3a7854da95c9c661553e06,
         type: 3}

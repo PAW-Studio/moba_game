@@ -59,12 +59,17 @@ public class Character : MonoBehaviour
     Transform healthBarTransform;                                                                    //Reference transform of healthbar
     Camera cam;
     public TeamType teamType;
+    public bool minionInRange;
+    public float distance = 0;
+    public MinionAIScript targetMinion = null;
     //
     void Start()
     {
 
         //Temp 
         teamType = TeamType.Blue;
+        gameObject.layer = teamType == TeamType.Blue ? 9 : 10;
+       
         characterOtrill = new Otrill();
         characterOtrill.CheckLevel();
         characterOtrill.DisplayStats();

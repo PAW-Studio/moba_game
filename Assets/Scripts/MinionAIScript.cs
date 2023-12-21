@@ -134,7 +134,7 @@ public class MinionAIScript : MonoBehaviour
             {
                 attackTimer = attackReset;
 
-               // InitiateAttack();
+                InitiateAttack();
             }
         }
 
@@ -170,12 +170,14 @@ public class MinionAIScript : MonoBehaviour
             agent.SetDestination(targetMinion.transform.position);
             // Minion stops at attackRange distance from target 
             agent.stoppingDistance = attackRange;
+            
         }
         else
         {
             // If target minion is less than attackRange distance away, moves towards it
             agent.SetDestination(targetMinion.transform.position);
             agent.velocity = Vector3.zero;
+            
         }
     }
 
@@ -202,9 +204,17 @@ public class MinionAIScript : MonoBehaviour
 
         else
         {
-            // Attacks opposite minion and reduces minion health from current health bar
-            targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-            targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+            if(targetMinion.GetComponent<Character>())
+            {
+               // targetMinion.GetComponent<Character>().DealDamage(0);
+            }
+            else 
+            {
+                // Attacks opposite minion and reduces minion health from current health bar
+                //targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
+                //targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+            }
+           
         }
     }
     /// <summary>
@@ -238,5 +248,6 @@ public class MinionAIScript : MonoBehaviour
     {
         TargetIndicator.SetActive(show);
         minionHealthBar.ShowOutline(show);
+       
     }
 }
