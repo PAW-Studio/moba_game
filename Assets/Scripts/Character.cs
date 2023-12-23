@@ -199,7 +199,6 @@ public class Character : MonoBehaviour
         //Set slider value
         championHealthBar.SetMaxHealth((float)currentHealth);
         championHealthBar.SetHealth((float)currentHealth,false);
-
     }
     /// <summary>
     /// Increase Q/W/E/R attack level by one (Max 5)

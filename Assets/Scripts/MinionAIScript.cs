@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MinionAIScript : MonoBehaviour
 {
@@ -68,12 +69,13 @@ public class MinionAIScript : MonoBehaviour
         {
             renderer.material = blueMinionMat;
             this.gameObject.layer = 9;
+            teamType = TeamType.Blue;
         }
-
         else
         {
             renderer.material = redMinionMat;
             this.gameObject.layer = 10;
+            teamType = TeamType.Red;
         }
     
         agent.SetDestination(destination);
@@ -162,8 +164,7 @@ public class MinionAIScript : MonoBehaviour
         }
     }
     void MoveToMinion()
-    {
-        
+    {   
         // Calculating distance between this minion and target
         if(Vector3.Distance(transform.position,targetMinion.transform.position) > attackRange)
         {
@@ -176,8 +177,7 @@ public class MinionAIScript : MonoBehaviour
         {
             // If target minion is less than attackRange distance away, moves towards it
             agent.SetDestination(targetMinion.transform.position);
-            agent.velocity = Vector3.zero;
-            
+            agent.velocity = Vector3.zero;   
         }
     }
 
@@ -201,7 +201,6 @@ public class MinionAIScript : MonoBehaviour
             // Reduces tower health from current health bar
             targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,targetMinion.gameObject);
         }
-
         else
         {
             if(targetMinion.GetComponent<Character>())
@@ -214,7 +213,6 @@ public class MinionAIScript : MonoBehaviour
                 //targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
                 //targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
             }
-           
         }
     }
     /// <summary>
@@ -250,4 +248,5 @@ public class MinionAIScript : MonoBehaviour
         minionHealthBar.ShowOutline(show);
        
     }
+    public void NewTarget() { }
 }

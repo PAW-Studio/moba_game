@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -92,7 +93,7 @@ public class PlayerScript : MonoBehaviour
         agent = gameObject.GetComponent<NavMeshAgent>();
 
         //Set reference for joystick and character
-        joyStick = FindObjectOfType<FixedJoystick>();
+        joyStick = GameManager.instance.MovementJoystick; //FindObjectOfType<FixedJoystick>();
         character = GetComponent<Character>();
     }
 
@@ -100,25 +101,52 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Collider[] hits = Physics.OverlapSphere(transform.position,10);
-        //foreach(Collider item in hits)
-        //{
-        //    MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
-        //    if(minionAIScript && minionAIScript.teamType!= character.teamType) 
-        //    {
-                
-        //        if(Vector3.Distance(transform.position,minionAIScript.transform.position) < 10) 
-        //        {
-        //            minionAIScript.ShowIndicator(true);
-                    
-        //        }
-        //        else
-        //        {
-        //            minionAIScript.ShowIndicator(false);
-        //        }
-                
-        //    }
-        //}
+        if(GameManager.instance.Minion_ChampToggle.isOn)
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position,10);
+
+            foreach(Collider item in hits)
+            {
+                MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
+                if(minionAIScript && minionAIScript.teamType != character.teamType)
+                {
+                    float objectDistance = Vector3.Distance(transform.position,minionAIScript.transform.position);
+                    if(objectDistance < minionAIScript.attackRange)
+                    {
+                        if(character.minionInRange && character.targetMinion)
+                        {
+                            if(objectDistance < character.distance)
+                            {
+                                character.targetMinion.ShowIndicator(false);
+                                character.targetMinion = null;
+                                character.targetMinion = minionAIScript;
+                                character.distance = objectDistance;
+                                character.targetMinion.ShowIndicator(true);
+                                character.minionInRange = true;
+                            }
+
+                        }
+                        else
+                        {
+                            character.minionInRange = true;
+                            character.targetMinion = minionAIScript;
+                            character.distance = objectDistance;
+                            character.targetMinion.ShowIndicator(true);
+                        }
+
+                    }
+                    else
+                    {
+                        if(character.targetMinion)
+                            character.targetMinion.ShowIndicator(false);
+                        character.minionInRange = false;
+                        character.targetMinion = null;
+                        character.distance = 0;
+                    }
+
+                }
+            }
+        }
         if(Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
@@ -166,10 +194,7 @@ public class PlayerScript : MonoBehaviour
             }
             else
             {
-                characterAnimator.SetBool("run",true);
-                float angle = Mathf.Atan2(joyStick.Horizontal,joyStick.Vertical) * Mathf.Rad2Deg;
-                float FinaleAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,angle,ref currentVelocity,smoothTime);
-                this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
+                RotateCharacter();
             }
         }
 
@@ -190,7 +215,39 @@ public class PlayerScript : MonoBehaviour
             _rb.velocity = vel;
         }
     }
+    /// <summary>
+    /// Rotate character with respect to joystic direction
+    /// </summary>
+    private void RotateCharacter()
+    {
+        characterAnimator.SetBool("run",true);
+        float angle = Mathf.Atan2(joyStick.Horizontal,joyStick.Vertical) * Mathf.Rad2Deg;
+        float FinaleAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,angle,ref currentVelocity,smoothTime);
+        this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
+    }
+    /// <summary>
+    /// Rotate character
+    /// </summary>
+    /// <param name="fixedJoystick">Joystick</param>
+    public void RotateCharacter(FixedJoystick fixedJoystick)
+    {
+        if(fixedJoystick.Direction.sqrMagnitude == 0)
+        {
+            characterAnimator.SetBool("run",false);
+            return;
+        }
+       // characterAnimator.SetBool("run",true);
+        float angle = Mathf.Atan2(fixedJoystick.Horizontal,fixedJoystick.Vertical) * Mathf.Rad2Deg;
+        float FinaleAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,angle,ref currentVelocity,smoothTime);
+        this.transform.eulerAngles = new Vector3(0,FinaleAngle,0);
+    }
+    public void InitiateAttackWrapper(int AttackValue,AttackType attackType) 
+    {
+        if(GameManager.instance.AttackButtons.Find(x => x.attackType == attackType).JoyStickAtcive()) return;
 
+        Debug.LogError("Auto attack");
+        InitiateAttack(AttackValue,attackType);
+    }
     /// <summary>
     /// Attack button functionality: 
     /// </summary>
@@ -1293,7 +1350,37 @@ public class PlayerScript : MonoBehaviour
     {
     
     }
-
+    /// <summary>
+    /// Check if attack is allowed or not
+    /// </summary>
+    /// <param name="attackType">Attack type</param>
+    /// <returns>True:  If attack is allowed</returns>
+    public bool AttackAllowed(AttackType attackType) 
+    {
+        bool allowed = true;
+        switch(attackType)
+        {
+            case AttackType.w:
+                allowed = (Attack_W_IsAtcitve || Attack_W_CoolDown) ? false : true;
+                break;
+            case AttackType.q:
+                allowed = (Attack_Q_IsAtcitve || Attack_Q_CoolDown) ? false : true;
+                break;
+            case AttackType.e:
+                allowed = (Attack_E_IsAtcitve || Attack_E_CoolDown) ? false : true;
+                break;
+            case AttackType.r:
+                allowed = (Attack_R_IsAtcitve || Attack_R_CoolDown) ? false : true;
+                break;
+            case AttackType.auto:
+                allowed = Attack_Auto_Allowed;
+                break;
+            default:
+                break;
+        }
+        return allowed;
+    }
+    //
 }
 /// <summary>
 /// Character attack types

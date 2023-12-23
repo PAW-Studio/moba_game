@@ -32,8 +32,9 @@ public class GameManager : MonoBehaviour
     public GameObject QWER_LevelUpPanel;                                            //Panel with "Q" ,"W", "E" and "R" buttons to choose any one for level up
    
     public List<AttackTypeReference> attackTypeReferences = new List<AttackTypeReference>();      //List of buttons with attack types in QWER_LevelUp panel
-  
-
+    public FixedJoystick MovementJoystick;                                          //Main Joystick
+    public Toggle Minion_ChampToggle;                                                //Minion champ toggle
+    public TMPro.TextMeshProUGUI ToggleButtonText;                                   //Minion toggle text
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
@@ -56,6 +57,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     int SpawnCannonAfterWaves = 3;                                                  //Used to decide after how many waves the cannon should spawn
     int WaveCounter=0;                                                              //Counts waves for calculations
+    
+
     private void Awake()
     {
         if(instance == null) 
@@ -194,7 +197,7 @@ public class GameManager : MonoBehaviour
         {
             int val = characterScirpt.AttackValues[i];
             AttackType type = AttackTypes[i];
-            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
+            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttackWrapper(val,type));
         }
         currentCharacter = characterScirpt;
     }
@@ -336,6 +339,15 @@ public class GameManager : MonoBehaviour
         }
         //QWER_LevelUpPanel.SetActive(false);
     }
+    public void ToggleMinion() 
+    {
+        //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
+        ToggleButtonText.text =Minion_ChampToggle.isOn?  "Champ": "Minion";
+    }
+    public bool Get_Minion_ChampToggleValue()
+    {
+        return Minion_ChampToggle.isOn;
+    }
 }
 //Handle attack buttton UI with this class
 [System.Serializable]
@@ -348,6 +360,7 @@ public class AttackButton
     public TMPro.TextMeshProUGUI coolDownTimer;             //Remaining time display object while cooldown is on
     public TMPro.TextMeshProUGUI attackName;                //Object reference for attack name text 
     public Button ScaleUpButton;                            //Scale up button for Attack
+    public FixedJoystick AttackButtonJoystick;              //AttackButton joystick
     /// <summary>
     /// Update remaining time text on button while attack button is on cooldown
     /// </summary>
@@ -419,6 +432,22 @@ public class AttackButton
         coolDownTimer.gameObject.SetActive(false);
         attackName.gameObject.SetActive(true);
         DeactiveIndicator.gameObject.SetActive(false);
+    }
+    /// <summary>
+    /// Show/Hide attack button target joystick
+    /// </summary>
+    /// <param name="show">True: show joystick, False : hide joystick</param>
+    public void ShowTargetJoystick(bool show) 
+    {
+        AttackButtonJoystick.transform.parent.gameObject.SetActive(show);
+    }
+    /// <summary>
+    /// Check if joystickis active
+    /// </summary>
+    /// <returns></returns>
+    public bool JoyStickAtcive() 
+    {
+        return AttackButtonJoystick.transform.parent.gameObject.activeInHierarchy;
     }
 }
 [System.Serializable]

@@ -51,56 +51,6 @@ public class MinionTargetScript : MonoBehaviour
                     targetList.RemoveAt(i);
                 }
             }
-           
-              
-                if(closestTarget.GetComponent<Character>())
-                {
-                    Character character = closestTarget.GetComponent<Character>();
-                    if(character.teamType != minionScript.teamType)
-                    {
-                        float distance = Vector3.Distance(gameObject.transform.position,closestTarget.transform.position);
-                        if(!character.minionInRange)
-                        {
-                            character.minionInRange = true;
-                            character.distance = distance;
-                            character.targetMinion = minionScript;
-                            minionScript.ShowIndicator(true);
-                        }
-                        else
-                        {
-                            if(distance < character.distance)
-                            {
-                                character.minionInRange = true;
-
-                                if(character.targetMinion)
-                                {
-                                    character.targetMinion.ShowIndicator(false);
-                                    character.targetMinion.hasTarget = false;
-                                    character.targetMinion.GetComponentInChildren<MinionTargetScript>().targetList.Clear();
-                                }
-                                character.distance = distance;
-                                character.targetMinion = minionScript;
-                                minionScript.ShowIndicator(true);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        character.minionInRange = false;
-                        character.distance = 0;
-                        character.targetMinion = null;
-                        minionScript.ShowIndicator(false);
-                        minionScript.hasTarget = false;
-                        targetList.Clear();
-                    }
-                }
-                else
-                {
-                    minionScript.ShowIndicator(false);
-                    minionScript.hasTarget = false;
-                    targetList.Clear();
-                }
-                
             minionScript.targetMinion = closestTarget;
             minionScript.hasTarget = true;
         }
