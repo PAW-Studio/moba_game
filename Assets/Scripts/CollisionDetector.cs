@@ -70,6 +70,11 @@ public class CollisionDetector : MonoBehaviour
         {
             //Detects Minions hit
             MinionAIScript hitItem = item.GetComponent<Collider>().gameObject.GetComponent<MinionAIScript>();
+            //Detects Champion hit
+            Character champhitItem = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
+
+            TowerAIScript towerItem= item.GetComponent<Collider>().gameObject.GetComponent<TowerAIScript>();
+
             if(hitItem)
             {
                 if(hitItem.teamType != character.teamType)
@@ -85,7 +90,25 @@ public class CollisionDetector : MonoBehaviour
                         }
                     }
                 }
-
+            }
+            else if(towerItem)
+            {
+                if(hitItem.teamType != character.teamType)
+                {
+                    if(hitItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position) < distanceAllowed)
+                    {
+                        if(!AnimationMovementManager.HitList.Contains(hitItem))
+                        {
+                            AnimationMovementManager.HitList.Add(hitItem);
+                            // hitItem.DealDamage(25);
+                            Debug.LogError("*Minion Hit :");
+                            Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position));
+                        }
+                    }
+                }
+            }
+            else if(champhitItem) 
+            {
                 //Detects Champions hit
                 if(hitItem.teamType != character.teamType)
                 {
@@ -102,7 +125,9 @@ public class CollisionDetector : MonoBehaviour
                         }
                     }
                 }
+
             }
+
         }
     }
     public Collider[] FilterTargetsWithinArc(Collider[] hits) 

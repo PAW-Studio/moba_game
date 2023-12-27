@@ -22,6 +22,12 @@ public class MinionHealthBar : MonoBehaviour
     public void SetMaxHealth(float health)
     {
         slider.maxValue = health;
+        if(effectBar) 
+        {
+            effectBar.maxValue = health;
+        }
+        slider.value = health;
+        effectBar.value = health;
     }
     
     public void SetHealth(float health,bool damage=true,GameObject objectToDestroy=null)
