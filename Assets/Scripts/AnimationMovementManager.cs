@@ -12,6 +12,7 @@ public class AnimationMovementManager : MonoBehaviour
     public bool Attacking = false;
     public List<MinionAIScript> HitList = new List<MinionAIScript>();
     public List<Character> HitListChampions = new List<Character>();
+    public List<TowerAIScript> HitListTower = new List<TowerAIScript>();
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
     public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
@@ -102,7 +103,11 @@ public class AnimationMovementManager : MonoBehaviour
                 MinionTargetDamage(target);
             }
         }
+        foreach(TowerAIScript target in HitListTower)
+        {
 
+            TowerTargetDamage(target);
+        }
         foreach(Character target in HitListChampions)
         {
             if(character.characterData.characterModel.characterType == CharacterType.Jahan)
@@ -143,6 +148,19 @@ public class AnimationMovementManager : MonoBehaviour
         float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
         Debug.LogError("Scale Damage " + damage);
+        if(target)
+        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+    }
+    /// <summary>
+    /// Damage Tower target
+    /// </summary>
+    /// <param name="target"></param>
+    public void TowerTargetDamage(TowerAIScript target)
+    {
+        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+        Debug.LogError("Scale Damage " + damage);
+        if(target)
         target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
     }
     // <summary>

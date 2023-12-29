@@ -612,7 +612,8 @@ public class Character : MonoBehaviour
     /// <param name="damage">damage value</param>
     public void DealDamage(float damage)
     {
-       currentHealth  -= damage;
+        if(damage <= 0) return;
+        currentHealth  -= damage;
         if(currentHealth < 0) 
         {
             currentHealth = 0;

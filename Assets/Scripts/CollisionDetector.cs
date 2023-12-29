@@ -93,16 +93,22 @@ public class CollisionDetector : MonoBehaviour
             }
             else if(towerItem)
             {
-                if(hitItem.teamType != character.teamType)
+                if(towerItem.teamType != character.teamType)
                 {
-                    if(hitItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position) < distanceAllowed)
+                   
+                    if(character.playerScript.currentAttackType == AttackType.auto)
                     {
-                        if(!AnimationMovementManager.HitList.Contains(hitItem))
+                        Debug.LogError("***Distance  type :" + distanceAllowed +">" +Vector3.Distance(AnimationMovementManager.playerScript.transform.position,towerItem.transform.position));
+                        if(towerItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,towerItem.transform.position) < 7)
                         {
-                            AnimationMovementManager.HitList.Add(hitItem);
-                            // hitItem.DealDamage(25);
-                            Debug.LogError("*Minion Hit :");
-                            Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,hitItem.transform.position));
+                           
+                            if(!AnimationMovementManager.HitListTower.Contains(towerItem))
+                            {
+                                AnimationMovementManager.HitListTower.Add(towerItem);
+                                // hitItem.DealDamage(25);
+                                Debug.LogError("*Minion Hit :");
+                                Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,towerItem.transform.position));
+                            }
                         }
                     }
                 }
@@ -110,7 +116,7 @@ public class CollisionDetector : MonoBehaviour
             else if(champhitItem) 
             {
                 //Detects Champions hit
-                if(hitItem.teamType != character.teamType)
+                if(champhitItem.teamType != character.teamType)
                 {
                     Character hitItemChampions = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
                     //Avoid self hit

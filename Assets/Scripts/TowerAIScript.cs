@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerAIScript : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class TowerAIScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject Healthbar = Instantiate(GameManager.instance.MinioinHealthBar,GameManager.instance.MinionHealthbarsParent);
+        GameObject Healthbar = Instantiate(GameManager.instance.TowerHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.transform.localScale = Vector3.one;
         Healthbar.name = "Tower";
         minionHealthBar = Healthbar.GetComponent<MinionHealthBar>();
@@ -82,10 +83,26 @@ public class TowerAIScript : MonoBehaviour
             hasTarget = false;
         }
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !destroyOnce)
         {
-            Destroy(this.gameObject);
+            destroyOnce = true;
+         
+            minionHealthBar.slider.gameObject.SetActive(false);
+            AnimateAndDestoryTower();
+            //Destroy(this.gameObject);
         }
+    }
+    bool destroyOnce = false;
+    public void AnimateAndDestoryTower() 
+    {
+        Vector3 position = gameObject.transform.position;
+
+        Vector3 positionRefForLeftRightAnimation = position;
+        positionRefForLeftRightAnimation.x -= 0.25f;
+        position.y = -2f;
+      
+        //LeanTween.moveX(gameObject,positionRefForLeftRightAnimation.x,0.2f).setLoopPingPong();
+        LeanTween.move(gameObject,position,.5f).setOnComplete(() => { Destroy(gameObject); });
     }
     /// <summary>
     /// Handle damage and update healthbar
@@ -93,6 +110,7 @@ public class TowerAIScript : MonoBehaviour
     /// <param name="damage">damage value</param>
     public void DealDamage(float damage)
     {
+        if(damage <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
         minionHealthBar.SetHealth(currentHealth,true,gameObject);

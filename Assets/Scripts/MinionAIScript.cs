@@ -219,8 +219,9 @@ public class MinionAIScript : MonoBehaviour
     /// Handle damage and update healthbar
     /// </summary>
     /// <param name="damage">damage value</param>
-    public void DealDamage(float damage) 
+    public void DealDamage(float damage)
     {
+        if(damage <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
         minionHealthBar.SetHealth(currentHealth,true,gameObject);
