@@ -36,12 +36,14 @@ public class Projectile : MonoBehaviour
                 {
                     if(attackType == AttackType.auto)
                     {
-                        float damageValue = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
-                        //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
-                        item.GetComponent<TowerAIScript>().DealDamage(damageValue); // Get current charactes AD
-                        Debug.LogError(damageValue);
-                        hit = true;
-
+                        if(character.teamType != item.GetComponent<TowerAIScript>().teamType)
+                        {
+                            float damageValue = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                            //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
+                            item.GetComponent<TowerAIScript>().DealDamage(damageValue); // Get current charactes AD
+                            Debug.LogError(damageValue);
+                            hit = true;
+                        }
                     }
                         break;
                     

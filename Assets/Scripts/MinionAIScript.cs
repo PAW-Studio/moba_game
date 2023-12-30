@@ -199,7 +199,7 @@ public class MinionAIScript : MonoBehaviour
             targetMinion.GetComponent<TowerAIScript>().currentHealth -= damage;
 
             // Reduces tower health from current health bar
-            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,targetMinion.gameObject);
+            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true);
         }
         else
         {

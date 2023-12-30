@@ -17,6 +17,8 @@ public class MinionHealthBar : MonoBehaviour
     Transform damageTextReference;
     [SerializeField]
     GameObject indicator;
+    [SerializeField]
+    List<Transform> animationPoints = new List<Transform>();
     
     private void OnEnable()
     {
@@ -55,11 +57,17 @@ public class MinionHealthBar : MonoBehaviour
     {
        // damageText.transform.position = damageTextReference.transform.position;
         float time = 0, duration = .5f;
-        float startVal = effectBar.value;
+        float startVal = effectBar.value;        
         damageText.text =  ((int)(oldValue-newVal)).ToString();
         damageText.gameObject.SetActive(true);
         LeanTween.scale(damageText.gameObject,Vector3.one,0.25f);
         LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(()=> damageText.gameObject.SetActive(false) );
+        float delay = 0;
+        //foreach(Transform item in animationPoints)
+        //{
+        //    LeanTween.move(damageText.gameObject,item,0.1f).setDelay(delay);
+        //    delay += 0.1f;
+        //}
        // LeanTween.move(damageText.gameObject,)
         while(time<duration)
         {

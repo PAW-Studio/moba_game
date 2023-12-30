@@ -93,16 +93,25 @@ public class TowerAIScript : MonoBehaviour
         }
     }
     bool destroyOnce = false;
+    bool destroyAnimationStarted = false;
     public void AnimateAndDestoryTower() 
     {
+        if(destroyAnimationStarted) return;
+
+        destroyAnimationStarted = true; 
         Vector3 position = gameObject.transform.position;
 
         Vector3 positionRefForLeftRightAnimation = position;
-        positionRefForLeftRightAnimation.x -= 0.25f;
-        position.y = -2f;
+        positionRefForLeftRightAnimation.x += .5f;
+        position.y = -15f;
       
-        //LeanTween.moveX(gameObject,positionRefForLeftRightAnimation.x,0.2f).setLoopPingPong();
-        LeanTween.move(gameObject,position,.5f).setOnComplete(() => { Destroy(gameObject); });
+      int id=  LeanTween.moveX(gameObject,positionRefForLeftRightAnimation.x,0.1f).setLoopPingPong().id;
+        LeanTween.move(gameObject,new Vector3(gameObject.transform.position.x, position.y,position.z),.5f).setDelay(0.5f).setOnComplete(() => {
+            //Destroy(gameObject); 
+            LeanTween.cancel(id);
+            gameObject.GetComponent<TowerAIScript>().enabled = false;
+            gameObject.GetComponent<Collider>().enabled = false;
+        });
     }
     /// <summary>
     /// Handle damage and update healthbar
@@ -113,7 +122,7 @@ public class TowerAIScript : MonoBehaviour
         if(damage <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth,true,gameObject);
+        minionHealthBar.SetHealth(currentHealth,true);
     }
 
 }
