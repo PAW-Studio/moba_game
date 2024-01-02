@@ -36,11 +36,14 @@ public class GameManager : MonoBehaviour
     public List<AttackTypeReference> attackTypeReferences = new List<AttackTypeReference>();      //List of buttons with attack types in QWER_LevelUp panel
     public FixedJoystick MovementJoystick;                                          //Main Joystick
     public Toggle Minion_ChampToggle;                                                //Minion champ toggle
+    public Toggle Tower_TargetToggle;                                                //Tower taget toggle
     public TMPro.TextMeshProUGUI ToggleButtonText;                                   //Minion toggle text
+    public TMPro.TextMeshProUGUI TowerToggleButtonText;                              //Tower toggle text
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
-
+    [SerializeField]
+    TargetDetailsUIManager targetDetails;
     float TimeInterval = 10f;
     float timer = 0f;
     float spawnDelay = 30f;
@@ -345,10 +348,38 @@ public class GameManager : MonoBehaviour
     {
         //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
         ToggleButtonText.text =Minion_ChampToggle.isOn?  "Champ": "Minion";
+        if(!Minion_ChampToggle.isOn) 
+        {
+            if(currentCharacter.targetMinion)
+            currentCharacter.targetMinion.ShowIndicator(false);
+        }
+    }
+    public void ToggleTower()
+    {
+        //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
+        TowerToggleButtonText.text = Tower_TargetToggle.isOn ? "Attack\nTower" : "X";
+        if(!Tower_TargetToggle.isOn)
+        {
+            if(currentCharacter.targetTower)
+                currentCharacter.targetTower.ShowIndicator(false);
+        }
     }
     public bool Get_Minion_ChampToggleValue()
     {
         return Minion_ChampToggle.isOn;
+    }
+    public void UpdateTargetDetailsUI()
+    {
+        if(targetDetails)
+        targetDetails.UpdateDetails();
+    }
+    public void ShowTargetDetailsUI(bool val)
+    {
+        if(targetDetails)
+        {
+            targetDetails.UpdateDetails();
+            targetDetails.gameObject.SetActive(val);
+        }
     }
 }
 //Handle attack buttton UI with this class
@@ -451,6 +482,7 @@ public class AttackButton
     {
         return AttackButtonJoystick.transform.parent.gameObject.activeInHierarchy;
     }
+   
 }
 [System.Serializable]
 public enum TeamType { Blue, Red}

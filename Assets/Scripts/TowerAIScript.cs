@@ -15,7 +15,7 @@ public class TowerAIScript : MonoBehaviour
     public float currentHealth;
     public TeamType teamType;
     public MinionHealthBar minionHealthBar;
-
+    public GameObject TargetIndicator;                                      //Target  Inication (ring) object
     [SerializeField]
     public GameObject referenceObject;                                      //Healthbar display reference object for the tower
     Transform healthBarTransform;
@@ -106,11 +106,13 @@ public class TowerAIScript : MonoBehaviour
         position.y = -15f;
       
       int id=  LeanTween.moveX(gameObject,positionRefForLeftRightAnimation.x,0.1f).setLoopPingPong().id;
-        LeanTween.move(gameObject,new Vector3(gameObject.transform.position.x, position.y,position.z),.5f).setDelay(0.5f).setOnComplete(() => {
+        LeanTween.move(gameObject,new Vector3(gameObject.transform.position.x, position.y,position.z),.5f).setDelay(0.5f).setOnComplete(() => 
+        {
             //Destroy(gameObject); 
             LeanTween.cancel(id);
             gameObject.GetComponent<TowerAIScript>().enabled = false;
             gameObject.GetComponent<Collider>().enabled = false;
+            PopUpsManager.Instance.ShowTowerDestroyPopup();
         });
     }
     /// <summary>
@@ -123,6 +125,17 @@ public class TowerAIScript : MonoBehaviour
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
         minionHealthBar.SetHealth(currentHealth,true);
+        GameManager.instance.UpdateTargetDetailsUI();
+    }
+    /// <summary>
+    /// Show/Hide indicator objects
+    /// </summary>
+    /// <param name="show">Show indicator</param>
+    public void ShowIndicator(bool show)
+    {
+        TargetIndicator.SetActive(show);
+        minionHealthBar.ShowOutline(show);
+
     }
 
 }

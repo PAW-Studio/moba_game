@@ -123,6 +123,7 @@ public class PlayerScript : MonoBehaviour
                                 character.distance = objectDistance;
                                 character.targetMinion.ShowIndicator(true);
                                 character.minionInRange = true;
+                                GameManager.instance.ShowTargetDetailsUI(true);//show target UI
                             }
 
                         }
@@ -132,6 +133,7 @@ public class PlayerScript : MonoBehaviour
                             character.targetMinion = minionAIScript;
                             character.distance = objectDistance;
                             character.targetMinion.ShowIndicator(true);
+                            GameManager.instance.ShowTargetDetailsUI(true);//show target UI
                         }
 
                     }
@@ -142,6 +144,60 @@ public class PlayerScript : MonoBehaviour
                         character.minionInRange = false;
                         character.targetMinion = null;
                         character.distance = 0;
+                        GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
+                    }
+
+                }
+            }
+        }
+        else if(GameManager.instance.Tower_TargetToggle.isOn)
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position,20);
+
+            foreach(Collider item in hits)
+            {
+                TowerAIScript towerAIScript = item.GetComponent<TowerAIScript>();
+                if(towerAIScript && towerAIScript.teamType != character.teamType)
+                {
+                    float objectDistance = Vector3.Distance(transform.position,towerAIScript.transform.position);
+                    if(objectDistance < towerAIScript.attackRange)
+                    {
+                        if(character.towerInRange && character.targetTower)
+                        {
+                            if(objectDistance < character.tower_distance)
+                            {
+                                if(character.targetTower)
+                                character.targetTower.ShowIndicator(false);
+                                character.targetTower = null;
+                                character.targetTower = towerAIScript;
+                                character.tower_distance = objectDistance;
+
+                                if(character.targetTower)
+                                character.targetTower.ShowIndicator(true);
+                                character.towerInRange = true;
+                                GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                            }
+
+                        }
+                        else
+                        {
+                            character.towerInRange = true;
+                            character.targetTower = towerAIScript;
+                            character.tower_distance = objectDistance;
+                            if(character.targetTower)
+                                character.targetTower.ShowIndicator(true);
+                            GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                        }
+
+                    }
+                    else
+                    {
+                        if(character.targetTower)
+                            character.targetTower.ShowIndicator(false);
+                        character.towerInRange = false;
+                        character.targetTower = null;
+                        character.tower_distance = 0;
+                        GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
                     }
 
                 }
@@ -485,7 +541,6 @@ public class PlayerScript : MonoBehaviour
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
-
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)

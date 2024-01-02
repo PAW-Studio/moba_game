@@ -168,7 +168,7 @@ public class MinionAIScript : MonoBehaviour
         // Calculating distance between this minion and target
         if(Vector3.Distance(transform.position,targetMinion.transform.position) > attackRange)
         {
-            agent.SetDestination(targetMinion.transform.position);
+            agent.SetDestination(targetMinion.transform.position-offset);
             // Minion stops at attackRange distance from target 
             agent.stoppingDistance = attackRange;
             
@@ -176,7 +176,7 @@ public class MinionAIScript : MonoBehaviour
         else
         {
             // If target minion is less than attackRange distance away, moves towards it
-            agent.SetDestination(targetMinion.transform.position);
+            agent.SetDestination(targetMinion.transform.position-offset);
             agent.velocity = Vector3.zero;   
         }
     }
@@ -225,6 +225,7 @@ public class MinionAIScript : MonoBehaviour
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damage;
         minionHealthBar.SetHealth(currentHealth,true,gameObject);
+        GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>
     /// Set slower movement speed for the given time

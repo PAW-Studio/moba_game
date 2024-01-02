@@ -60,8 +60,11 @@ public class Character : MonoBehaviour
     Camera cam;
     public TeamType teamType;
     public bool minionInRange;
+    public bool towerInRange;
     public float distance = 0;
+    public float tower_distance = 0;
     public MinionAIScript targetMinion = null;
+    public TowerAIScript targetTower = null;
     //
     void Start()
     {
@@ -619,6 +622,7 @@ public class Character : MonoBehaviour
             currentHealth = 0;
         }
         championHealthBar.SetHealth((float)currentHealth,true,gameObject);
+        GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>
     /// Regain health and update healthbar

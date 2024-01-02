@@ -11,8 +11,7 @@ public class CollisionDetector : MonoBehaviour
     Character character;
     private void OnEnable()
     {
-        character = AnimationMovementManager.playerScript.GetComponent<Character>();
-        Debug.LogError("Character set");
+        character = AnimationMovementManager.playerScript.GetComponent<Character>();       
     }
     private void Update()
     {
