@@ -1889,6 +1889,9 @@ MonoBehaviour:
   AP: {fileID: 1572724108}
   AR: {fileID: 1169935345}
   MR: {fileID: 375629759}
+  minionTarget: {fileID: 0}
+  towerTarget: {fileID: 0}
+  championTarget: {fileID: 0}
 --- !u!1001 &214492678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4566,6 +4569,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410330065}
   m_CullTransparentMesh: 1
+--- !u!1 &412153551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 412153552}
+  m_Layer: 0
+  m_Name: Damage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &412153552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412153551}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1599.0188, y: 764.86725, z: 44.12689}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &413249859
 GameObject:
   m_ObjectHideFlags: 0
@@ -33688,6 +33722,8 @@ MonoBehaviour:
   tower_distance: 0
   targetMinion: {fileID: 0}
   targetTower: {fileID: 0}
+  targetChampion: {fileID: 0}
+  TargetIndicator: {fileID: 0}
 --- !u!23 &4237582128924020807
 MeshRenderer:
   m_ObjectHideFlags: 0

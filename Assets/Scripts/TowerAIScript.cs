@@ -110,8 +110,14 @@ public class TowerAIScript : MonoBehaviour
         {
             //Destroy(gameObject); 
             LeanTween.cancel(id);
-            gameObject.GetComponent<TowerAIScript>().enabled = false;
+            TowerAIScript towerAIScript = gameObject.GetComponent<TowerAIScript>();
+            towerAIScript.enabled = false;
             gameObject.GetComponent<Collider>().enabled = false;
+            TowerAIScript tower = GameManager.instance.GetTargetUIManager().towerTarget;
+            if(tower && tower== towerAIScript)
+            {
+                GameManager.instance.ShowTargetDetailsUI(false);
+            }
             PopUpsManager.Instance.ShowTowerDestroyPopup();
         });
     }
@@ -133,9 +139,10 @@ public class TowerAIScript : MonoBehaviour
     /// <param name="show">Show indicator</param>
     public void ShowIndicator(bool show)
     {
+        if(TargetIndicator)
         TargetIndicator.SetActive(show);
+        if(minionHealthBar)
         minionHealthBar.ShowOutline(show);
-
     }
 
 }

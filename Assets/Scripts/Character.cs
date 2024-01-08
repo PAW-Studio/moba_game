@@ -61,10 +61,13 @@ public class Character : MonoBehaviour
     public TeamType teamType;
     public bool minionInRange;
     public bool towerInRange;
+   
     public float distance = 0;
     public float tower_distance = 0;
     public MinionAIScript targetMinion = null;
     public TowerAIScript targetTower = null;
+    public Character targetChampion = null;
+    public GameObject TargetIndicator;
     //
     void Start()
     {
@@ -669,7 +672,18 @@ public class Character : MonoBehaviour
         championHealthBar.SetHealth((float)currentHealth);
 
     }
-   
+    /// <summary>
+    /// Show/Hide indicator objects
+    /// </summary>
+    /// <param name="show">Show indicator</param>
+    public void ShowIndicator(bool show)
+    {
+        if(TargetIndicator)
+        TargetIndicator.SetActive(show);
+        championHealthBar.ShowOutline(show);
+
+    }
+
 }
 /// <summary>
 /// This class is used to hold the character type and character model object in the script

@@ -336,7 +336,12 @@ MonoBehaviour:
   slider: {fileID: 7837300789159221849}
   effectBar: {fileID: 1037008090754814805}
   damageText: {fileID: 6803355357844053047}
+  HealthText: {fileID: 0}
+  textPrefab: {fileID: 3995688731762604582, guid: 443c11b44d463b94d8aa9c7d9ff8e4b8,
+    type: 3}
+  damageTextReference: {fileID: 0}
   indicator: {fileID: 8494298727924567029}
+  animationPoints: []
 --- !u!1 &3893793215645293883
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,7 +555,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7890231044847301126}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09f530ae0dc32b54191e11e4e8d65505, type: 3}
   m_Name: 
@@ -559,7 +564,11 @@ MonoBehaviour:
   slider: {fileID: 1037008090754814805}
   effectBar: {fileID: 0}
   damageText: {fileID: 0}
+  HealthText: {fileID: 0}
+  textPrefab: {fileID: 0}
+  damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
+  animationPoints: []
 --- !u!1 &8494298727924567029
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,7 +693,7 @@ GameObject:
   - component: {fileID: 2738017397573459538}
   - component: {fileID: 5314107976014462486}
   - component: {fileID: 6803355357844053047}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -413,7 +413,7 @@ MonoBehaviour:
   attackTimer: 2
   attackReset: 2
   damage: 30
-  maxHealth: 10
+  maxHealth: 200
   currentHealth: 0
   teamType: 0
   minionHealthBar: {fileID: 7232226329618615207}

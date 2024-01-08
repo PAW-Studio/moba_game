@@ -13,6 +13,7 @@ public class MinionHealthBar : MonoBehaviour
     public Slider effectBar;                                    //Effect bar to create decrease effect in helatbar     
     public TMPro.TextMeshProUGUI damageText;                    //Damage text
     public TMPro.TextMeshProUGUI HealthText;                    //Damage text
+    public GameObject textPrefab;
     [SerializeField]
     Transform damageTextReference;
     [SerializeField]
@@ -40,6 +41,8 @@ public class MinionHealthBar : MonoBehaviour
     
     public void SetHealth(float health,bool damage=true,GameObject objectToDestroy=null)
     {
+        if(slider.value == 0f) return;
+       
         float oldValue = slider.value;
         slider.value = health;
         SetHealthText(slider.value);
@@ -59,9 +62,27 @@ public class MinionHealthBar : MonoBehaviour
         float time = 0, duration = .5f;
         float startVal = effectBar.value;        
         damageText.text =  ((int)(oldValue-newVal)).ToString();
-        damageText.gameObject.SetActive(true);
-        LeanTween.scale(damageText.gameObject,Vector3.one,0.25f);
-        LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(()=> damageText.gameObject.SetActive(false) );
+        GameObject textObj = Instantiate(textPrefab,transform.parent);
+        textObj.transform.position = damageText.transform.position;
+        textObj.GetComponent<TMPro.TextMeshProUGUI>().text = damageText.text;
+      //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,0);
+       // damageText.gameObject.SetActive(true);
+      //  LeanTween.scale(damageText.gameObject,Vector3.one,0.25f);
+      //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(()=> damageText.gameObject.SetActive(false) );
+
+
+        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,0);
+        // damageText.gameObject.SetActive(true);
+        textObj.SetActive(true);
+        LeanTween.scale(textObj.gameObject,Vector3.one,0.25f);
+        int random = UnityEngine.Random.Range(0,2);
+        
+        float xMovement = random == 0 ? 15 : -15f;
+        LeanTween.moveX(textObj,textObj.transform.position.x +xMovement,0.25f);
+        LeanTween.moveY(textObj,textObj.transform.position.y + 10f,0.25f);
+        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy( textObj.gameObject));
+        LeanTween.moveY(textObj,textObj.transform.position.y - 10f,0.25f).setDelay(0.25f);
+
         float delay = 0;
         //foreach(Transform item in animationPoints)
         //{
@@ -79,7 +100,27 @@ public class MinionHealthBar : MonoBehaviour
         if(newVal <= 0f) 
         {
             if(objToDestroy)
-            Destroy(objToDestroy);
+            {
+                MinionAIScript minionObject = objToDestroy.GetComponent<MinionAIScript>();
+                Character characterObject = objToDestroy.GetComponent<Character>();
+                if(minionObject) 
+                {
+                    MinionAIScript minionTarget = GameManager.instance.GetTargetUIManager().minionTarget;
+                    if(minionTarget && minionTarget== minionObject) 
+                    {
+                        GameManager.instance.ShowTargetDetailsUI(false);
+                    }
+                }
+                else if(characterObject) 
+                {
+                    Character champ = GameManager.instance.GetTargetUIManager().championTarget;
+                    if(champ && champ == characterObject)
+                    {
+                        GameManager.instance.ShowTargetDetailsUI(false);
+                    }
+                }
+                Destroy(objToDestroy); 
+            }
 
             Destroy(this.gameObject);
         }

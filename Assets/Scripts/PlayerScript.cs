@@ -117,17 +117,19 @@ public class PlayerScript : MonoBehaviour
                         {
                             if(objectDistance < character.distance)
                             {
-                                character.targetMinion.ShowIndicator(false);
-                                character.targetMinion = null;
-                                character.targetMinion = minionAIScript;
-                                character.distance = objectDistance;
-                                character.targetMinion.ShowIndicator(true);
-                                character.minionInRange = true;
-                                GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                if(character.targetMinion != minionAIScript)
+                                {
+                                    character.targetMinion.ShowIndicator(false);
+                                    character.targetMinion = null;
+                                    character.targetMinion = minionAIScript;
+                                    character.distance = objectDistance;
+                                    character.targetMinion.ShowIndicator(true);
+                                    character.minionInRange = true;
+                                    GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                }
                             }
-
                         }
-                        else
+                        else if(character.targetMinion==null && character.targetMinion!=minionAIScript)
                         {
                             character.minionInRange = true;
                             character.targetMinion = minionAIScript;
@@ -135,7 +137,6 @@ public class PlayerScript : MonoBehaviour
                             character.targetMinion.ShowIndicator(true);
                             GameManager.instance.ShowTargetDetailsUI(true);//show target UI
                         }
-
                     }
                     else
                     {
@@ -150,7 +151,59 @@ public class PlayerScript : MonoBehaviour
                 }
             }
         }
-        else if(GameManager.instance.Tower_TargetToggle.isOn)
+        else if(!GameManager.instance.Minion_ChampToggle.isOn)
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position,20);
+
+            foreach(Collider item in hits)
+            {
+                if(item != this)
+                {
+                    Character champion = item.GetComponent<Character>();
+                    if(champion && champion.teamType != character.teamType)
+                    {
+                        float objectDistance = Vector3.Distance(transform.position,champion.transform.position);
+                        if(objectDistance < champion.currentRange)
+                        {
+                            if(character.minionInRange && character.targetMinion)
+                            {
+                                if(objectDistance < character.distance)
+                                {
+                                    character.targetMinion.ShowIndicator(false);
+                                    character.targetChampion = null;
+                                    character.targetChampion = champion;
+                                    character.distance = objectDistance;
+                                    character.targetChampion.ShowIndicator(true);
+                                    character.minionInRange = true;
+                                    GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                }
+
+                            }
+                            else
+                            {
+                                character.minionInRange = true;
+                                character.targetChampion = champion;
+                                character.distance = objectDistance;
+                                character.targetChampion.ShowIndicator(true);
+                                GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                            }
+                        }
+                        else
+                        {
+                            if(character.targetChampion)
+                                character.targetChampion.ShowIndicator(false);
+                            character.minionInRange = false;
+                            character.targetChampion = null;
+                            character.distance = 0;
+                            GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
+                        }
+
+                    }
+                }
+            }
+        }
+
+        if(GameManager.instance.Tower_TargetToggle.isOn)
         {
             Collider[] hits = Physics.OverlapSphere(transform.position,20);
 
@@ -199,7 +252,6 @@ public class PlayerScript : MonoBehaviour
                         character.tower_distance = 0;
                         GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
                     }
-
                 }
             }
         }

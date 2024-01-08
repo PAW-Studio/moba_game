@@ -205,13 +205,13 @@ public class MinionAIScript : MonoBehaviour
         {
             if(targetMinion.GetComponent<Character>())
             {
-               // targetMinion.GetComponent<Character>().DealDamage(0);
+               // targetMinion.GetComponent<Character>().DealDamage(1);
             }
             else 
             {
                 // Attacks opposite minion and reduces minion health from current health bar
-                //targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-                //targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+                targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
+                targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
             }
         }
     }

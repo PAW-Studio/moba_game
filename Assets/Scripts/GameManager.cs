@@ -344,6 +344,9 @@ public class GameManager : MonoBehaviour
         }
         //QWER_LevelUpPanel.SetActive(false);
     }
+    /// <summary>
+    /// Toggle minion target button
+    /// </summary>
     public void ToggleMinion() 
     {
         //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
@@ -353,7 +356,11 @@ public class GameManager : MonoBehaviour
             if(currentCharacter.targetMinion)
             currentCharacter.targetMinion.ShowIndicator(false);
         }
+        
     }
+    /// <summary>
+    /// Toggle tower target button
+    /// </summary>
     public void ToggleTower()
     {
         //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
@@ -364,15 +371,26 @@ public class GameManager : MonoBehaviour
                 currentCharacter.targetTower.ShowIndicator(false);
         }
     }
+    /// <summary>
+    /// Returns toggle valu of minion_champ toggle
+    /// </summary>
+    /// <returns></returns>
     public bool Get_Minion_ChampToggleValue()
     {
         return Minion_ChampToggle.isOn;
     }
+    /// <summary>
+    /// Update details in Target UI
+    /// </summary>
     public void UpdateTargetDetailsUI()
     {
         if(targetDetails)
         targetDetails.UpdateDetails();
     }
+    /// <summary>
+    /// Show / Hide target UI
+    /// </summary>
+    /// <param name="val"></param>
     public void ShowTargetDetailsUI(bool val)
     {
         if(targetDetails)
@@ -380,6 +398,15 @@ public class GameManager : MonoBehaviour
             targetDetails.UpdateDetails();
             targetDetails.gameObject.SetActive(val);
         }
+    }
+    
+    /// <summary>
+    /// Access target details manager
+    /// </summary>
+    /// <returns></returns>
+    public TargetDetailsUIManager GetTargetUIManager() 
+    {
+        return targetDetails;
     }
 }
 //Handle attack buttton UI with this class
