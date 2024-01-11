@@ -20,7 +20,8 @@ public class MinionHealthBar : MonoBehaviour
     GameObject indicator;
     [SerializeField]
     List<Transform> animationPoints = new List<Transform>();
-    
+    [SerializeField]
+    Color ADDamageColor, APDamageColor;
     private void OnEnable()
     {
         camera = Camera.main;
@@ -39,7 +40,7 @@ public class MinionHealthBar : MonoBehaviour
         
     }
     
-    public void SetHealth(float health,bool damage=true,GameObject objectToDestroy=null)
+    public void SetHealth(float health,bool damage=true,GameObject objectToDestroy=null,DamageTypeDetails damageType= DamageTypeDetails.None)
     {
         if(slider.value == 0f) return;
        
@@ -48,7 +49,7 @@ public class MinionHealthBar : MonoBehaviour
         SetHealthText(slider.value);
         if(effectBar && damage)
         {
-            StartCoroutine(EffectBar(slider.value,oldValue,objectToDestroy));
+            StartCoroutine(EffectBar(slider.value,oldValue,objectToDestroy,damageType));
         }
         
     }
@@ -56,22 +57,26 @@ public class MinionHealthBar : MonoBehaviour
     /// This bar creates effect of decrease healthbar effect 
     /// </summary>
     /// <param name="newVal">already decreased value of red-color main slider</param>
-    public IEnumerator EffectBar(float newVal,float oldValue,GameObject objToDestroy) 
+    public IEnumerator EffectBar(float newVal,float oldValue,GameObject objToDestroy,DamageTypeDetails damageType) 
     {
        // damageText.transform.position = damageTextReference.transform.position;
         float time = 0, duration = .5f;
         float startVal = effectBar.value;        
         damageText.text =  ((int)(oldValue-newVal)).ToString();
         GameObject textObj = Instantiate(textPrefab,transform.parent);
+        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,0);
         textObj.transform.position = damageText.transform.position;
-        textObj.GetComponent<TMPro.TextMeshProUGUI>().text = damageText.text;
+        TMPro.TextMeshProUGUI tmpObject = textObj.GetComponent<TMPro.TextMeshProUGUI>();
+        
+        tmpObject.color = damageType == DamageTypeDetails.AD || damageType == DamageTypeDetails.None ? Color.red : APDamageColor;
+        tmpObject.text = damageText.text;
       //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,0);
        // damageText.gameObject.SetActive(true);
       //  LeanTween.scale(damageText.gameObject,Vector3.one,0.25f);
       //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(()=> damageText.gameObject.SetActive(false) );
 
 
-        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,0);
+        
         // damageText.gameObject.SetActive(true);
         textObj.SetActive(true);
         LeanTween.scale(textObj.gameObject,Vector3.one,0.25f);

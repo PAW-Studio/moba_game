@@ -114,15 +114,15 @@ public class MinionAIScript : MonoBehaviour
         {
             if(targetMinion.layer == 11 || targetMinion.layer == 12)
             {
-                if(targetMinion.tag == "BlueTower")
-                {
-                    MoveToBlueTower();
-                }
+                    if(targetMinion.tag == "BlueTower")
+                    {
+                        MoveToBlueTower();
+                    }
 
-                else if(targetMinion.tag == "RedTower")
-                {
-                    MoveToRedTower();
-                }
+                    else if(targetMinion.tag == "RedTower")
+                    {
+                        MoveToRedTower();
+                    }
             }
 
             else
@@ -144,7 +144,19 @@ public class MinionAIScript : MonoBehaviour
         {
             // No target; resumes pathing towards destination
             hasTarget = false;
-            agent.SetDestination(destination);
+            if(teamType== TeamType.Blue)            
+            {
+                
+                if(Vector3.Distance(transform.position,destination)<2 )
+                {
+                    Debug.LogError(agent.remainingDistance);
+                    destination = FindAnyObjectByType<GameManager>().redSpawnLocation;
+                    Debug.LogError("Destination change");
+                }
+                agent.SetDestination(destination);
+            }
+           
+           
         }
 
        
@@ -184,15 +196,32 @@ public class MinionAIScript : MonoBehaviour
     void MoveToBlueTower()
     {
         agent.SetDestination(targetMinion.transform.position + offset);
+        RemoveDestroyedTowerFromTarget();
+    }
+
+    private void RemoveDestroyedTowerFromTarget()
+    {
+        float distance = Vector3.Distance(transform.position,targetMinion.transform.position);
+        if(distance< 20)
+        {
+            if(!targetMinion.GetComponent<TowerAIScript>().enabled)
+            {
+                targetMinion = null;
+                hasTarget = false;
+                agent.SetDestination(destination);
+            }
+        }
     }
 
     void MoveToRedTower()
     {
         agent.SetDestination(targetMinion.transform.position - offset);
+        RemoveDestroyedTowerFromTarget();
     }
 
     void InitiateAttack()
     {
+        if(!targetMinion) return;
         // Attacks opposite tower
         if(targetMinion.layer == 11 || targetMinion.layer == 12)
         {
@@ -219,12 +248,12 @@ public class MinionAIScript : MonoBehaviour
     /// Handle damage and update healthbar
     /// </summary>
     /// <param name="damage">damage value</param>
-    public void DealDamage(float damage)
+    public void DealDamage( DamageDetails damageDetails=null)
     {
-        if(damage <= 0) return;
+        if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
-        currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth,true,gameObject);
+        currentHealth -= damageDetails.damangeValue;
+        minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails.damagetype);
         GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>

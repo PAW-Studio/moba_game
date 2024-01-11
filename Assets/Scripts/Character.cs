@@ -242,7 +242,7 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="attackType">current attack type</param>
     /// <returns></returns>
-    public float CalculateDamangeForAttack(AttackType attackType)
+    public DamageDetails CalculateDamangeForAttack(AttackType attackType)
     {
         float damage = 0;
         DamageDetails damageDetails=new DamageDetails();
@@ -282,12 +282,14 @@ public class Character : MonoBehaviour
                                     }
                                 }
                                 Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AD;
                                 break;
                             //Treat AP and Bonus AP same for now
                             case ScalingConditionTypes.Value_Plus_Percentage_AP:
                             case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
                                 damageValueW += item.baseValue + (float)(currentAP * (item.percentage / 100));
                                 Debug.LogError("AP  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAP * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AP;
                                 break;
                             case ScalingConditionTypes.SlowerForSomeTime:
                                 break;
@@ -302,6 +304,7 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.AD_Plus_Percentage_AP:
                                 damageValueW += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                damageDetails.damagetype = DamageTypeDetails.AD; //Query here
                                 break;
                             default:
                                 break;
@@ -343,12 +346,14 @@ public class Character : MonoBehaviour
                                     }
                                 }
                                 Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AD;
                                 break;
                             //Treat AP and Bonus AP same for now
                             case ScalingConditionTypes.Value_Plus_Percentage_AP:
                             case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
                                 damageValue += item.baseValue + (float)(currentAP * (item.percentage / 100));
                                 Debug.LogError("AP  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAP * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AP;
                                 break;
                             case ScalingConditionTypes.SlowerForSomeTime:
                                 break;
@@ -363,6 +368,7 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.AD_Plus_Percentage_AP:
                                 damageValue += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                damageDetails.damagetype = DamageTypeDetails.AD; //Query for damage : AD+ AP
                                 break;
                             default:
                                 break;
@@ -404,12 +410,14 @@ public class Character : MonoBehaviour
                                     }
                                 }
                                 Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AD;
                                 break;
                             //Treat AP and Bonus AP same for now
                             case ScalingConditionTypes.Value_Plus_Percentage_AP:
                             case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
                                 damageValueE += item.baseValue + (float)(currentAP * (item.percentage / 100));
                                 Debug.LogError("AP  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAP * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AD;
                                 break;
                             case ScalingConditionTypes.SlowerForSomeTime:
                                 break;
@@ -424,6 +432,7 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.AD_Plus_Percentage_AP:
                                 damageValueE += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                damageDetails.damagetype = DamageTypeDetails.AD; //Query
                                 break;
                             default:
                                 break;
@@ -465,12 +474,14 @@ public class Character : MonoBehaviour
                                     }
                                 }
                                 Debug.LogError("AD  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAD * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AD;
                                 break;
                             //Treat AP and Bonus AP same for now
                             case ScalingConditionTypes.Value_Plus_Percentage_AP:
                             case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
                                 damageValueR += item.baseValue + (float)(currentAP * (item.percentage / 100));
                                 Debug.LogError("AP  : Base Value " + item.baseValue + "  PercentageValue " + (float)(currentAP * (item.percentage / 100)));
+                                damageDetails.damagetype = DamageTypeDetails.AP;
                                 break;
                             case ScalingConditionTypes.SlowerForSomeTime:
                                 break;
@@ -485,6 +496,7 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.AD_Plus_Percentage_AP:
                                 damageValueR += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                damageDetails.damagetype = DamageTypeDetails.AD; //Query
                                 break;
                             default:
                                 break;
@@ -511,12 +523,14 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.Value_Plus_Percentage_AD:
                                 damageValueAuto += (float)currentAD;// //item.baseValue + (float)(currentAD * (item.percentage / 100));
+                                damageDetails.damagetype = DamageTypeDetails.AD;
                                 break;
                             //Treat AP and Bonus AP same for now
                             case ScalingConditionTypes.Value_Plus_Percentage_AP:
                             case ScalingConditionTypes.Value_Plus_Percentage_BonusAP:
                                 //damageValueAuto += item.baseValue + (float)(currentAP * (item.percentage / 100));
                                 damageValueAuto +=  (float)currentAP;
+                                damageDetails.damagetype = DamageTypeDetails.AD; //As this  Auto attack
                                 break;
                             case ScalingConditionTypes.SlowerForSomeTime:
                                 break;
@@ -531,6 +545,7 @@ public class Character : MonoBehaviour
                                 break;
                             case ScalingConditionTypes.AD_Plus_Percentage_AP:
                                 damageValueAuto += (float)currentAD + (float)(currentAP * (item.percentage / 100));
+                                damageDetails.damagetype = DamageTypeDetails.AD; //Auto attack
                                 break;
                             default:
                                 break;
@@ -550,7 +565,8 @@ public class Character : MonoBehaviour
             damage -=  (damage* (playerScript.Shield_UpdatedPercentage / 100));  
         }
         damageDetails.damangeValue = damage;
-        return damage;
+        //return damage;
+        return damageDetails;
     }
 
     /// <summary>
@@ -616,15 +632,15 @@ public class Character : MonoBehaviour
     /// Handle damage and update healthbar
     /// </summary>
     /// <param name="damage">damage value</param>
-    public void DealDamage(float damage)
+    public void DealDamage(DamageDetails damageDetails = null)
     {
-        if(damage <= 0) return;
-        currentHealth  -= damage;
+        if(damageDetails.damangeValue <= 0) return;
+        currentHealth  -= damageDetails.damangeValue;
         if(currentHealth < 0) 
         {
             currentHealth = 0;
         }
-        championHealthBar.SetHealth((float)currentHealth,true,gameObject);
+        championHealthBar.SetHealth((float)currentHealth,true,gameObject,damageDetails.damagetype);
         GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>
@@ -699,10 +715,11 @@ public class CharacterModels
 /// </summary>
 public class DamageDetails 
 {
-    public ScalingConditionTypes damageType;
+    public ScalingConditionTypes ScaleCondition;
+    public DamageTypeDetails damagetype;
     public float damangeValue;
 }
 /// <summary>
 /// Used to set damage type 
 /// </summary>
-public enum DamageTypeDetails{ AD, AP }
+public enum DamageTypeDetails{None ,AD, AP }

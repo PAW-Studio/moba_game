@@ -325,6 +325,8 @@ MonoBehaviour:
   damageTextReference: {fileID: 0}
   indicator: {fileID: 3131144057640336313}
   animationPoints: []
+  ADDamageColor: {r: 0.6792453, g: 0.09636475, b: 0.08009967, a: 1}
+  APDamageColor: {r: 0, g: 0.5992108, b: 0.8113208, a: 1}
 --- !u!1 &2981978533711524744
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +706,8 @@ MonoBehaviour:
   damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
   animationPoints: []
+  ADDamageColor: {r: 0, g: 0, b: 0, a: 0}
+  APDamageColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &7382674938856607121
 GameObject:
   m_ObjectHideFlags: 0

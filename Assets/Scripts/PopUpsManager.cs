@@ -24,7 +24,6 @@ public class PopUpsManager : MonoBehaviour
     void HideTowerDestroyPopup() 
     {
         TowerDestoryPopup.gameObject.SetActive(false);
-        
         GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
     }
 }

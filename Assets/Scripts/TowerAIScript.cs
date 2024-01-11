@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -112,8 +113,13 @@ public class TowerAIScript : MonoBehaviour
             LeanTween.cancel(id);
             TowerAIScript towerAIScript = gameObject.GetComponent<TowerAIScript>();
             towerAIScript.enabled = false;
-            gameObject.GetComponent<Collider>().enabled = false;
+            List<Collider> colliders = gameObject.GetComponentsInChildren<Collider>().ToList();
+            foreach(Collider item in colliders)
+            {
+                item.enabled = false;
+            }
             TowerAIScript tower = GameManager.instance.GetTargetUIManager().towerTarget;
+            
             if(tower && tower== towerAIScript)
             {
                 GameManager.instance.ShowTargetDetailsUI(false);
@@ -125,12 +131,12 @@ public class TowerAIScript : MonoBehaviour
     /// Handle damage and update healthbar
     /// </summary>
     /// <param name="damage">damage value</param>
-    public void DealDamage(float damage)
+    public void DealDamage(DamageDetails damageDetails = null)
     {
-        if(damage <= 0) return;
+        if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
-        currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth,true);
+        currentHealth -= damageDetails.damangeValue;
+        minionHealthBar.SetHealth(currentHealth,true,null,damageDetails.damagetype);
         GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>

@@ -145,11 +145,11 @@ public class AnimationMovementManager : MonoBehaviour
     /// <param name="target"></param>
     public void MinionTargetDamage(MinionAIScript target) 
     {
-        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        DamageDetails damageDetails    = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-        Debug.LogError("Scale Damage " + damage);
+        Debug.LogError("Scale Damage " + damageDetails.damangeValue);
         if(target)
-        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+        target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions
     }
     /// <summary>
     /// Damage Tower target
@@ -157,11 +157,11 @@ public class AnimationMovementManager : MonoBehaviour
     /// <param name="target"></param>
     public void TowerTargetDamage(TowerAIScript target)
     {
-        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-        Debug.LogError("Scale Damage " + damage);
+        Debug.LogError("Scale Damage " + damageDetails.damangeValue);
         if(target)
-        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+        target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions
     }
     // <summary>
     /// Damage Chamipon target
@@ -169,10 +169,10 @@ public class AnimationMovementManager : MonoBehaviour
     /// <param name="target"></param>
     public void MinionChampionDamage(Character target)
     {
-        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-        Debug.LogError("*" + target.name + " Target : Scale Damage " + damage);
-        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+        Debug.LogError("*" + target.name + " Target : Scale Damage " + damageDetails.damangeValue);
+        target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions
     }
     /// <summary>
     /// Set current attack type and bool variable to indicate that player is attacking -This method is called from animation clips 

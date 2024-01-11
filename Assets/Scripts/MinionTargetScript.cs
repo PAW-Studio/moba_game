@@ -43,6 +43,11 @@ public class MinionTargetScript : MonoBehaviour
                         closestDistance = distance;
                         closestTarget = targetList[i];
                     }
+                    TowerAIScript tower = targetList[i].GetComponent<TowerAIScript>();
+                    if(tower && tower.enabled==false)
+                    {
+                        targetList.RemoveAt(i);
+                    }
                 }
 
                 // Removing null references in target list to avoid nullexception error

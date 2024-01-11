@@ -25,10 +25,10 @@ public class Projectile : MonoBehaviour
             {
                 if(item.GetComponent<MinionAIScript>()) 
                 {
-                  float damageValue=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                  DamageDetails damageDetails=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                     //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
-                    item.GetComponent<MinionAIScript>().DealDamage(damageValue); // Get current charactes AD
-                    Debug.LogError(damageValue);
+                    item.GetComponent<MinionAIScript>().DealDamage(damageDetails); // Get current charactes AD
+                    Debug.LogError(damageDetails.damangeValue);
                     hit = true;
                     break;
                 }
@@ -38,10 +38,10 @@ public class Projectile : MonoBehaviour
                     {
                         if(character.teamType != item.GetComponent<TowerAIScript>().teamType)
                         {
-                            float damageValue = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                            DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                             //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
-                            item.GetComponent<TowerAIScript>().DealDamage(damageValue); // Get current charactes AD
-                            Debug.LogError(damageValue);
+                            item.GetComponent<TowerAIScript>().DealDamage(damageDetails); // Get current charactes AD
+                            Debug.LogError(damageDetails.damangeValue);
                             hit = true;
                         }
                     }
@@ -50,10 +50,10 @@ public class Projectile : MonoBehaviour
                 }
                 else if(item.GetComponent<Character>() && character.gameObject!= item.gameObject) // Avoid self hit
                 {
-                    float damageValue = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                    DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                     //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
-                    item.GetComponent<Character>().DealDamage(damageValue); // Get current charactes AD
-                    Debug.LogError(damageValue);
+                    item.GetComponent<Character>().DealDamage(damageDetails); // Get current charactes AD
+                    Debug.LogError(damageDetails.damangeValue);
                     hit = true;
                     break;
                 }
