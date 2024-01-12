@@ -37,6 +37,8 @@ public class MinionAIScript : MonoBehaviour
     float TimePassed = 0;
     float SlowEffectTime;
     
+    public float Gold,Xp;
+   
     // Start is called before the first frame update
     void Start()
     { 

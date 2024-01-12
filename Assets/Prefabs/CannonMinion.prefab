@@ -107,7 +107,13 @@ MonoBehaviour:
   slider: {fileID: 121411094}
   effectBar: {fileID: 0}
   damageText: {fileID: 0}
+  HealthText: {fileID: 0}
+  textPrefab: {fileID: 0}
+  damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
+  animationPoints: []
+  ADDamageColor: {r: 0, g: 0, b: 0, a: 0}
+  APDamageColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &132888067
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +569,8 @@ MonoBehaviour:
   referenceObject: {fileID: 1242347814248633524}
   minionHealthBar: {fileID: 6427617232901066831}
   TargetIndicator: {fileID: 8563240457472391814}
+  Gold: 27
+  Xp: 95
 --- !u!195 &-1914293143120551198
 NavMeshAgent:
   m_ObjectHideFlags: 0

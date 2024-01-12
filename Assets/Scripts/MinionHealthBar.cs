@@ -13,7 +13,7 @@ public class MinionHealthBar : MonoBehaviour
     public Slider effectBar;                                    //Effect bar to create decrease effect in helatbar     
     public TMPro.TextMeshProUGUI damageText;                    //Damage text
     public TMPro.TextMeshProUGUI HealthText;                    //Damage text
-    public GameObject textPrefab;
+    public GameObject textPrefab,goldTextPrefab;
     [SerializeField]
     Transform damageTextReference;
     [SerializeField]
@@ -88,6 +88,11 @@ public class MinionHealthBar : MonoBehaviour
         LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy( textObj.gameObject));
         LeanTween.moveY(textObj,textObj.transform.position.y - 10f,0.25f).setDelay(0.25f);
 
+      //  MinionAIScript minionObject = objToDestroy.GetComponent<MinionAIScript>();
+
+        //AnimateGoldTexObject(minionObject.Gold.ToString());
+
+
         float delay = 0;
         //foreach(Transform item in animationPoints)
         //{
@@ -111,6 +116,9 @@ public class MinionHealthBar : MonoBehaviour
                 if(minionObject) 
                 {
                     MinionAIScript minionTarget = GameManager.instance.GetTargetUIManager().minionTarget;
+
+                    AnimateGoldTexObject(minionObject.Gold.ToString());
+
                     if(minionTarget && minionTarget== minionObject) 
                     {
                         GameManager.instance.ShowTargetDetailsUI(false);
@@ -130,7 +138,78 @@ public class MinionHealthBar : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+    /// <summary>
+    /// Animate Gold text object when minion is destroyed
+    /// </summary>
+    /// <param name="_text">gold text</param>
+    public void AnimateGoldTexObject(string _text) 
+    {
+        GameObject textObj = Instantiate(goldTextPrefab,transform.parent);
+        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,0);
+        textObj.transform.position = damageText.transform.position;
+        TMPro.TextMeshProUGUI tmpObject = textObj.GetComponent<TMPro.TextMeshProUGUI>();
 
+        tmpObject.color = Color.yellow;
+        tmpObject.text = _text; //damageText.text;
+        textObj.SetActive(true);
+        LeanTween.scale(textObj.gameObject,Vector3.one,0.25f);
+        int random = UnityEngine.Random.Range(0,2);
+
+        float xMovement = random == 0 ? 15 : -15f;
+        LeanTween.moveX(textObj,textObj.transform.position.x + xMovement,0.25f);
+        LeanTween.moveY(textObj,textObj.transform.position.y + 10f,0.25f);
+        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy(textObj.gameObject));
+        LeanTween.moveY(textObj,textObj.transform.position.y - 10f,0.25f).setDelay(0.25f);
+       // StartCoroutine(LerpTextColor(textObj.GetComponent<TMPro.TextMeshProUGUI>(),.5f));
+
+       // StartCoroutine(LerpImage(textObj.GetComponentInChildren<Image>(),0.25f));
+    }
+    /// <summary>
+    /// Lerp text
+    /// </summary>
+    /// <param name="endValue"></param>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    IEnumerator LerpTextColor(TMPro.TextMeshProUGUI text,float duration)
+    {
+        float time = 0;
+        Color startValue = text.color;
+        Color endValue = startValue;
+        endValue.a = 0;
+
+        while(time < duration)
+        {
+            text.color = Color.Lerp(startValue,endValue,time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        text.color = endValue;
+    }
+    /// <summary>
+    /// Lerp text
+    /// </summary>
+    /// <param name="endValue"></param>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    IEnumerator LerpImage(Image _image,float duration)
+    {
+      
+        float time = 0;
+        Color startValue = _image.color;
+        Color endValue = startValue;
+        endValue.a = 0;
+
+
+        while(time < duration)
+        {
+            Debug.LogError("LERP" +_image+ endValue.a);
+            _image.color = Color.Lerp(startValue,endValue,time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        Debug.LogError("Lerp image");
+        _image.color = endValue;
+    }
     private void Update()
     {
         if(local)

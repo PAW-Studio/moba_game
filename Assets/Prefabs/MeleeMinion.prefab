@@ -235,6 +235,8 @@ MonoBehaviour:
   referenceObject: {fileID: 9175692136361091935}
   minionHealthBar: {fileID: 3122900433084742560}
   TargetIndicator: {fileID: 3449969136300517598}
+  Gold: 22
+  Xp: 62
 --- !u!195 &-1914293143120551198
 NavMeshAgent:
   m_ObjectHideFlags: 0

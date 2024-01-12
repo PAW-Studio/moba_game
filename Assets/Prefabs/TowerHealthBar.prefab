@@ -936,6 +936,8 @@ MonoBehaviour:
   HealthText: {fileID: 5732267383013795196}
   textPrefab: {fileID: 3995688731762604582, guid: 443c11b44d463b94d8aa9c7d9ff8e4b8,
     type: 3}
+  goldTextPrefab: {fileID: 3995688731762604582, guid: 641086d3ef9f9ea4398c0fd989a9a4e6,
+    type: 3}
   damageTextReference: {fileID: 0}
   indicator: {fileID: 5147377508977388262}
   animationPoints:
@@ -1168,6 +1170,7 @@ MonoBehaviour:
   damageText: {fileID: 0}
   HealthText: {fileID: 0}
   textPrefab: {fileID: 0}
+  goldTextPrefab: {fileID: 0}
   damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
   animationPoints: []
@@ -2128,6 +2131,7 @@ MonoBehaviour:
   damageText: {fileID: 0}
   HealthText: {fileID: 0}
   textPrefab: {fileID: 0}
+  goldTextPrefab: {fileID: 0}
   damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
   animationPoints: []

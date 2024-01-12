@@ -124,67 +124,130 @@ public class GameManager : MonoBehaviour
     {
         // Spawning and setting destination for melee minions
         GameObject[] meleeMinions = new GameObject[3];
-
-        for(int i = 0 ; i < 3 ; i++)
+        for(int j = 0 ; j < 3 ; j++)
         {
-            meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
-            meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,Lane.Center) ;
+            Lane lanetype = Lane.Center;
+            switch(j)
+            {
+                case 0:
+                    lanetype = Lane.Center;
+                    break;
 
-            // Blue minions
-            meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+                case 1:
+                    lanetype = Lane.Left;
+                    break;
 
-            meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
-            meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,Lane.Center);
+                case 2:
+                    lanetype = Lane.Right;
+                    break;
+                default:
+                    break;
+            }
+            for(int i = 0 ; i < 3 ; i++)
+            {
+                meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
 
-            // Red minions
-            meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                // Blue minions
+                meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+
+                meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            }
         }
+       
     }
 
     void CasterMinionSpawn()
     {
         // Spawning and setting destination for caster minions
         GameObject[] casterMinions = new GameObject[3];
-
-        for(int i = 0 ; i < 3 ; i++)
+        for(int j = 0 ; j < 3 ; j++)
         {
-            casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
-            casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,Lane.Center);
+            Lane lanetype = Lane.Center;
+            switch(j)
+            {
+                case 0:
+                    lanetype = Lane.Center;
+                    break;
 
-            // Blue minions
-            casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
-            casterMinions[i].GetComponent<MinionAIScript>().teamType =  TeamType.Blue;
+                case 1:
+                    lanetype = Lane.Left;
+                    break;
 
-            casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
-            casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,Lane.Center);
+                case 2:
+                    lanetype = Lane.Right;
+                    break;
+                default:
+                    break;
+            }
+            for(int i = 0 ; i < 3 ; i++)
+            {
 
-            // Red minions
-            casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
-            casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+                casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
 
+                // Blue minions
+                casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+                casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+                casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+
+            }
         }
+       
     }
 
     void CannonMinionSpawn()
     {
         // Every third wave spawns a cannon minion and sets destination as above
-        if(waveCount == 3)
-        {
-            GameObject cannonMinion1;
+      //  if(waveCount == 3)
+      //  {
+            for(int i = 0 ; i < 3 ; i++)
+            {
+                Lane lanetype = Lane.Center;
+                switch(i)
+                {
+                    case 0:
+                        lanetype = Lane.Center;
+                        break;
 
-            cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
-            cannonMinion1.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue, Lane.Center);
-            cannonMinion1.GetComponent<MinionAIScript>().isBlue = true;
-            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+                    case 1:
+                        lanetype = Lane.Left;
+                        break;
 
-            cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
-            cannonMinion1.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,Lane.Center); ;
-            cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
-            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+                    case 2:
+                        lanetype = Lane.Right;
+                        break;
+                    default:
+                        break;
+                }
+                
+                GameObject cannonMinionBlue, cannonMinionRed;
+
+                cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+                cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+                cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
+                cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+                cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+                cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
+                cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
+                cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+
+            }
 
             // Resetting wave count for next cannon minion wave
-            waveCount = 0;
-        }
+          //  waveCount = 0;
+       // }
     }
     /// <summary>
     /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
@@ -272,7 +335,6 @@ public class GameManager : MonoBehaviour
             WaveCounter += 1;
             MeleeMinionSpawn();
             CasterMinionSpawn();
-
             if(WaveCounter % SpawnCannonAfterWaves == 0)                // checks that if the wave is multiple of the given variable for spawning cannon or not
             {
                 CannonMinionSpawn();
@@ -417,8 +479,6 @@ public class GameManager : MonoBehaviour
     /// <returns>Destination position (Vector3)</returns>
     public Vector3 GetDestinationPoint(TeamType teamType,Lane lane) 
     {
-        //Temp left lane
-        lane = Lane.Left;
         Vector3 destination = teamType == TeamType.Blue ? redSpawnLocation: blueSpawnLocation;
         switch(lane)
         {

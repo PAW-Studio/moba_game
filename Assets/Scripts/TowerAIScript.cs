@@ -21,6 +21,7 @@ public class TowerAIScript : MonoBehaviour
     public GameObject referenceObject;                                      //Healthbar display reference object for the tower
     Transform healthBarTransform;
     Camera cam;
+    public float Gold, Xp;
     // Start is called before the first frame update
     void Start()
     {
