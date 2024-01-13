@@ -63,8 +63,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     int SpawnCannonAfterWaves = 3;                                                  //Used to decide after how many waves the cannon should spawn
     int WaveCounter=0;                                                              //Counts waves for calculations
-    
-
+    [SerializeField]
+    TMPro.TextMeshProUGUI GoldCountsText;                                              //Current team gold count 
+    int GoldCount = 0;
     private void Awake()
     {
         if(instance == null) 
@@ -492,6 +493,15 @@ public class GameManager : MonoBehaviour
                 break;
         }
         return destination;
+    }
+    /// <summary>
+    /// Update gold count
+    /// </summary>
+    /// <param name="gold">amount</param>
+    public void UpdateGold(float gold) 
+    {
+        GoldCount += (int)gold;
+        GoldCountsText.text =GoldCount.ToString();
     }
 }
 [System.Serializable]

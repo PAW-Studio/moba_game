@@ -116,7 +116,10 @@ public class MinionHealthBar : MonoBehaviour
                 if(minionObject) 
                 {
                     MinionAIScript minionTarget = GameManager.instance.GetTargetUIManager().minionTarget;
-
+                    if(minionObject.teamType== TeamType.Red) 
+                    {
+                        GameManager.instance.UpdateGold(minionObject.Gold);
+                    }
                     AnimateGoldTexObject(minionObject.Gold.ToString());
 
                     if(minionTarget && minionTarget== minionObject) 
@@ -144,6 +147,7 @@ public class MinionHealthBar : MonoBehaviour
     /// <param name="_text">gold text</param>
     public void AnimateGoldTexObject(string _text) 
     {
+
         GameObject textObj = Instantiate(goldTextPrefab,transform.parent);
         LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,0);
         textObj.transform.position = damageText.transform.position;

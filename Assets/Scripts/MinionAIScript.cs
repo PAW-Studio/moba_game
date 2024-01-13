@@ -38,6 +38,8 @@ public class MinionAIScript : MonoBehaviour
     float SlowEffectTime;
     
     public float Gold,Xp;
+    [SerializeField]
+    SpriteRenderer minimapSprite;
    
     // Start is called before the first frame update
     void Start()
@@ -72,13 +74,16 @@ public class MinionAIScript : MonoBehaviour
             renderer.material = blueMinionMat;
             this.gameObject.layer = 9;
             teamType = TeamType.Blue;
+            minimapSprite.color = Color.blue;
         }
         else
         {
             renderer.material = redMinionMat;
             this.gameObject.layer = 10;
             teamType = TeamType.Red;
+            minimapSprite.color = Color.red;
         }
+
     
         agent.SetDestination(destination);
     }
