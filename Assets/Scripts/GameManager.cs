@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     TMPro.TextMeshProUGUI GoldCountsText;                                              //Current team gold count 
     int GoldCount = 0;
+    public List<Character> TeamPlayers;                                            //List of all players
     private void Awake()
     {
         if(instance == null) 
@@ -84,6 +86,7 @@ public class GameManager : MonoBehaviour
         QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
 
         StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
+        TeamPlayers = FindObjectsOfType<Character>().ToList();
     }
     /// <summary>
     /// Change graphics quality level

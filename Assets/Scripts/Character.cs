@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-
+    public int Id;                                                             //Id is used to decide uniqe player in team 
     Otrill characterOtrill;
 
     public PlayerScript playerScript;                                               //Handles movement ,attack 
@@ -25,7 +25,7 @@ public class Character : MonoBehaviour
     public CharacterModels currentCharacterModel;                                  //Current selected character set to this reference variable
     public float invisibleTime = 5f;
     public CharacterScriptable characterData;                                      //Scriptable object of character to reference the selected character details
-
+    public int gold;                                                               //player's gold
 
     //CharacterData references
     //Used to avoid any change in base values in scriptable character object
@@ -73,6 +73,7 @@ public class Character : MonoBehaviour
     {
 
         //Temp 
+        Id = Random.Range(1,10);
         teamType = TeamType.Blue;
         gameObject.layer = teamType == TeamType.Blue ? 9 : 10;
        
@@ -629,6 +630,14 @@ public class Character : MonoBehaviour
         }
     }
     /// <summary>
+    /// Update gold value
+    /// </summary>
+    /// <param name="_gold">gold earned from killing</param>
+    public void UpdateGold(int _gold) 
+    {
+        gold += _gold;  //Add gold for killing 
+    }
+    /// <summary>
     /// Handle damage and update healthbar
     /// </summary>
     /// <param name="damage">damage value</param>
@@ -640,7 +649,7 @@ public class Character : MonoBehaviour
         {
             currentHealth = 0;
         }
-        championHealthBar.SetHealth((float)currentHealth,true,gameObject,damageDetails.damagetype);
+        championHealthBar.SetHealth((float)currentHealth,true,gameObject,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>
@@ -718,6 +727,7 @@ public class DamageDetails
     public ScalingConditionTypes ScaleCondition;
     public DamageTypeDetails damagetype;
     public float damangeValue;
+    public int damageById;                   //Id of player/minion who damaged the current object
 }
 /// <summary>
 /// Used to set damage type 

@@ -13,7 +13,7 @@ public class MinionHealthBar : MonoBehaviour
     public Slider effectBar;                                    //Effect bar to create decrease effect in helatbar     
     public TMPro.TextMeshProUGUI damageText;                    //Damage text
     public TMPro.TextMeshProUGUI HealthText;                    //Damage text
-    public GameObject textPrefab,goldTextPrefab;
+    public GameObject textPrefab, goldTextPrefab;
     [SerializeField]
     Transform damageTextReference;
     [SerializeField]
@@ -29,7 +29,7 @@ public class MinionHealthBar : MonoBehaviour
     public void SetMaxHealth(float health)
     {
         slider.maxValue = health;
-        if(effectBar) 
+        if(effectBar)
         {
             effectBar.maxValue = health;
             effectBar.value = float.MaxValue;
@@ -37,58 +37,58 @@ public class MinionHealthBar : MonoBehaviour
         slider.value = health;
         effectBar.value = health;
         SetHealthText(slider.value);
-        
+
     }
-    
-    public void SetHealth(float health,bool damage=true,GameObject objectToDestroy=null,DamageTypeDetails damageType= DamageTypeDetails.None)
+
+    public void SetHealth(float health,bool damage = true,GameObject objectToDestroy = null,DamageDetails damageDetails = null)
     {
         if(slider.value == 0f) return;
-       
+
         float oldValue = slider.value;
         slider.value = health;
         SetHealthText(slider.value);
         if(effectBar && damage)
         {
-            StartCoroutine(EffectBar(slider.value,oldValue,objectToDestroy,damageType));
+            StartCoroutine(EffectBar(slider.value,oldValue,objectToDestroy,damageDetails));
         }
-        
+
     }
     /// <summary>
     /// This bar creates effect of decrease healthbar effect 
     /// </summary>
     /// <param name="newVal">already decreased value of red-color main slider</param>
-    public IEnumerator EffectBar(float newVal,float oldValue,GameObject objToDestroy,DamageTypeDetails damageType) 
+    public IEnumerator EffectBar(float newVal,float oldValue,GameObject objToDestroy,DamageDetails damageDetails)
     {
-       // damageText.transform.position = damageTextReference.transform.position;
+        // damageText.transform.position = damageTextReference.transform.position;
         float time = 0, duration = .5f;
-        float startVal = effectBar.value;        
-        damageText.text =  ((int)(oldValue-newVal)).ToString();
+        float startVal = effectBar.value;
+        damageText.text = ((int)(oldValue - newVal)).ToString();
         GameObject textObj = Instantiate(textPrefab,transform.parent);
         LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,0);
         textObj.transform.position = damageText.transform.position;
         TMPro.TextMeshProUGUI tmpObject = textObj.GetComponent<TMPro.TextMeshProUGUI>();
-        
-        tmpObject.color = damageType == DamageTypeDetails.AD || damageType == DamageTypeDetails.None ? Color.red : APDamageColor;
+
+        tmpObject.color = damageDetails.damagetype == DamageTypeDetails.AD || damageDetails.damagetype == DamageTypeDetails.None ? Color.red : APDamageColor;
         tmpObject.text = damageText.text;
-      //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,0);
-       // damageText.gameObject.SetActive(true);
-      //  LeanTween.scale(damageText.gameObject,Vector3.one,0.25f);
-      //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(()=> damageText.gameObject.SetActive(false) );
+        //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,0);
+        // damageText.gameObject.SetActive(true);
+        //  LeanTween.scale(damageText.gameObject,Vector3.one,0.25f);
+        //  LeanTween.scale(damageText.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(()=> damageText.gameObject.SetActive(false) );
 
 
-        
+
         // damageText.gameObject.SetActive(true);
         textObj.SetActive(true);
         LeanTween.scale(textObj.gameObject,Vector3.one,0.25f);
         int random = UnityEngine.Random.Range(0,2);
-        
+
         float xMovement = random == 0 ? 15 : -15f;
-        LeanTween.moveX(textObj,textObj.transform.position.x +xMovement,0.25f);
+        LeanTween.moveX(textObj,textObj.transform.position.x + xMovement,0.25f);
         LeanTween.moveY(textObj,textObj.transform.position.y + 10f,0.25f);
-        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy( textObj.gameObject));
+        LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy(textObj.gameObject));
         LeanTween.moveY(textObj,textObj.transform.position.y - 10f,0.25f).setDelay(0.25f);
 
-      //  MinionAIScript minionObject = objToDestroy.GetComponent<MinionAIScript>();
+        //  MinionAIScript minionObject = objToDestroy.GetComponent<MinionAIScript>();
 
         //AnimateGoldTexObject(minionObject.Gold.ToString());
 
@@ -99,35 +99,39 @@ public class MinionHealthBar : MonoBehaviour
         //    LeanTween.move(damageText.gameObject,item,0.1f).setDelay(delay);
         //    delay += 0.1f;
         //}
-       // LeanTween.move(damageText.gameObject,)
-        while(time<duration)
+        // LeanTween.move(damageText.gameObject,)
+        while(time < duration)
         {
-            effectBar.value = Mathf.Lerp(startVal,newVal,time/duration);
+            effectBar.value = Mathf.Lerp(startVal,newVal,time / duration);
             time += Time.deltaTime;
             yield return null;
         }
         effectBar.value = newVal;
-        if(newVal <= 0f) 
+        if(newVal <= 0f)
         {
             if(objToDestroy)
             {
                 MinionAIScript minionObject = objToDestroy.GetComponent<MinionAIScript>();
                 Character characterObject = objToDestroy.GetComponent<Character>();
-                if(minionObject) 
+                if(minionObject)
                 {
                     MinionAIScript minionTarget = GameManager.instance.GetTargetUIManager().minionTarget;
-                    if(minionObject.teamType== TeamType.Red) 
+                    if(minionObject.teamType == TeamType.Red)
                     {
-                        GameManager.instance.UpdateGold(minionObject.Gold);
+                        if(damageDetails.damageById != -1) 
+                        {
+                            GameManager.instance.TeamPlayers.Find(x => x.Id == damageDetails.damageById).UpdateGold((int)minionObject.Gold);
+                        }
+                       // GameManager.instance.UpdateGold(minionObject.Gold);
                     }
                     AnimateGoldTexObject(minionObject.Gold.ToString());
 
-                    if(minionTarget && minionTarget== minionObject) 
+                    if(minionTarget && minionTarget == minionObject)
                     {
                         GameManager.instance.ShowTargetDetailsUI(false);
                     }
                 }
-                else if(characterObject) 
+                else if(characterObject)
                 {
                     Character champ = GameManager.instance.GetTargetUIManager().championTarget;
                     if(champ && champ == characterObject)
@@ -135,9 +139,8 @@ public class MinionHealthBar : MonoBehaviour
                         GameManager.instance.ShowTargetDetailsUI(false);
                     }
                 }
-                Destroy(objToDestroy); 
+                Destroy(objToDestroy);
             }
-
             Destroy(this.gameObject);
         }
     }
@@ -145,7 +148,7 @@ public class MinionHealthBar : MonoBehaviour
     /// Animate Gold text object when minion is destroyed
     /// </summary>
     /// <param name="_text">gold text</param>
-    public void AnimateGoldTexObject(string _text) 
+    public void AnimateGoldTexObject(string _text)
     {
 
         GameObject textObj = Instantiate(goldTextPrefab,transform.parent);
@@ -164,9 +167,9 @@ public class MinionHealthBar : MonoBehaviour
         LeanTween.moveY(textObj,textObj.transform.position.y + 10f,0.25f);
         LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy(textObj.gameObject));
         LeanTween.moveY(textObj,textObj.transform.position.y - 10f,0.25f).setDelay(0.25f);
-       // StartCoroutine(LerpTextColor(textObj.GetComponent<TMPro.TextMeshProUGUI>(),.5f));
+        // StartCoroutine(LerpTextColor(textObj.GetComponent<TMPro.TextMeshProUGUI>(),.5f));
 
-       // StartCoroutine(LerpImage(textObj.GetComponentInChildren<Image>(),0.25f));
+        // StartCoroutine(LerpImage(textObj.GetComponentInChildren<Image>(),0.25f));
     }
     /// <summary>
     /// Lerp text
@@ -197,7 +200,7 @@ public class MinionHealthBar : MonoBehaviour
     /// <returns></returns>
     IEnumerator LerpImage(Image _image,float duration)
     {
-      
+
         float time = 0;
         Color startValue = _image.color;
         Color endValue = startValue;
@@ -206,7 +209,7 @@ public class MinionHealthBar : MonoBehaviour
 
         while(time < duration)
         {
-            Debug.LogError("LERP" +_image+ endValue.a);
+            Debug.LogError("LERP" + _image + endValue.a);
             _image.color = Color.Lerp(startValue,endValue,time / duration);
             time += Time.deltaTime;
             yield return null;
@@ -217,19 +220,19 @@ public class MinionHealthBar : MonoBehaviour
     private void Update()
     {
         if(local)
-        transform.parent.LookAt(camera.transform);
+            transform.parent.LookAt(camera.transform);
     }
     /// <summary>
     /// Show indicator on healthbar
     /// </summary>
     /// <param name="show">Show outline highlight</param>
-    public void ShowOutline(bool show) 
+    public void ShowOutline(bool show)
     {
         indicator.gameObject.SetActive(show);
     }
-    void SetHealthText(float value) 
+    void SetHealthText(float value)
     {
-        if(HealthText) 
+        if(HealthText)
         {
             HealthText.text = Convert.ToInt32(value).ToString();
         }

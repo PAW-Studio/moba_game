@@ -49,7 +49,7 @@ public class TargetDetailsUIManager : MonoBehaviour
             targetHealthBar.value = minionTarget.currentHealth;
             health = System.Convert.ToInt32( targetHealthBar.value).ToString() + "/" + System.Convert.ToInt32(minionTarget.maxHealth).ToString();
             AD.text = System.Convert.ToInt32( minionTarget.damage).ToString();
-            Debug.LogError("Target Minion updated " + health);
+           // Debug.LogError("Target Minion updated " + health);
         }
         if(targetTower)
         {

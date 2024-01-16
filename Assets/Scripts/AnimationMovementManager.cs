@@ -22,11 +22,12 @@ public class AnimationMovementManager : MonoBehaviour
     public Transform spawnTransforSerinaAuto;                               //Serina Autor arrow spawn reference
     public Transform spawnTrasformLeft;                                     //Arrow/projectile spawn transform for left hand
     public Projectile arrowProjectile;                                      //Reference script of arrow projectile
-   
+    int characterId;
 
     private void OnEnable()
     {
         // startPosition = transform.position;
+        characterId = GetComponentInParent<Character>().Id;
     }
     /// <summary>
     /// Set the variable for auto movement ON in playerscript
@@ -146,6 +147,7 @@ public class AnimationMovementManager : MonoBehaviour
     public void MinionTargetDamage(MinionAIScript target) 
     {
         DamageDetails damageDetails    = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        damageDetails.damageById = characterId;
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
         Debug.LogError("Scale Damage " + damageDetails.damangeValue);
         if(target)
@@ -158,6 +160,7 @@ public class AnimationMovementManager : MonoBehaviour
     public void TowerTargetDamage(TowerAIScript target)
     {
         DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        damageDetails.damageById = characterId;
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
         Debug.LogError("Scale Damage " + damageDetails.damangeValue);
         if(target)

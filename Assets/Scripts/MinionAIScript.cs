@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class MinionAIScript : MonoBehaviour
 {
+    public int Id = -1;                       
     public Vector3 destination;
 
     public Material blueMinionMat;
@@ -241,7 +242,7 @@ public class MinionAIScript : MonoBehaviour
         {
             if(targetMinion.GetComponent<Character>())
             {
-               // targetMinion.GetComponent<Character>().DealDamage(1);
+                //targetMinion.GetComponent<Character>().DealDamage(1);
             }
             else 
             {
@@ -260,7 +261,7 @@ public class MinionAIScript : MonoBehaviour
         if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damageDetails.damangeValue;
-        minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails.damagetype);
+        minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>

@@ -137,7 +137,7 @@ public class TowerAIScript : MonoBehaviour
         if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damageDetails.damangeValue;
-        minionHealthBar.SetHealth(currentHealth,true,null,damageDetails.damagetype);
+        minionHealthBar.SetHealth(currentHealth,true,null,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>
