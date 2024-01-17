@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     TMPro.TextMeshProUGUI GoldCountsText;                                              //Current team gold count 
     int GoldCount = 0;
     public List<Character> TeamPlayers;                                            //List of all players
+    public TowerDetails TowerDestroyDetails=new TowerDetails();                    //Tower damage details to manage gold rewards of players
     private void Awake()
     {
         if(instance == null) 
@@ -98,11 +99,14 @@ public class GameManager : MonoBehaviour
         qLevel += 1;
         Debug.LogError(qLevel);
         if(qLevel == 6) qLevel = 0;
-    }  
+    }
+    [SerializeField]
+    public GameObject tower;
     // Update is called once per frame
     void Update()
     {
       //  SpawnTime();
+    
     }
     
 
@@ -506,6 +510,35 @@ public class GameManager : MonoBehaviour
         GoldCount += (int)gold;
         GoldCountsText.text =GoldCount.ToString();
     }
+    /// <summary>
+    /// Give gold rewards to players with in range of current tower whose health is decrease upto  level(1000/2000/3000/4000 )
+    /// </summary>
+    public void TriggerGoldRewardForPlayerswithInRangeForTowerForLevelDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails) 
+    {
+        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < 120);
+        foreach(Character item in list)
+        {
+            item.UpdateGold(towerDetails.LevelGold);
+            UpdateGold(towerDetails.LevelGold);
+        }
+    }
+    /// <summary>
+    /// Give gold rewards to players with in range of current tower whose health is decrease upto  level(1000/2000/3000/4000 )
+    /// </summary>
+    public void TriggerGoldRewardForPlayersForTowerDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails)
+    {
+        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < 120);
+        foreach(Character item in list)
+        {
+            item.UpdateGold(towerDetails.FinalGoldWithiInRange);
+            UpdateGold(towerDetails.FinalGoldWithiInRange);
+        }
+        foreach(Character item in TeamPlayers.FindAll(x=>x.teamType!=towerType && !list.Contains(x)))
+        {
+            item.UpdateGold(towerDetails.FinalGold_OutOfRange);
+            UpdateGold(towerDetails.FinalGold_OutOfRange);
+        }
+    }
 }
 [System.Serializable]
 public enum Lane { Center,Left,Right}
@@ -608,8 +641,18 @@ public class AttackButton
     public bool JoyStickAtcive() 
     {
         return AttackButtonJoystick.transform.parent.gameObject.activeInHierarchy;
-    }
-   
+    } 
 }
 [System.Serializable]
 public enum TeamType { Blue, Red}
+/// <summary>
+/// Tower damage and gold reward details
+/// </summary>
+public class TowerDetails 
+{
+    public int MaxHealth = 5000;
+    public int Levels = 5;
+    public int LevelGold = 125; // gold given as reward to team players within the range for tower level destroy
+    public int FinalGoldWithiInRange = 250; // gold given as reward to team players within the range for tower level destroy
+    public int FinalGold_OutOfRange = 50; // gold given as reward to team players within the range for tower level destroy
+}

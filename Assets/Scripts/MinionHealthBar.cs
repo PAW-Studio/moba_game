@@ -51,7 +51,6 @@ public class MinionHealthBar : MonoBehaviour
         {
             StartCoroutine(EffectBar(slider.value,oldValue,objectToDestroy,damageDetails));
         }
-
     }
     /// <summary>
     /// This bar creates effect of decrease healthbar effect 
@@ -87,12 +86,34 @@ public class MinionHealthBar : MonoBehaviour
         LeanTween.moveY(textObj,textObj.transform.position.y + 10f,0.25f);
         LeanTween.scale(textObj.gameObject,Vector3.one * 0.75f,.25f).setDelay(0.25f).setOnComplete(() => Destroy(textObj.gameObject));
         LeanTween.moveY(textObj,textObj.transform.position.y - 10f,0.25f).setDelay(0.25f);
-
-        //  MinionAIScript minionObject = objToDestroy.GetComponent<MinionAIScript>();
-
-        //AnimateGoldTexObject(minionObject.Gold.ToString());
-
-
+        if(damageDetails.damagedItem== DamagedItem.Tower && newVal > 0)
+        {
+            bool level = false;
+            if(newVal <= 1000 && oldValue > 1000)
+            {
+                level = true;
+            }
+            else if(newVal <= 2000 && oldValue > 2000)
+            {
+                level = true;
+            }
+            else if(newVal <= 3000 && oldValue > 3000)
+            {
+                level = true;
+            }
+            else if(newVal <= 4000 && oldValue > 4000)
+            {
+                level = true;
+            }
+            else if(newVal < 5000 && oldValue >= 5000)
+            {
+                level = true;
+            }
+            if(level)
+            {
+                GameManager.instance.TriggerGoldRewardForPlayerswithInRangeForTowerForLevelDestroy(damageDetails.teamType,damageDetails.damagePosition,GameManager.instance.TowerDestroyDetails);
+            }
+        }
         float delay = 0;
         //foreach(Transform item in animationPoints)
         //{
@@ -121,10 +142,11 @@ public class MinionHealthBar : MonoBehaviour
                         if(damageDetails.damageById != -1) 
                         {
                             GameManager.instance.TeamPlayers.Find(x => x.Id == damageDetails.damageById).UpdateGold((int)minionObject.Gold);
+                            AnimateGoldTexObject(minionObject.Gold.ToString());
+                            GameManager.instance.UpdateGold(minionObject.Gold);
                         }
-                       // GameManager.instance.UpdateGold(minionObject.Gold);
+
                     }
-                    AnimateGoldTexObject(minionObject.Gold.ToString());
 
                     if(minionTarget && minionTarget == minionObject)
                     {

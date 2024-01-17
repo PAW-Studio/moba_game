@@ -27,6 +27,8 @@ public class Projectile : MonoBehaviour
                 {
                   DamageDetails damageDetails=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                   damageDetails.damageById = character.Id; //Owner of projectile
+                    damageDetails.damagedItem = DamagedItem.Minion;
+                    damageDetails.teamType = character.teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
                     //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
                     item.GetComponent<MinionAIScript>().DealDamage(damageDetails); // Get current charactes AD
                     Debug.LogError(damageDetails.damangeValue);
@@ -41,6 +43,8 @@ public class Projectile : MonoBehaviour
                         {
                             DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                             damageDetails.damageById = character.Id;
+                            damageDetails.damagedItem = DamagedItem.Tower;
+                            damageDetails.teamType = character.teamType== TeamType.Red?TeamType.Blue: TeamType.Red;     //Set opposite type
                             //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
                             item.GetComponent<TowerAIScript>().DealDamage(damageDetails); // Get current charactes AD
                             Debug.LogError(damageDetails.damangeValue);
@@ -54,6 +58,8 @@ public class Projectile : MonoBehaviour
                 {
                     DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                     damageDetails.damageById = character.Id;
+                    damageDetails.damagedItem = DamagedItem.Character;
+                    damageDetails.teamType = character.teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
                     //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
                     item.GetComponent<Character>().DealDamage(damageDetails); // Get current charactes AD
                     Debug.LogError(damageDetails.damangeValue);

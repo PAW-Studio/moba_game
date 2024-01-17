@@ -1523,6 +1523,8 @@ MonoBehaviour:
   IntervalBetweenWaves: 30
   SpawnCannonAfterWaves: 3
   GoldCountsText: {fileID: 1490472654611384164}
+  TeamPlayers: []
+  tower: {fileID: 358397099}
 --- !u!1 &199858039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3861,6 +3863,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 342284714}
   m_CullTransparentMesh: 1
+--- !u!1 &358397099 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5290875632430388772, guid: df3d1490bae3ed64e9333ae36213507b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4125224281484038080}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &367822627
 GameObject:
   m_ObjectHideFlags: 0
@@ -34052,6 +34060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4321167bb96409a49893eaf80b56c1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Id: 0
   playerScript: {fileID: 0}
   AttackValues: 
   characterModels: []
@@ -34063,6 +34072,7 @@ MonoBehaviour:
     characterModel: {fileID: 0}
   invisibleTime: 5
   characterData: {fileID: 0}
+  gold: 0
   currentHealth: 0
   currentHealthRegen: 0
   currentAD: 0

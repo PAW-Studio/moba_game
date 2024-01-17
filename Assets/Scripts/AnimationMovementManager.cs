@@ -148,6 +148,8 @@ public class AnimationMovementManager : MonoBehaviour
     {
         DamageDetails damageDetails    = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
         damageDetails.damageById = characterId;
+        damageDetails.damagedItem = DamagedItem.Minion;
+        damageDetails.teamType = GameManager.instance.TeamPlayers.Find(x=>x.Id== characterId).teamType== TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
         Debug.LogError("Scale Damage " + damageDetails.damangeValue);
         if(target)
@@ -161,6 +163,8 @@ public class AnimationMovementManager : MonoBehaviour
     {
         DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
         damageDetails.damageById = characterId;
+        damageDetails.damagedItem = DamagedItem.Tower;
+        damageDetails.teamType= GameManager.instance.TeamPlayers.Find(x => x.Id == characterId).teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
         Debug.LogError("Scale Damage " + damageDetails.damangeValue);
         if(target)
@@ -173,6 +177,9 @@ public class AnimationMovementManager : MonoBehaviour
     public void MinionChampionDamage(Character target)
     {
         DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        damageDetails.damageById = characterId;
+        damageDetails.damagedItem = DamagedItem.Character;
+        damageDetails.teamType = target.teamType;     //Set opposite type
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
         Debug.LogError("*" + target.name + " Target : Scale Damage " + damageDetails.damangeValue);
         target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions

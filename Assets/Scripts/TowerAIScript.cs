@@ -22,9 +22,12 @@ public class TowerAIScript : MonoBehaviour
     Transform healthBarTransform;
     Camera cam;
     public float Gold, Xp;
+    public TowerDetails towerDestroyDetails;
     // Start is called before the first frame update
     void Start()
     {
+        towerDestroyDetails = GameManager.instance.TowerDestroyDetails;
+        maxHealth = towerDestroyDetails.MaxHealth;
         GameObject Healthbar = Instantiate(GameManager.instance.TowerHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.transform.localScale = Vector3.one;
         Healthbar.name = "Tower";
@@ -74,7 +77,13 @@ public class TowerAIScript : MonoBehaviour
                 if(targetMinion.GetComponent<MinionAIScript>()) 
                 {
                     targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-                    targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+                    DamageDetails damageDetails = new DamageDetails();
+                    damageDetails.damageById = -1;
+                    damageDetails.damagedItem = DamagedItem.Minion;
+                    damageDetails.damagePosition = targetMinion.transform.position;
+                    damageDetails.damangeValue = damage;
+                    damageDetails.teamType = teamType == TeamType.Red ?  TeamType.Blue : TeamType.Red;
+                    targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject,damageDetails);
                 }
                 
             }
@@ -88,15 +97,20 @@ public class TowerAIScript : MonoBehaviour
         if (currentHealth <= 0 && !destroyOnce)
         {
             destroyOnce = true;
-         
+            DamageDetails damageDetails = new DamageDetails();
+            damageDetails.damageById = -1;
+            damageDetails.damagedItem = DamagedItem.Tower;
+            damageDetails.damagePosition = transform.position;
+            damageDetails.damangeValue = damage;
+            damageDetails.teamType = teamType;
             minionHealthBar.slider.gameObject.SetActive(false);
-            AnimateAndDestoryTower();
+            AnimateAndDestoryTower(damageDetails);
             //Destroy(this.gameObject);
         }
     }
     bool destroyOnce = false;
     bool destroyAnimationStarted = false;
-    public void AnimateAndDestoryTower() 
+    public void AnimateAndDestoryTower(DamageDetails damageDetails) 
     {
         if(destroyAnimationStarted) return;
 
@@ -126,6 +140,7 @@ public class TowerAIScript : MonoBehaviour
                 GameManager.instance.ShowTargetDetailsUI(false);
             }
             PopUpsManager.Instance.ShowTowerDestroyPopup();
+            GameManager.instance.TriggerGoldRewardForPlayersForTowerDestroy(teamType,transform.position,GameManager.instance.TowerDestroyDetails);
         });
     }
     /// <summary>
@@ -137,6 +152,7 @@ public class TowerAIScript : MonoBehaviour
         if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damageDetails.damangeValue;
+        damageDetails.damagePosition = transform.position;
         minionHealthBar.SetHealth(currentHealth,true,null,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }

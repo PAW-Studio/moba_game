@@ -102,6 +102,11 @@ public class Character : MonoBehaviour
         GameManager.instance.Hide_QWER_LevelUpdatePanel();
         Invoke(nameof(ShowHealthBar),0.3f);
     }
+   
+    private void Update()
+    {
+        Debug.LogError(Vector3.Distance(transform.position,GameManager.instance.tower.transform.position));
+    }
     /// <summary>
     /// Set active healthvar object on
     /// </summary>
@@ -649,6 +654,7 @@ public class Character : MonoBehaviour
         {
             currentHealth = 0;
         }
+        damageDetails.damagePosition = transform.position;
         championHealthBar.SetHealth((float)currentHealth,true,gameObject,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }
@@ -728,8 +734,15 @@ public class DamageDetails
     public DamageTypeDetails damagetype;
     public float damangeValue;
     public int damageById;                   //Id of player/minion who damaged the current object
+    public DamagedItem damagedItem;
+    public TeamType teamType;
+    public Vector3 damagePosition;
 }
 /// <summary>
 /// Used to set damage type 
 /// </summary>
 public enum DamageTypeDetails{None ,AD, AP }
+/// <summary>
+/// Type of object who got damaged
+/// </summary>
+public enum DamagedItem {None, Tower,Minion,Character}

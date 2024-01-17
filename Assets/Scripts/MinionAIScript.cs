@@ -234,21 +234,38 @@ public class MinionAIScript : MonoBehaviour
         if(targetMinion.layer == 11 || targetMinion.layer == 12)
         {
             targetMinion.GetComponent<TowerAIScript>().currentHealth -= damage;
-
+            DamageDetails damageDetails = new DamageDetails();
+            damageDetails.damangeValue = damage;
+            damageDetails.damagetype = DamageTypeDetails.AD;
+            damageDetails.damageById = Id;
+            damageDetails.damagedItem = DamagedItem.Tower;
+            damageDetails.teamType = teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
             // Reduces tower health from current health bar
-            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true);
+            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,null,damageDetails);
         }
         else
         {
             if(targetMinion.GetComponent<Character>())
             {
+                DamageDetails damageDetails = new DamageDetails();
+                damageDetails.damangeValue = 1;
+                damageDetails.damagetype = DamageTypeDetails.AD;
+                damageDetails.damageById = Id;
+                damageDetails.damagedItem = DamagedItem.Character;
+                damageDetails.teamType = teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
                 //targetMinion.GetComponent<Character>().DealDamage(1);
             }
             else 
             {
+                DamageDetails damageDetails = new DamageDetails();
+                damageDetails.damangeValue = damage;
+                damageDetails.damagetype = DamageTypeDetails.AD;
+                damageDetails.damageById = Id;
+                damageDetails.damagedItem = DamagedItem.Minion;
+                damageDetails.teamType = teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
                 // Attacks opposite minion and reduces minion health from current health bar
                 targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-                targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+                targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject,damageDetails);
             }
         }
     }
@@ -261,6 +278,7 @@ public class MinionAIScript : MonoBehaviour
         if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damageDetails.damangeValue;
+        damageDetails.damagePosition = transform.position;
         minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }
