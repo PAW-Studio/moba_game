@@ -68,6 +68,7 @@ public class Character : MonoBehaviour
     public TowerAIScript targetTower = null;
     public Character targetChampion = null;
     public GameObject TargetIndicator;
+    public float Xp = 0;
     //
     void Start()
     {
@@ -102,11 +103,11 @@ public class Character : MonoBehaviour
         GameManager.instance.Hide_QWER_LevelUpdatePanel();
         Invoke(nameof(ShowHealthBar),0.3f);
     }
-   
-    private void Update()
-    {
-        Debug.LogError(Vector3.Distance(transform.position,GameManager.instance.tower.transform.position));
-    }
+    //Distance calculation
+    //private void Update()
+    //{
+    //    Debug.LogError(Vector3.Distance(transform.position,GameManager.instance.tower.transform.position));
+    //}
     /// <summary>
     /// Set active healthvar object on
     /// </summary>
@@ -641,6 +642,14 @@ public class Character : MonoBehaviour
     public void UpdateGold(int _gold) 
     {
         gold += _gold;  //Add gold for killing 
+    }
+    /// <summary>
+    /// Update xp value
+    /// </summary>
+    /// <param name="_xp">Xp earned</param>
+    public void UpdateXp(float _xp)
+    {
+        Xp += _xp;  //Add earned xp
     }
     /// <summary>
     /// Handle damage and update healthbar

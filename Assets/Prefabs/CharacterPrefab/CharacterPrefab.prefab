@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4321167bb96409a49893eaf80b56c1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Id: 0
   playerScript: {fileID: 884645105129681058}
   AttackValues: 0a00000014000000320000004600000064000000
   characterModels:
@@ -221,6 +222,7 @@ MonoBehaviour:
     characterModel: {fileID: 0}
   invisibleTime: 5
   characterData: {fileID: 0}
+  gold: 0
   currentHealth: 0
   currentHealthRegen: 0
   currentAD: 0
@@ -1411,9 +1413,13 @@ MonoBehaviour:
   effectBar: {fileID: 0}
   damageText: {fileID: 0}
   HealthText: {fileID: 0}
+  textPrefab: {fileID: 0}
+  goldTextPrefab: {fileID: 0}
   damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
   animationPoints: []
+  ADDamageColor: {r: 0, g: 0, b: 0, a: 0}
+  APDamageColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &7597496393336482990
 GameObject:
   m_ObjectHideFlags: 0

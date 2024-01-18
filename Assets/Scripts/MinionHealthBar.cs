@@ -105,10 +105,6 @@ public class MinionHealthBar : MonoBehaviour
             {
                 level = true;
             }
-            else if(newVal < 5000 && oldValue >= 5000)
-            {
-                level = true;
-            }
             if(level)
             {
                 GameManager.instance.TriggerGoldRewardForPlayerswithInRangeForTowerForLevelDestroy(damageDetails.teamType,damageDetails.damagePosition,GameManager.instance.TowerDestroyDetails);
@@ -143,6 +139,8 @@ public class MinionHealthBar : MonoBehaviour
                         {
                             GameManager.instance.TeamPlayers.Find(x => x.Id == damageDetails.damageById).UpdateGold((int)minionObject.Gold);
                             AnimateGoldTexObject(minionObject.Gold.ToString());
+                            GameManager.instance.UpdateXpData(minionObject.Xp);
+                            GameManager.instance.UpdateXp(minionObject.Xp,damageDetails.damageById);
                             GameManager.instance.UpdateGold(minionObject.Gold);
                         }
 

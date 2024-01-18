@@ -68,7 +68,15 @@ public class GameManager : MonoBehaviour
     TMPro.TextMeshProUGUI GoldCountsText;                                              //Current team gold count 
     int GoldCount = 0;
     public List<Character> TeamPlayers;                                            //List of all players
+    [SerializeField]
     public TowerDetails TowerDestroyDetails=new TowerDetails();                    //Tower damage details to manage gold rewards of players
+    public Image XpFill;
+    public TMPro.TextMeshProUGUI CurrnetLevel,XpText;                              
+    public List<XpData> xpData = new List<XpData>();
+    public XpData CurrnetLevelXpData = new XpData();
+    public GameObject XpUI;
+    public float CurrnetXpValue;
+
     private void Awake()
     {
         if(instance == null) 
@@ -88,6 +96,11 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
         TeamPlayers = FindObjectsOfType<Character>().ToList();
+        //Temp
+        XpFill.fillAmount = 0;
+        CurrnetLevel.text = "1".ToString();
+        CurrnetLevelXpData = xpData[0];
+        XpText.text = "0" + "/" + CurrnetLevelXpData.XpNeeded;
     }
     /// <summary>
     /// Change graphics quality level
@@ -510,34 +523,71 @@ public class GameManager : MonoBehaviour
         GoldCount += (int)gold;
         GoldCountsText.text =GoldCount.ToString();
     }
+    public void UpdateXp(float Xp,float Id) 
+    {
+        Character character = TeamPlayers.Find(x => x.Id == Id);
+        character.UpdateXp(Xp) ;
+    }
     /// <summary>
     /// Give gold rewards to players with in range of current tower whose health is decrease upto  level(1000/2000/3000/4000 )
     /// </summary>
     public void TriggerGoldRewardForPlayerswithInRangeForTowerForLevelDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails) 
     {
-        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < 120);
+        float distance = ((towerDetails.Range / 10) / 2);
+        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < distance );
+        int goldForEachPlayer = towerDetails.LevelGold / list.Count;
         foreach(Character item in list)
         {
-            item.UpdateGold(towerDetails.LevelGold);
-            UpdateGold(towerDetails.LevelGold);
+            
+            item.UpdateGold(goldForEachPlayer);
+            UpdateGold(goldForEachPlayer);
         }
     }
     /// <summary>
-    /// Give gold rewards to players with in range of current tower whose health is decrease upto  level(1000/2000/3000/4000 )
+    /// Give gold rewards to all team players for tower destroy
     /// </summary>
     public void TriggerGoldRewardForPlayersForTowerDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails)
     {
-        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < 120);
+        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType);
+        int goldForEachPlayer = towerDetails.FinalGoldWithiInRange / list.Count;
         foreach(Character item in list)
         {
-            item.UpdateGold(towerDetails.FinalGoldWithiInRange);
-            UpdateGold(towerDetails.FinalGoldWithiInRange);
+            item.UpdateGold(goldForEachPlayer);
+            UpdateGold(goldForEachPlayer);
         }
-        foreach(Character item in TeamPlayers.FindAll(x=>x.teamType!=towerType && !list.Contains(x)))
+        //foreach(Character item in TeamPlayers.FindAll(x=>x.teamType!=towerType && !list.Contains(x)))
+        //{
+        //    item.UpdateGold(towerDetails.FinalGold_OutOfRange);
+        //    UpdateGold(towerDetails.FinalGold_OutOfRange);
+        //}
+    }
+    public void UpdateXpData(float xp) 
+    {
+        CurrnetXpValue += xp;
+       XpText.text =  CurrnetXpValue + "/" + CurrnetLevelXpData.XpNeeded;
+        float amount= (xp * 100) / CurrnetLevelXpData.XpNeeded;
+        amount = amount/ 100;  
+        XpFill.fillAmount += amount; //Xp added
+        if(XpFill.fillAmount == 1)
         {
-            item.UpdateGold(towerDetails.FinalGold_OutOfRange);
-            UpdateGold(towerDetails.FinalGold_OutOfRange);
+            //Xp level increase
+            LeanTween.scale(XpUI,Vector3.one * 1.1f,0.25f);
+            LeanTween.scale(XpUI,Vector3.one * 1f,0.25f).setDelay(0.25f);
+            Invoke(nameof(UpdateXpUIForNextLevel),2f);
         }
+
+    }
+
+    private void UpdateXpUIForNextLevel()
+    {
+        XpData _CurrnetLevel, NextLevel;
+        _CurrnetLevel = CurrnetLevelXpData;
+        NextLevel = xpData.Find(x => x.CurrentLevel == _CurrnetLevel.NextLevel);
+        CurrnetLevelXpData = NextLevel;
+        CurrnetLevel.text = CurrnetLevelXpData.CurrentLevel.ToString();
+        XpFill.fillAmount = 0;
+        CurrnetXpValue = 0;
+        XpText.text = 0 + "/" + CurrnetLevelXpData.XpNeeded;
     }
 }
 [System.Serializable]
@@ -648,11 +698,20 @@ public enum TeamType { Blue, Red}
 /// <summary>
 /// Tower damage and gold reward details
 /// </summary>
+[System.Serializable]
 public class TowerDetails 
 {
     public int MaxHealth = 5000;
     public int Levels = 5;
+    public int Range = 1200;
     public int LevelGold = 125; // gold given as reward to team players within the range for tower level destroy
     public int FinalGoldWithiInRange = 250; // gold given as reward to team players within the range for tower level destroy
     public int FinalGold_OutOfRange = 50; // gold given as reward to team players within the range for tower level destroy
+}
+[System.Serializable]
+public class XpData 
+{
+    public int CurrentLevel;
+    public int NextLevel;
+    public int XpNeeded;
 }
