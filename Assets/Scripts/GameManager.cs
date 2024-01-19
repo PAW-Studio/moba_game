@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,10 +12,13 @@ public class GameManager : MonoBehaviour
     public GameObject cannonMinion;
     public Vector3 blueSpawnLocation = new Vector3(-159,1,-152);
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
+    public Transform blueLeftLaneMidPoint, blueRightLaneMidPoint;                       //Mid points
     public Transform characterSpawnTranform;
     public GameObject MinioinHealthBar;                                                 //Healthbar prefab for minions
+    public GameObject TowerHealthBar;                                                 //Healthbar prefab for towers
     public GameObject ChampionHealthBar;                                                 //Healthbar prefab for Champion
     public Transform MinionHealthbarsParent;                                            //Parent transform for minion healthbars
+    public Transform TowerHealthbarParent;                                            //Parent transform for tower healthbars
     public Transform MeleeMinionParentContainer;                                        //Parent transform for melee minions
     public Transform CasterMinionParentContainer;                                        //Parent transform for caster minions
     public Transform CannonMinionParentContainer;                                        //Parent transform for cannon minions
@@ -32,12 +36,16 @@ public class GameManager : MonoBehaviour
     public GameObject QWER_LevelUpPanel;                                            //Panel with "Q" ,"W", "E" and "R" buttons to choose any one for level up
    
     public List<AttackTypeReference> attackTypeReferences = new List<AttackTypeReference>();      //List of buttons with attack types in QWER_LevelUp panel
-  
-
+    public FixedJoystick MovementJoystick;                                          //Main Joystick
+    public Toggle Minion_ChampToggle;                                                //Minion champ toggle
+    public Toggle Tower_TargetToggle;                                                //Tower taget toggle
+    public TMPro.TextMeshProUGUI ToggleButtonText;                                   //Minion toggle text
+    public TMPro.TextMeshProUGUI TowerToggleButtonText;                              //Tower toggle text
     [SerializeField]
     CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
-
+    [SerializeField]
+    TargetDetailsUIManager targetDetails;
     float TimeInterval = 10f;
     float timer = 0f;
     float spawnDelay = 30f;
@@ -56,6 +64,19 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     int SpawnCannonAfterWaves = 3;                                                  //Used to decide after how many waves the cannon should spawn
     int WaveCounter=0;                                                              //Counts waves for calculations
+    [SerializeField]
+    TMPro.TextMeshProUGUI GoldCountsText;                                              //Current team gold count 
+    int GoldCount = 0;
+    public List<Character> TeamPlayers;                                            //List of all players
+    [SerializeField]
+    public TowerDetails TowerDestroyDetails=new TowerDetails();                    //Tower damage details to manage gold rewards of players
+    public Image XpFill;
+    public TMPro.TextMeshProUGUI CurrnetLevel,XpText;                              
+    public List<XpData> xpData = new List<XpData>();
+    public XpData CurrnetLevelXpData = new XpData();
+    public GameObject XpUI;
+    public float CurrnetXpValue;
+
     private void Awake()
     {
         if(instance == null) 
@@ -74,6 +95,12 @@ public class GameManager : MonoBehaviour
         QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
 
         StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
+        TeamPlayers = FindObjectsOfType<Character>().ToList();
+        //Temp
+        XpFill.fillAmount = 0;
+        CurrnetLevel.text = "1".ToString();
+        CurrnetLevelXpData = xpData[0];
+        XpText.text = "0" + "/" + CurrnetLevelXpData.XpNeeded;
     }
     /// <summary>
     /// Change graphics quality level
@@ -85,11 +112,14 @@ public class GameManager : MonoBehaviour
         qLevel += 1;
         Debug.LogError(qLevel);
         if(qLevel == 6) qLevel = 0;
-    }  
+    }
+    [SerializeField]
+    public GameObject tower;
     // Update is called once per frame
     void Update()
     {
       //  SpawnTime();
+    
     }
     
 
@@ -115,67 +145,130 @@ public class GameManager : MonoBehaviour
     {
         // Spawning and setting destination for melee minions
         GameObject[] meleeMinions = new GameObject[3];
-
-        for(int i = 0 ; i < 3 ; i++)
+        for(int j = 0 ; j < 3 ; j++)
         {
-            meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
-            meleeMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            Lane lanetype = Lane.Center;
+            switch(j)
+            {
+                case 0:
+                    lanetype = Lane.Center;
+                    break;
 
-            // Blue minions
-            meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+                case 1:
+                    lanetype = Lane.Left;
+                    break;
 
-            meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
-            meleeMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
+                case 2:
+                    lanetype = Lane.Right;
+                    break;
+                default:
+                    break;
+            }
+            for(int i = 0 ; i < 3 ; i++)
+            {
+                meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
 
-            // Red minions
-            meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                // Blue minions
+                meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+
+                meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            }
         }
+       
     }
 
     void CasterMinionSpawn()
     {
         // Spawning and setting destination for caster minions
         GameObject[] casterMinions = new GameObject[3];
-
-        for(int i = 0 ; i < 3 ; i++)
+        for(int j = 0 ; j < 3 ; j++)
         {
-            casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
-            casterMinions[i].GetComponent<MinionAIScript>().destination = redSpawnLocation;
+            Lane lanetype = Lane.Center;
+            switch(j)
+            {
+                case 0:
+                    lanetype = Lane.Center;
+                    break;
 
-            // Blue minions
-            casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
-            casterMinions[i].GetComponent<MinionAIScript>().teamType =  TeamType.Blue;
+                case 1:
+                    lanetype = Lane.Left;
+                    break;
 
-            casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
-            casterMinions[i].GetComponent<MinionAIScript>().destination = blueSpawnLocation;
+                case 2:
+                    lanetype = Lane.Right;
+                    break;
+                default:
+                    break;
+            }
+            for(int i = 0 ; i < 3 ; i++)
+            {
 
-            // Red minions
-            casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
-            casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+                casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
 
+                // Blue minions
+                casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+                casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+                casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+
+            }
         }
+       
     }
 
     void CannonMinionSpawn()
     {
         // Every third wave spawns a cannon minion and sets destination as above
-        if(waveCount == 3)
-        {
-            GameObject cannonMinion1;
+      //  if(waveCount == 3)
+      //  {
+            for(int i = 0 ; i < 3 ; i++)
+            {
+                Lane lanetype = Lane.Center;
+                switch(i)
+                {
+                    case 0:
+                        lanetype = Lane.Center;
+                        break;
 
-            cannonMinion1 = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
-            cannonMinion1.GetComponent<MinionAIScript>().destination = redSpawnLocation;
-            cannonMinion1.GetComponent<MinionAIScript>().isBlue = true;
-            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+                    case 1:
+                        lanetype = Lane.Left;
+                        break;
 
-            cannonMinion1 = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
-            cannonMinion1.GetComponent<MinionAIScript>().destination = blueSpawnLocation;
-            cannonMinion1.GetComponent<MinionAIScript>().isBlue = false;
-            cannonMinion1.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+                    case 2:
+                        lanetype = Lane.Right;
+                        break;
+                    default:
+                        break;
+                }
+                
+                GameObject cannonMinionBlue, cannonMinionRed;
+
+                cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+                cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+                cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
+                cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+                cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+                cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
+                cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
+                cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+
+            }
 
             // Resetting wave count for next cannon minion wave
-            waveCount = 0;
-        }
+          //  waveCount = 0;
+       // }
     }
     /// <summary>
     /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
@@ -194,7 +287,7 @@ public class GameManager : MonoBehaviour
         {
             int val = characterScirpt.AttackValues[i];
             AttackType type = AttackTypes[i];
-            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttack(val,type));
+            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttackWrapper(val,type));
         }
         currentCharacter = characterScirpt;
     }
@@ -263,7 +356,6 @@ public class GameManager : MonoBehaviour
             WaveCounter += 1;
             MeleeMinionSpawn();
             CasterMinionSpawn();
-
             if(WaveCounter % SpawnCannonAfterWaves == 0)                // checks that if the wave is multiple of the given variable for spawning cannon or not
             {
                 CannonMinionSpawn();
@@ -336,7 +428,170 @@ public class GameManager : MonoBehaviour
         }
         //QWER_LevelUpPanel.SetActive(false);
     }
+    /// <summary>
+    /// Toggle minion target button
+    /// </summary>
+    public void ToggleMinion() 
+    {
+        //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
+        ToggleButtonText.text =Minion_ChampToggle.isOn?  "Champ": "Minion";
+        if(!Minion_ChampToggle.isOn) 
+        {
+            if(currentCharacter.targetMinion)
+            currentCharacter.targetMinion.ShowIndicator(false);
+        }
+        
+    }
+    /// <summary>
+    /// Toggle tower target button
+    /// </summary>
+    public void ToggleTower()
+    {
+        //Minion_ChampToggle.isOn = !Minion_ChampToggle.isOn;        
+        TowerToggleButtonText.text = Tower_TargetToggle.isOn ? "Attack\nTower" : "X";
+        if(!Tower_TargetToggle.isOn)
+        {
+            if(currentCharacter.targetTower)
+                currentCharacter.targetTower.ShowIndicator(false);
+        }
+    }
+    /// <summary>
+    /// Returns toggle valu of minion_champ toggle
+    /// </summary>
+    /// <returns></returns>
+    public bool Get_Minion_ChampToggleValue()
+    {
+        return Minion_ChampToggle.isOn;
+    }
+    /// <summary>
+    /// Update details in Target UI
+    /// </summary>
+    public void UpdateTargetDetailsUI()
+    {
+        if(targetDetails)
+        targetDetails.UpdateDetails();
+    }
+    /// <summary>
+    /// Show / Hide target UI
+    /// </summary>
+    /// <param name="val"></param>
+    public void ShowTargetDetailsUI(bool val)
+    {
+        if(targetDetails)
+        {
+            targetDetails.UpdateDetails();
+            targetDetails.gameObject.SetActive(val);
+        }
+    }
+    
+    /// <summary>
+    /// Access target details manager
+    /// </summary>
+    /// <returns></returns>
+    public TargetDetailsUIManager GetTargetUIManager() 
+    {
+        return targetDetails;
+    }
+    /// <summary>
+    /// Returns destination points with resepect to lane type and team type (for left and right lanes , half way points are set as first destination)
+    /// </summary>
+    /// <param name="teamType">Team type: Red / Blue</param>
+    /// <param name="lane">Left , Right , Center</param>
+    /// <returns>Destination position (Vector3)</returns>
+    public Vector3 GetDestinationPoint(TeamType teamType,Lane lane) 
+    {
+        Vector3 destination = teamType == TeamType.Blue ? redSpawnLocation: blueSpawnLocation;
+        switch(lane)
+        {
+            case Lane.Left:
+                destination = teamType == TeamType.Blue ? blueLeftLaneMidPoint.transform.position : blueRightLaneMidPoint.transform.position;
+                break;
+            case Lane.Right:
+                destination = teamType == TeamType.Blue ? blueRightLaneMidPoint.transform.position : blueLeftLaneMidPoint.transform.position;
+                break;
+            default:
+                break;
+        }
+        return destination;
+    }
+    /// <summary>
+    /// Update gold count
+    /// </summary>
+    /// <param name="gold">amount</param>
+    public void UpdateGold(float gold) 
+    {
+        GoldCount += (int)gold;
+        GoldCountsText.text =GoldCount.ToString();
+    }
+    public void UpdateXp(float Xp,float Id) 
+    {
+        Character character = TeamPlayers.Find(x => x.Id == Id);
+        character.UpdateXp(Xp) ;
+    }
+    /// <summary>
+    /// Give gold rewards to players with in range of current tower whose health is decrease upto  level(1000/2000/3000/4000 )
+    /// </summary>
+    public void TriggerGoldRewardForPlayerswithInRangeForTowerForLevelDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails) 
+    {
+        float distance = ((towerDetails.Range / 10) / 2);
+        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < distance );
+        int goldForEachPlayer = towerDetails.LevelGold / list.Count;
+        foreach(Character item in list)
+        {
+            
+            item.UpdateGold(goldForEachPlayer);
+            UpdateGold(goldForEachPlayer);
+        }
+    }
+    /// <summary>
+    /// Give gold rewards to all team players for tower destroy
+    /// </summary>
+    public void TriggerGoldRewardForPlayersForTowerDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails)
+    {
+        List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType);
+        int goldForEachPlayer = towerDetails.FinalGoldWithiInRange / list.Count;
+        foreach(Character item in list)
+        {
+            item.UpdateGold(goldForEachPlayer);
+            UpdateGold(goldForEachPlayer);
+        }
+        //foreach(Character item in TeamPlayers.FindAll(x=>x.teamType!=towerType && !list.Contains(x)))
+        //{
+        //    item.UpdateGold(towerDetails.FinalGold_OutOfRange);
+        //    UpdateGold(towerDetails.FinalGold_OutOfRange);
+        //}
+    }
+    public void UpdateXpData(float xp) 
+    {
+        CurrnetXpValue += xp;
+       XpText.text =  CurrnetXpValue + "/" + CurrnetLevelXpData.XpNeeded;
+        float amount= (xp * 100) / CurrnetLevelXpData.XpNeeded;
+        amount = amount/ 100;  
+        XpFill.fillAmount += amount; //Xp added
+        if(XpFill.fillAmount == 1)
+        {
+            //Xp level increase
+            LeanTween.scale(XpUI,Vector3.one * 1.1f,0.25f);
+            LeanTween.scale(XpUI,Vector3.one * 1f,0.25f).setDelay(0.25f);
+            Invoke(nameof(UpdateXpUIForNextLevel),2f);
+        }
+
+    }
+
+    private void UpdateXpUIForNextLevel()
+    {
+        XpData _CurrnetLevel, NextLevel;
+        _CurrnetLevel = CurrnetLevelXpData;
+        NextLevel = xpData.Find(x => x.CurrentLevel == _CurrnetLevel.NextLevel);
+        CurrnetLevelXpData = NextLevel;
+        CurrnetLevel.text = CurrnetLevelXpData.CurrentLevel.ToString();
+        XpFill.fillAmount = 0;
+        CurrnetXpValue = 0;
+        XpText.text = 0 + "/" + CurrnetLevelXpData.XpNeeded;
+    }
 }
+[System.Serializable]
+public enum Lane { Center,Left,Right}
 //Handle attack buttton UI with this class
 [System.Serializable]
 public class AttackButton 
@@ -348,6 +603,7 @@ public class AttackButton
     public TMPro.TextMeshProUGUI coolDownTimer;             //Remaining time display object while cooldown is on
     public TMPro.TextMeshProUGUI attackName;                //Object reference for attack name text 
     public Button ScaleUpButton;                            //Scale up button for Attack
+    public FixedJoystick AttackButtonJoystick;              //AttackButton joystick
     /// <summary>
     /// Update remaining time text on button while attack button is on cooldown
     /// </summary>
@@ -420,6 +676,42 @@ public class AttackButton
         attackName.gameObject.SetActive(true);
         DeactiveIndicator.gameObject.SetActive(false);
     }
+    /// <summary>
+    /// Show/Hide attack button target joystick
+    /// </summary>
+    /// <param name="show">True: show joystick, False : hide joystick</param>
+    public void ShowTargetJoystick(bool show) 
+    {
+        AttackButtonJoystick.transform.parent.gameObject.SetActive(show);
+    }
+    /// <summary>
+    /// Check if joystickis active
+    /// </summary>
+    /// <returns></returns>
+    public bool JoyStickAtcive() 
+    {
+        return AttackButtonJoystick.transform.parent.gameObject.activeInHierarchy;
+    } 
 }
 [System.Serializable]
 public enum TeamType { Blue, Red}
+/// <summary>
+/// Tower damage and gold reward details
+/// </summary>
+[System.Serializable]
+public class TowerDetails 
+{
+    public int MaxHealth = 5000;
+    public int Levels = 5;
+    public int Range = 1200;
+    public int LevelGold = 125; // gold given as reward to team players within the range for tower level destroy
+    public int FinalGoldWithiInRange = 250; // gold given as reward to team players within the range for tower level destroy
+    public int FinalGold_OutOfRange = 50; // gold given as reward to team players within the range for tower level destroy
+}
+[System.Serializable]
+public class XpData 
+{
+    public int CurrentLevel;
+    public int NextLevel;
+    public int XpNeeded;
+}

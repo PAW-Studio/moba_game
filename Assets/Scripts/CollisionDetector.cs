@@ -11,8 +11,7 @@ public class CollisionDetector : MonoBehaviour
     Character character;
     private void OnEnable()
     {
-        character = AnimationMovementManager.playerScript.GetComponent<Character>();
-        Debug.LogError("Character set");
+        character = AnimationMovementManager.playerScript.GetComponent<Character>();       
     }
     private void Update()
     {
@@ -70,6 +69,11 @@ public class CollisionDetector : MonoBehaviour
         {
             //Detects Minions hit
             MinionAIScript hitItem = item.GetComponent<Collider>().gameObject.GetComponent<MinionAIScript>();
+            //Detects Champion hit
+            Character champhitItem = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
+
+            TowerAIScript towerItem= item.GetComponent<Collider>().gameObject.GetComponent<TowerAIScript>();
+
             if(hitItem)
             {
                 if(hitItem.teamType != character.teamType)
@@ -85,9 +89,33 @@ public class CollisionDetector : MonoBehaviour
                         }
                     }
                 }
-
+            }
+            else if(towerItem)
+            {
+                if(towerItem.teamType != character.teamType)
+                {
+                   
+                    if(character.playerScript.currentAttackType == AttackType.auto)
+                    {
+                        Debug.LogError("***Distance  type :" + distanceAllowed +">" +Vector3.Distance(AnimationMovementManager.playerScript.transform.position,towerItem.transform.position));
+                        if(towerItem && Vector3.Distance(AnimationMovementManager.playerScript.transform.position,towerItem.transform.position) < 7)
+                        {
+                           
+                            if(!AnimationMovementManager.HitListTower.Contains(towerItem))
+                            {
+                                AnimationMovementManager.HitListTower.Add(towerItem);
+                                // hitItem.DealDamage(25);
+                                Debug.LogError("*Minion Hit :");
+                                Debug.LogError("Hit " + item.GetComponent<Collider>().gameObject.name + "\n" + "DISTANCE " + Vector3.Distance(AnimationMovementManager.playerScript.transform.position,towerItem.transform.position));
+                            }
+                        }
+                    }
+                }
+            }
+            else if(champhitItem) 
+            {
                 //Detects Champions hit
-                if(hitItem.teamType != character.teamType)
+                if(champhitItem.teamType != character.teamType)
                 {
                     Character hitItemChampions = item.GetComponent<Collider>().gameObject.GetComponent<Character>();
                     //Avoid self hit
@@ -102,7 +130,9 @@ public class CollisionDetector : MonoBehaviour
                         }
                     }
                 }
+
             }
+
         }
     }
     public Collider[] FilterTargetsWithinArc(Collider[] hits) 

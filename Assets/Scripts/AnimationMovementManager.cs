@@ -12,6 +12,7 @@ public class AnimationMovementManager : MonoBehaviour
     public bool Attacking = false;
     public List<MinionAIScript> HitList = new List<MinionAIScript>();
     public List<Character> HitListChampions = new List<Character>();
+    public List<TowerAIScript> HitListTower = new List<TowerAIScript>();
     public List<CollisionDetectorObject> collisionDetectorObjects;            //list of collision detector objects for different type of collisions after attack
     public DamageType currentAttackDamangeType;                               //DamageTypeOff current attack
     public List<ProjectileSpawnDetails> projectileSpawnDetails = new List<ProjectileSpawnDetails>(); //Details of projectiles(throwable/shootable) with resepect to attack types
@@ -21,11 +22,12 @@ public class AnimationMovementManager : MonoBehaviour
     public Transform spawnTransforSerinaAuto;                               //Serina Autor arrow spawn reference
     public Transform spawnTrasformLeft;                                     //Arrow/projectile spawn transform for left hand
     public Projectile arrowProjectile;                                      //Reference script of arrow projectile
-   
+    int characterId;
 
     private void OnEnable()
     {
         // startPosition = transform.position;
+        characterId = GetComponentInParent<Character>().Id;
     }
     /// <summary>
     /// Set the variable for auto movement ON in playerscript
@@ -102,7 +104,11 @@ public class AnimationMovementManager : MonoBehaviour
                 MinionTargetDamage(target);
             }
         }
+        foreach(TowerAIScript target in HitListTower)
+        {
 
+            TowerTargetDamage(target);
+        }
         foreach(Character target in HitListChampions)
         {
             if(character.characterData.characterModel.characterType == CharacterType.Jahan)
@@ -140,10 +146,29 @@ public class AnimationMovementManager : MonoBehaviour
     /// <param name="target"></param>
     public void MinionTargetDamage(MinionAIScript target) 
     {
-        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        DamageDetails damageDetails    = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        damageDetails.damageById = characterId;
+        damageDetails.damagedItem = DamagedItem.Minion;
+        damageDetails.teamType = GameManager.instance.TeamPlayers.Find(x=>x.Id== characterId).teamType== TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-        Debug.LogError("Scale Damage " + damage);
-        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+        Debug.LogError("Scale Damage " + damageDetails.damangeValue);
+        if(target)
+        target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions
+    }
+    /// <summary>
+    /// Damage Tower target
+    /// </summary>
+    /// <param name="target"></param>
+    public void TowerTargetDamage(TowerAIScript target)
+    {
+        DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        damageDetails.damageById = characterId;
+        damageDetails.damagedItem = DamagedItem.Tower;
+        damageDetails.teamType= GameManager.instance.TeamPlayers.Find(x => x.Id == characterId).teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
+        //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
+        Debug.LogError("Scale Damage " + damageDetails.damangeValue);
+        if(target)
+        target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions
     }
     // <summary>
     /// Damage Chamipon target
@@ -151,10 +176,13 @@ public class AnimationMovementManager : MonoBehaviour
     /// <param name="target"></param>
     public void MinionChampionDamage(Character target)
     {
-        float damage = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(playerScript.currentAttackType);
+        damageDetails.damageById = characterId;
+        damageDetails.damagedItem = DamagedItem.Character;
+        damageDetails.teamType = target.teamType;     //Set opposite type
         //target.DealDamage((float)GameManager.instance.GetCurrentAD());  //damage equal to character's current AD
-        Debug.LogError("*" + target.name + " Target : Scale Damage " + damage);
-        target.DealDamage(damage);  //damage equal to character's current attack type and level scale conditions
+        Debug.LogError("*" + target.name + " Target : Scale Damage " + damageDetails.damangeValue);
+        target.DealDamage(damageDetails);  //damage equal to character's current attack type and level scale conditions
     }
     /// <summary>
     /// Set current attack type and bool variable to indicate that player is attacking -This method is called from animation clips 

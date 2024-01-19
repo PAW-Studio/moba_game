@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MinionAIScript : MonoBehaviour
 {
+    public int Id = -1;                       
     public Vector3 destination;
 
     public Material blueMinionMat;
@@ -35,10 +37,14 @@ public class MinionAIScript : MonoBehaviour
     bool DecreasedSpeedEffect;
     float TimePassed = 0;
     float SlowEffectTime;
+    
+    public float Gold,Xp;
+    [SerializeField]
+    SpriteRenderer minimapSprite;
+   
     // Start is called before the first frame update
     void Start()
-    {
-      
+    { 
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
         GameObject Healthbar = Instantiate(GameManager.instance.MinioinHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.transform.localScale = Vector3.one;
@@ -68,14 +74,18 @@ public class MinionAIScript : MonoBehaviour
         {
             renderer.material = blueMinionMat;
             this.gameObject.layer = 9;
+            teamType = TeamType.Blue;
+            minimapSprite.color = Color.blue;
         }
-
         else
         {
             renderer.material = redMinionMat;
             this.gameObject.layer = 10;
+            teamType = TeamType.Red;
+            minimapSprite.color = Color.red;
         }
 
+    
         agent.SetDestination(destination);
     }
     /// <summary>
@@ -112,15 +122,15 @@ public class MinionAIScript : MonoBehaviour
         {
             if(targetMinion.layer == 11 || targetMinion.layer == 12)
             {
-                if(targetMinion.tag == "BlueTower")
-                {
-                    MoveToBlueTower();
-                }
+                    if(targetMinion.tag == "BlueTower")
+                    {
+                        MoveToBlueTower();
+                    }
 
-                else if(targetMinion.tag == "RedTower")
-                {
-                    MoveToRedTower();
-                }
+                    else if(targetMinion.tag == "RedTower")
+                    {
+                        MoveToRedTower();
+                    }
             }
 
             else
@@ -134,7 +144,7 @@ public class MinionAIScript : MonoBehaviour
             {
                 attackTimer = attackReset;
 
-               // InitiateAttack();
+                InitiateAttack();
             }
         }
 
@@ -142,10 +152,22 @@ public class MinionAIScript : MonoBehaviour
         {
             // No target; resumes pathing towards destination
             hasTarget = false;
-            agent.SetDestination(destination);
+            if(teamType== TeamType.Blue)            
+            {
+                
+                if(Vector3.Distance(transform.position,destination)<2 )
+                {
+                    Debug.LogError(agent.remainingDistance);
+                    destination = FindAnyObjectByType<GameManager>().redSpawnLocation;
+                    Debug.LogError("Destination change");
+                }
+                agent.SetDestination(destination);
+            }
+           
+           
         }
 
-
+       
         //if(currentHealth <= 0)
         //{
         //    Destroy(minionHealthBar.gameObject);
@@ -162,60 +184,103 @@ public class MinionAIScript : MonoBehaviour
         }
     }
     void MoveToMinion()
-    {
-        
+    {   
         // Calculating distance between this minion and target
         if(Vector3.Distance(transform.position,targetMinion.transform.position) > attackRange)
         {
-            agent.SetDestination(targetMinion.transform.position);
+            agent.SetDestination(targetMinion.transform.position-offset);
             // Minion stops at attackRange distance from target 
             agent.stoppingDistance = attackRange;
+            
         }
         else
         {
             // If target minion is less than attackRange distance away, moves towards it
-            agent.SetDestination(targetMinion.transform.position);
-            agent.velocity = Vector3.zero;
+            agent.SetDestination(targetMinion.transform.position-offset);
+            agent.velocity = Vector3.zero;   
         }
     }
 
     void MoveToBlueTower()
     {
         agent.SetDestination(targetMinion.transform.position + offset);
+        RemoveDestroyedTowerFromTarget();
+    }
+
+    private void RemoveDestroyedTowerFromTarget()
+    {
+        float distance = Vector3.Distance(transform.position,targetMinion.transform.position);
+        if(distance< 20)
+        {
+            if(!targetMinion.GetComponent<TowerAIScript>().enabled)
+            {
+                targetMinion = null;
+                hasTarget = false;
+                agent.SetDestination(destination);
+            }
+        }
     }
 
     void MoveToRedTower()
     {
         agent.SetDestination(targetMinion.transform.position - offset);
+        RemoveDestroyedTowerFromTarget();
     }
 
     void InitiateAttack()
     {
+        if(!targetMinion) return;
         // Attacks opposite tower
         if(targetMinion.layer == 11 || targetMinion.layer == 12)
         {
             targetMinion.GetComponent<TowerAIScript>().currentHealth -= damage;
-
+            DamageDetails damageDetails = new DamageDetails();
+            damageDetails.damangeValue = damage;
+            damageDetails.damagetype = DamageTypeDetails.AD;
+            damageDetails.damageById = Id;
+            damageDetails.damagedItem = DamagedItem.Tower;
+            damageDetails.teamType = teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
             // Reduces tower health from current health bar
-            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,targetMinion.gameObject);
+            targetMinion.GetComponent<TowerAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<TowerAIScript>().currentHealth,true,null,damageDetails);
         }
-
         else
         {
-            // Attacks opposite minion and reduces minion health from current health bar
-            targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
-            targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject);
+            if(targetMinion.GetComponent<Character>())
+            {
+                DamageDetails damageDetails = new DamageDetails();
+                damageDetails.damangeValue = 1;
+                damageDetails.damagetype = DamageTypeDetails.AD;
+                damageDetails.damageById = Id;
+                damageDetails.damagedItem = DamagedItem.Character;
+                damageDetails.teamType = teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
+                //targetMinion.GetComponent<Character>().DealDamage(1);
+            }
+            else 
+            {
+                DamageDetails damageDetails = new DamageDetails();
+                damageDetails.damangeValue = damage;
+                damageDetails.damagetype = DamageTypeDetails.AD;
+                damageDetails.damageById = Id;
+                damageDetails.damagedItem = DamagedItem.Minion;
+                damageDetails.teamType = teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
+                // Attacks opposite minion and reduces minion health from current health bar
+                targetMinion.GetComponent<MinionAIScript>().currentHealth -= damage;
+                targetMinion.GetComponent<MinionAIScript>().minionHealthBar.SetHealth(targetMinion.GetComponent<MinionAIScript>().currentHealth,true,targetMinion.gameObject,damageDetails);
+            }
         }
     }
     /// <summary>
     /// Handle damage and update healthbar
     /// </summary>
     /// <param name="damage">damage value</param>
-    public void DealDamage(float damage) 
+    public void DealDamage( DamageDetails damageDetails=null)
     {
+        if(damageDetails.damangeValue <= 0) return;
         Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
-        currentHealth -= damage;
-        minionHealthBar.SetHealth(currentHealth,true,gameObject);
+        currentHealth -= damageDetails.damangeValue;
+        damageDetails.damagePosition = transform.position;
+        minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails);
+        GameManager.instance.UpdateTargetDetailsUI();
     }
     /// <summary>
     /// Set slower movement speed for the given time
@@ -230,4 +295,15 @@ public class MinionAIScript : MonoBehaviour
         SlowEffectTime = slowerEffectTime;
         agent.speed = DecreasedSpeed;
     }
+    /// <summary>
+    /// Show/Hide indicator objects
+    /// </summary>
+    /// <param name="show">Show indicator</param>
+    public void ShowIndicator(bool show) 
+    {
+        TargetIndicator.SetActive(show);
+        minionHealthBar.ShowOutline(show);
+       
+    }
+    public void NewTarget() { }
 }

@@ -43,6 +43,11 @@ public class MinionTargetScript : MonoBehaviour
                         closestDistance = distance;
                         closestTarget = targetList[i];
                     }
+                    TowerAIScript tower = targetList[i].GetComponent<TowerAIScript>();
+                    if(tower && tower.enabled==false)
+                    {
+                        targetList.RemoveAt(i);
+                    }
                 }
 
                 // Removing null references in target list to avoid nullexception error
@@ -51,9 +56,15 @@ public class MinionTargetScript : MonoBehaviour
                     targetList.RemoveAt(i);
                 }
             }
-
             minionScript.targetMinion = closestTarget;
             minionScript.hasTarget = true;
+        }
+        else if(targetList.Count>0 && minionScript.hasTarget) 
+        {
+            if(!minionScript.targetMinion.GetComponent<Character>()) 
+            {
+                minionScript.ShowIndicator(false);
+            }
         }
     }
 
@@ -71,7 +82,6 @@ public class MinionTargetScript : MonoBehaviour
                 }
             }
         }
-
         else
         {
             // Adding blue minions and towers to target list

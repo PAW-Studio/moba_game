@@ -19,26 +19,50 @@ public class Projectile : MonoBehaviour
     {
         if(shoot)
         {
-
            Collider[] hits = Physics.OverlapSphere(projectileColliderOjbect.transform.position,collisionRadius);
             bool hit = false;
             foreach(Collider item in hits)
             {
                 if(item.GetComponent<MinionAIScript>()) 
                 {
-                  float damageValue=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                  DamageDetails damageDetails=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                  damageDetails.damageById = character.Id; //Owner of projectile
+                    damageDetails.damagedItem = DamagedItem.Minion;
+                    damageDetails.teamType = character.teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
                     //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
-                    item.GetComponent<MinionAIScript>().DealDamage(damageValue); // Get current charactes AD
-                    Debug.LogError(damageValue);
+                    item.GetComponent<MinionAIScript>().DealDamage(damageDetails); // Get current charactes AD
+                    Debug.LogError(damageDetails.damangeValue);
                     hit = true;
                     break;
                 }
-                if(item.GetComponent<Character>() && character.gameObject!= item.gameObject) // Avoid self hit
+                if(item.GetComponent<TowerAIScript>())
                 {
-                    float damageValue = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                    if(attackType == AttackType.auto)
+                    {
+                        if(character.teamType != item.GetComponent<TowerAIScript>().teamType)
+                        {
+                            DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                            damageDetails.damageById = character.Id;
+                            damageDetails.damagedItem = DamagedItem.Tower;
+                            damageDetails.teamType = character.teamType== TeamType.Red?TeamType.Blue: TeamType.Red;     //Set opposite type
+                            //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
+                            item.GetComponent<TowerAIScript>().DealDamage(damageDetails); // Get current charactes AD
+                            Debug.LogError(damageDetails.damangeValue);
+                            hit = true;
+                        }
+                    }
+                        break;
+                    
+                }
+                else if(item.GetComponent<Character>() && character.gameObject!= item.gameObject) // Avoid self hit
+                {
+                    DamageDetails damageDetails = GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
+                    damageDetails.damageById = character.Id;
+                    damageDetails.damagedItem = DamagedItem.Character;
+                    damageDetails.teamType = character.teamType == TeamType.Red ? TeamType.Blue : TeamType.Red;     //Set opposite type
                     //  item.GetComponent<MinionAIScript>().DealDamage((float)GameManager.instance.GetCurrentAD()); // Get current charactes AD
-                    item.GetComponent<Character>().DealDamage(damageValue); // Get current charactes AD
-                    Debug.LogError(damageValue);
+                    item.GetComponent<Character>().DealDamage(damageDetails); // Get current charactes AD
+                    Debug.LogError(damageDetails.damangeValue);
                     hit = true;
                     break;
                 }
@@ -58,7 +82,6 @@ public class Projectile : MonoBehaviour
     {
         shoot = true;
         Debug.DrawRay(transform.position,transform.forward * 130,Color.blue,10f);
-
     }
 }
 
