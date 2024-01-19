@@ -263,6 +263,7 @@ MonoBehaviour:
   targetTower: {fileID: 0}
   targetChampion: {fileID: 0}
   TargetIndicator: {fileID: 5005013703394687444}
+  Xp: 0
 --- !u!1 &1053586027030269514
 GameObject:
   m_ObjectHideFlags: 0

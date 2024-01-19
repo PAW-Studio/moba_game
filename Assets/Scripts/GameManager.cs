@@ -535,10 +535,9 @@ public class GameManager : MonoBehaviour
     {
         float distance = ((towerDetails.Range / 10) / 2);
         List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < distance );
-        int goldForEachPlayer = towerDetails.LevelGold / list.Count;
+        int goldForEachPlayer = list.Count>0? towerDetails.LevelGold / list.Count: towerDetails.LevelGold;
         foreach(Character item in list)
         {
-            
             item.UpdateGold(goldForEachPlayer);
             UpdateGold(goldForEachPlayer);
         }
@@ -549,7 +548,7 @@ public class GameManager : MonoBehaviour
     public void TriggerGoldRewardForPlayersForTowerDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails)
     {
         List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType);
-        int goldForEachPlayer = towerDetails.FinalGoldWithiInRange / list.Count;
+        int goldForEachPlayer = list.Count>0? towerDetails.FinalGoldWithiInRange / list.Count: towerDetails.FinalGoldWithiInRange;
         foreach(Character item in list)
         {
             item.UpdateGold(goldForEachPlayer);

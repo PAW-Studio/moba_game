@@ -963,7 +963,7 @@ public class PlayerScript : MonoBehaviour
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
-
+                
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
