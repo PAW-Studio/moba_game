@@ -1614,24 +1614,61 @@ MonoBehaviour:
   xpData:
   - CurrentLevel: 1
     NextLevel: 2
-    XpNeeded: 552
+    XpNeeded: 280
   - CurrentLevel: 2
     NextLevel: 3
-    XpNeeded: 923
+    XpNeeded: 380
   - CurrentLevel: 3
     NextLevel: 4
-    XpNeeded: 1475
+    XpNeeded: 480
   - CurrentLevel: 4
     NextLevel: 5
-    XpNeeded: 1846
+    XpNeeded: 580
   - CurrentLevel: 5
     NextLevel: 6
-    XpNeeded: 3045
+    XpNeeded: 680
+  - CurrentLevel: 6
+    NextLevel: 7
+    XpNeeded: 780
+  - CurrentLevel: 7
+    NextLevel: 8
+    XpNeeded: 880
+  - CurrentLevel: 8
+    NextLevel: 9
+    XpNeeded: 980
+  - CurrentLevel: 9
+    NextLevel: 10
+    XpNeeded: 1080
+  - CurrentLevel: 10
+    NextLevel: 11
+    XpNeeded: 1180
+  - CurrentLevel: 11
+    NextLevel: 12
+    XpNeeded: 1280
+  - CurrentLevel: 12
+    NextLevel: 13
+    XpNeeded: 1380
+  - CurrentLevel: 13
+    NextLevel: 14
+    XpNeeded: 1480
+  - CurrentLevel: 14
+    NextLevel: 15
+    XpNeeded: 1580
+  - CurrentLevel: 15
+    NextLevel: 16
+    XpNeeded: 1680
+  - CurrentLevel: 16
+    NextLevel: 17
+    XpNeeded: 1780
+  - CurrentLevel: 17
+    NextLevel: 18
+    XpNeeded: 1880
   CurrnetLevelXpData:
     CurrentLevel: 0
     NextLevel: 0
     XpNeeded: 0
   XpUI: {fileID: 789040162}
+  CurrnetXpValue: 0
   tower: {fileID: 358397099}
 --- !u!1 &199858039
 GameObject:

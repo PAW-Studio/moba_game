@@ -560,33 +560,57 @@ public class GameManager : MonoBehaviour
         //    UpdateGold(towerDetails.FinalGold_OutOfRange);
         //}
     }
+    float xpReminder = 0;
     public void UpdateXpData(float xp) 
     {
         CurrnetXpValue += xp;
-       XpText.text =  CurrnetXpValue + "/" + CurrnetLevelXpData.XpNeeded;
+     
         float amount= (xp * 100) / CurrnetLevelXpData.XpNeeded;
         amount = amount/ 100;  
         XpFill.fillAmount += amount; //Xp added
+        if(XpFill.fillAmount >= 1) 
+        {
+            XpFill.fillAmount = 1;
+            if(CurrnetXpValue > CurrnetLevelXpData.XpNeeded) 
+            {
+                xpReminder = CurrnetXpValue - CurrnetLevelXpData.XpNeeded;
+                CurrnetXpValue -= xpReminder;
+            }
+        }
+        XpText.text = CurrnetXpValue+ "/" + CurrnetLevelXpData.XpNeeded;
+
         if(XpFill.fillAmount == 1)
         {
             //Xp level increase
             LeanTween.scale(XpUI,Vector3.one * 1.1f,0.25f);
             LeanTween.scale(XpUI,Vector3.one * 1f,0.25f).setDelay(0.25f);
+
             Invoke(nameof(UpdateXpUIForNextLevel),2f);
         }
 
     }
-
+   
+    bool levelUpdate = false;
     private void UpdateXpUIForNextLevel()
     {
+        if(levelUpdate) return;
+
+            levelUpdate = true;
+        Debug.LogError(xpReminder);
         XpData _CurrnetLevel, NextLevel;
         _CurrnetLevel = CurrnetLevelXpData;
         NextLevel = xpData.Find(x => x.CurrentLevel == _CurrnetLevel.NextLevel);
         CurrnetLevelXpData = NextLevel;
         CurrnetLevel.text = CurrnetLevelXpData.CurrentLevel.ToString();
         XpFill.fillAmount = 0;
-        CurrnetXpValue = 0;
-        XpText.text = 0 + "/" + CurrnetLevelXpData.XpNeeded;
+        CurrnetXpValue = 0+xpReminder;
+        XpText.text = CurrnetXpValue + "/" + CurrnetLevelXpData.XpNeeded;
+        UpdateXpData(xpReminder);
+        Invoke("ResetLevelUpdate",0.5f);
+    }
+    public void ResetLevelUpdate() 
+    {
+        levelUpdate = false;
     }
 }
 [System.Serializable]
