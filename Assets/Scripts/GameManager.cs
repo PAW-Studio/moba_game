@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -76,14 +77,16 @@ public class GameManager : MonoBehaviour
     public XpData CurrnetLevelXpData = new XpData();
     public GameObject XpUI;
     public float CurrnetXpValue;
-
+    
     private void Awake()
     {
+        PhotonNetwork.AutomaticallySyncScene=true;
         if(instance == null) 
         {
             instance = this;
         }
     }
+   
     /// <summary>
     /// Spawn character and set grahics quality level
     /// </summary>
@@ -102,6 +105,14 @@ public class GameManager : MonoBehaviour
         CurrnetLevelXpData = xpData[0];
         XpText.text = "0" + "/" + CurrnetLevelXpData.XpNeeded;
     }
+    //public void SpawnCharacter() 
+    //{
+    //    GameObject playerCharacter = PhotonNetwork.Instantiate("CharacterPrefab",Vector3.zero,Quaternion.identity);
+    //    playerCharacter.gameObject.SetActive(false);
+    //    playerCharacter.GetComponent<Rigidbody>().useGravity = false;
+    //    currentCharacter = playerCharacter.GetComponent<Character>();
+    //    playerCharacter.gameObject.SetActive(true);
+    //}
     /// <summary>
     /// Change graphics quality level
     /// </summary>
@@ -119,7 +130,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
       //  SpawnTime();
-    
     }
     
 
@@ -280,7 +290,9 @@ public class GameManager : MonoBehaviour
         {
             spawnPosition = CharacterLastPosition;
         }
-        GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+        //GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+
+        GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); cameraFollow.SetPlayerAndOffset(character.transform);
 
         Character characterScirpt = character.GetComponent<Character>();
         for(int i = 0 ; i < AttackButtons.Count ; i++)
