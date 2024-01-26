@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 739571081852479501}
   - component: {fileID: 6675274934325490295}
   - component: {fileID: 5702932458225867882}
+  - component: {fileID: 4095482595738637928}
   m_Layer: 0
   m_Name: Moorg Idle
   m_TagString: Untagged
@@ -252,6 +253,57 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &4095482595738637928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74497786573730487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: run
+  - Type: 4
+    SynchronizeType: 0
+    Name: die
+  - Type: 4
+    SynchronizeType: 0
+    Name: e
+  - Type: 4
+    SynchronizeType: 0
+    Name: left_punch
+  - Type: 4
+    SynchronizeType: 0
+    Name: right_punch
+  - Type: 4
+    SynchronizeType: 0
+    Name: q
+  - Type: 4
+    SynchronizeType: 0
+    Name: turn
+  - Type: 4
+    SynchronizeType: 0
+    Name: ult
+  - Type: 4
+    SynchronizeType: 0
+    Name: w
+  - Type: 4
+    SynchronizeType: 0
+    Name: r
+  - Type: 4
+    SynchronizeType: 0
+    Name: auto
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &82420097152490620
 GameObject:
   m_ObjectHideFlags: 0
@@ -4776,6 +4828,7 @@ GameObject:
   - component: {fileID: 340341147933276696}
   - component: {fileID: 5933790116144160866}
   - component: {fileID: 3468109768641949289}
+  - component: {fileID: 2645869688904406367}
   m_Layer: 0
   m_Name: Ranzeb Idle
   m_TagString: Untagged
@@ -4856,6 +4909,22 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &2645869688904406367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149247847610359970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &1155787937436533897
 GameObject:
   m_ObjectHideFlags: 0
@@ -10374,6 +10443,7 @@ GameObject:
   - component: {fileID: 3384753435099200811}
   - component: {fileID: 8653987210458244945}
   - component: {fileID: 699025700790680828}
+  - component: {fileID: 3499400516857896340}
   m_Layer: 0
   m_Name: Otrill Idle
   m_TagString: Untagged
@@ -10444,6 +10514,22 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 6786723313643121155}
   arrowProjectile: {fileID: 0}
+--- !u!114 &3499400516857896340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716479800795375505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &2725248076695858348
 GameObject:
   m_ObjectHideFlags: 0
@@ -10552,6 +10638,7 @@ GameObject:
   - component: {fileID: 3357274574735740499}
   - component: {fileID: 8680481181351728169}
   - component: {fileID: 8017635261176742125}
+  - component: {fileID: 5319426187286672807}
   m_Layer: 0
   m_Name: Sura Idle
   m_TagString: Untagged
@@ -10621,6 +10708,22 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &5319426187286672807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2728266428882048233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &2733900681806379554
 GameObject:
   m_ObjectHideFlags: 0
@@ -11215,6 +11318,7 @@ GameObject:
   - component: {fileID: 2530737001668780584}
   - component: {fileID: 8502469754141440082}
   - component: {fileID: 5859420276799175976}
+  - component: {fileID: 1184447105367939822}
   m_Layer: 0
   m_Name: Hakka Idle
   m_TagString: Untagged
@@ -11306,6 +11410,51 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &1184447105367939822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2906276729735084178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: run
+  - Type: 4
+    SynchronizeType: 2
+    Name: die
+  - Type: 4
+    SynchronizeType: 2
+    Name: e
+  - Type: 4
+    SynchronizeType: 2
+    Name: left
+  - Type: 4
+    SynchronizeType: 2
+    Name: right
+  - Type: 4
+    SynchronizeType: 2
+    Name: q
+  - Type: 4
+    SynchronizeType: 2
+    Name: turn
+  - Type: 4
+    SynchronizeType: 2
+    Name: r
+  - Type: 4
+    SynchronizeType: 2
+    Name: w
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &2911123918464787175
 GameObject:
   m_ObjectHideFlags: 0
@@ -13589,6 +13738,7 @@ GameObject:
   - component: {fileID: 4169781428513634274}
   - component: {fileID: 8015887033122598296}
   - component: {fileID: 2346594797588871355}
+  - component: {fileID: 7269007468606714332}
   m_Layer: 0
   m_Name: Tapani Idle
   m_TagString: Untagged
@@ -13671,6 +13821,60 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &7269007468606714332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3645059929303362904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: run
+  - Type: 4
+    SynchronizeType: 2
+    Name: die
+  - Type: 4
+    SynchronizeType: 2
+    Name: e
+  - Type: 4
+    SynchronizeType: 2
+    Name: left
+  - Type: 4
+    SynchronizeType: 2
+    Name: right
+  - Type: 4
+    SynchronizeType: 2
+    Name: q
+  - Type: 4
+    SynchronizeType: 2
+    Name: turn
+  - Type: 4
+    SynchronizeType: 2
+    Name: r
+  - Type: 4
+    SynchronizeType: 2
+    Name: w
+  - Type: 4
+    SynchronizeType: 2
+    Name: rLeft
+  - Type: 4
+    SynchronizeType: 2
+    Name: rRight
+  - Type: 4
+    SynchronizeType: 2
+    Name: auto
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &3652007328141547284
 GameObject:
   m_ObjectHideFlags: 0
@@ -14910,6 +15114,7 @@ GameObject:
   - component: {fileID: 3898420560318157083}
   - component: {fileID: 923597941088660689}
   - component: {fileID: 2858840882094772703}
+  - component: {fileID: 2389154262590790971}
   m_Layer: 7
   m_Name: CharacterPrefab
   m_TagString: Untagged
@@ -15131,10 +15336,37 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 2389154262590790971}
+  - {fileID: 1184447105367939822}
+  - {fileID: 4095482595738637928}
+  - {fileID: 5091695432064975189}
+  - {fileID: 3816183481223165640}
+  - {fileID: 3499400516857896340}
+  - {fileID: 2645869688904406367}
+  - {fileID: 237895593583529864}
+  - {fileID: 5319426187286672807}
+  - {fileID: 7269007468606714332}
+  - {fileID: 8777802991896644352}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2389154262590790971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3898420560318157076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &3913216205743655020
 GameObject:
   m_ObjectHideFlags: 0
@@ -18751,6 +18983,7 @@ GameObject:
   - component: {fileID: 5651504918971311309}
   - component: {fileID: 1769352886343810743}
   - component: {fileID: 4017865625986939380}
+  - component: {fileID: 5091695432064975189}
   m_Layer: 0
   m_Name: Dira Idle
   m_TagString: Untagged
@@ -18850,6 +19083,22 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &5091695432064975189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4982667200890945143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &4984152282980320818
 GameObject:
   m_ObjectHideFlags: 0
@@ -20001,6 +20250,7 @@ GameObject:
   - component: {fileID: 4701823558290332897}
   - component: {fileID: 1702386265355749019}
   - component: {fileID: 4082138826596473275}
+  - component: {fileID: 3816183481223165640}
   m_Layer: 0
   m_Name: Jahan Idle
   m_TagString: Untagged
@@ -20075,6 +20325,54 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &3816183481223165640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5335616783376516699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: run
+  - Type: 4
+    SynchronizeType: 0
+    Name: die
+  - Type: 4
+    SynchronizeType: 0
+    Name: e
+  - Type: 4
+    SynchronizeType: 0
+    Name: left_punch
+  - Type: 4
+    SynchronizeType: 0
+    Name: right_punch
+  - Type: 4
+    SynchronizeType: 0
+    Name: q
+  - Type: 4
+    SynchronizeType: 0
+    Name: turn
+  - Type: 4
+    SynchronizeType: 0
+    Name: r
+  - Type: 4
+    SynchronizeType: 0
+    Name: w
+  - Type: 4
+    SynchronizeType: 0
+    Name: auto
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &5335803347355200780
 GameObject:
   m_ObjectHideFlags: 0
@@ -21821,6 +22119,7 @@ GameObject:
   - component: {fileID: 6517135200668491228}
   - component: {fileID: 905697668158179238}
   - component: {fileID: 5540255169284344348}
+  - component: {fileID: 8777802991896644352}
   m_Layer: 0
   m_Name: Udara Idle
   m_TagString: Untagged
@@ -21890,6 +22189,22 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 0}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &8777802991896644352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5853082213347379046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &5856254460741014390
 GameObject:
   m_ObjectHideFlags: 0
@@ -30604,6 +30919,7 @@ GameObject:
   - component: {fileID: 8719675781338183132}
   - component: {fileID: 3450511820501086118}
   - component: {fileID: 7238086069350088546}
+  - component: {fileID: 237895593583529864}
   m_Layer: 0
   m_Name: Serina Idle
   m_TagString: Untagged
@@ -30679,6 +30995,60 @@ MonoBehaviour:
   spawnTransforSerinaAuto: {fileID: 4972419957791316421}
   spawnTrasformLeft: {fileID: 0}
   arrowProjectile: {fileID: 0}
+--- !u!114 &237895593583529864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235203828548202342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: run
+  - Type: 4
+    SynchronizeType: 2
+    Name: die
+  - Type: 4
+    SynchronizeType: 2
+    Name: e
+  - Type: 4
+    SynchronizeType: 2
+    Name: left
+  - Type: 4
+    SynchronizeType: 2
+    Name: right
+  - Type: 4
+    SynchronizeType: 2
+    Name: q
+  - Type: 4
+    SynchronizeType: 2
+    Name: turn
+  - Type: 4
+    SynchronizeType: 2
+    Name: r
+  - Type: 4
+    SynchronizeType: 2
+    Name: w
+  - Type: 4
+    SynchronizeType: 2
+    Name: rLeft
+  - Type: 4
+    SynchronizeType: 2
+    Name: rRight
+  - Type: 4
+    SynchronizeType: 2
+    Name: auto
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &8245110627891869293
 GameObject:
   m_ObjectHideFlags: 0

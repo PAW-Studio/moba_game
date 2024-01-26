@@ -61,8 +61,19 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {    
         base.OnPlayerEnteredRoom(newPlayer);
-        GameObject playerCharacter= PhotonNetwork.Instantiate("CharacterPrefab",Vector3.zero,Quaternion.identity);
+       // GameObject playerCharacter= PhotonNetwork.Instantiate("CharacterPrefab",Vector3.zero,Quaternion.identity);
         Debug.LogError("Player " + newPlayer.NickName + "Entered room");
+        if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            //Load scene
+            foreach(Player item in PhotonNetwork.PlayerList)
+            {
+                if(item.IsMasterClient)
+                {
+                    PhotonNetwork.LoadLevel(1);
+                }
+            }
+        }
     }
     public override void OnJoinedRoom()
     {

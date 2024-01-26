@@ -84,7 +84,7 @@ public class Character : MonoBehaviour
 
 
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
-        GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
+         GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.name = "Champion HealthBar";
         Healthbar.transform.localScale = Vector3.one;
         championHealthBar = Healthbar.GetComponent<MinionHealthBar>();

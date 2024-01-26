@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject meleeMinion;
     public GameObject casterMinion;
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //spawn character
-        SpawnCharacter();
+       // SpawnCharacter();
         qLevel = 2;                                         //Default graphics quality level-2 (Medium) : (0->VeryLow,1->Low,2->Medium,3->High,4->VeryHigh,5->Ultra
         QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
 
@@ -104,6 +104,8 @@ public class GameManager : MonoBehaviour
         CurrnetLevel.text = "1".ToString();
         CurrnetLevelXpData = xpData[0];
         XpText.text = "0" + "/" + CurrnetLevelXpData.XpNeeded;
+        photonView.RPC("PlayersReady",RpcTarget.MasterClient);
+
     }
     //public void SpawnCharacter() 
     //{
@@ -189,7 +191,6 @@ public class GameManager : MonoBehaviour
                 meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
             }
         }
-       
     }
 
     void CasterMinionSpawn()
@@ -280,28 +281,46 @@ public class GameManager : MonoBehaviour
           //  waveCount = 0;
        // }
     }
+    int readycount;
+    [PunRPC]
+    public void PlayersReady() 
+    {
+        if(PhotonNetwork.IsMasterClient) 
+        {
+            readycount += 1;
+            if(readycount== PhotonNetwork.CurrentRoom.MaxPlayers) 
+            {
+                photonView.RPC("SpawnCharacter",RpcTarget.All);
+            }
+        }
+    }
+    [PunRPC]
     /// <summary>
     /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
     /// </summary>
     public void SpawnCharacter()
     {
-        Vector3 spawnPosition = characterSpawnTranform.position;
-        if(CharacterLastPosition != Vector3.zero) 
-        {
-            spawnPosition = CharacterLastPosition;
-        }
-        //GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+       
+            Vector3 spawnPosition =  characterSpawnTranform.position;
+            if(CharacterLastPosition != Vector3.zero)
+            {
+                spawnPosition = CharacterLastPosition;
+            }
+            //GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
 
-        GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); cameraFollow.SetPlayerAndOffset(character.transform);
-
-        Character characterScirpt = character.GetComponent<Character>();
-        for(int i = 0 ; i < AttackButtons.Count ; i++)
-        {
-            int val = characterScirpt.AttackValues[i];
-            AttackType type = AttackTypes[i];
-            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttackWrapper(val,type));
-        }
-        currentCharacter = characterScirpt;
+            GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); cameraFollow.SetPlayerAndOffset(character.transform);
+            character.gameObject.SetActive(false);
+            Character characterScirpt = character.GetComponent<Character>();
+            for(int i = 0 ; i < AttackButtons.Count ; i++)
+            {
+                int val = characterScirpt.AttackValues[i];
+                AttackType type = AttackTypes[i];
+                AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttackWrapper(val,type));
+            }
+            currentCharacter = characterScirpt;
+            currentCharacter.gameObject.SetActive(true);
+        
+       
     }
     //Trigger attack active coroutine 
     public void TriggerAttackActiveCoroutine(AttackType attackType,float duration) 
@@ -339,9 +358,10 @@ public class GameManager : MonoBehaviour
 
     //Temp to change character
     public void ChangeCharacter()
-    {
+    {     
         currentCharacter.ChangeCharacter();
     }
+   
     /// <summary>
     /// Trigger die animation for current player character
     /// </summary>
@@ -411,7 +431,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Show_QWER_LevelUpdatePanel()
     {
-        Debug.LogError(currentCharacter.characterData.characterModel.characterType);
+       // Debug.LogError(currentCharacter.characterData.characterModel.characterType);
         foreach(AttackTypeReference item in attackTypeReferences)
         {
             //Allow button to be interactable only if attack level is less then max(5) attack level

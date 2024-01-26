@@ -4,14 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-
+using Photon.Pun;
 
 //MS-> Movement speed
 //AS-> Attack speed  for auto attacks
 //AD-> Attack damange
 //AP-> Ability power
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : MonoBehaviourPunCallbacks
 {
     NavMeshAgent agent;
 
@@ -101,99 +101,51 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.instance.Minion_ChampToggle.isOn)
+        if(photonView.IsMine)
         {
-            Collider[] hits = Physics.OverlapSphere(transform.position,10);
-
-            foreach(Collider item in hits)
+            if(GameManager.instance.Minion_ChampToggle.isOn)
             {
-                MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
-                if(minionAIScript && minionAIScript.teamType != character.teamType)
-                {
-                    float objectDistance = Vector3.Distance(transform.position,minionAIScript.transform.position);
-                    if(objectDistance < minionAIScript.attackRange)
-                    {
-                        if(character.minionInRange && character.targetMinion)
-                        {
-                            if(objectDistance < character.distance)
-                            {
-                                if(character.targetMinion != minionAIScript)
-                                {
-                                    character.targetMinion.ShowIndicator(false);
-                                    character.targetMinion = null;
-                                    character.targetMinion = minionAIScript;
-                                    character.distance = objectDistance;
-                                    character.targetMinion.ShowIndicator(true);
-                                    character.minionInRange = true;
-                                    GameManager.instance.ShowTargetDetailsUI(true);//show target UI
-                                }
-                            }
-                        }
-                        else if(character.targetMinion==null && character.targetMinion!=minionAIScript)
-                        {
-                            character.minionInRange = true;
-                            character.targetMinion = minionAIScript;
-                            character.distance = objectDistance;
-                            character.targetMinion.ShowIndicator(true);
-                            GameManager.instance.ShowTargetDetailsUI(true);//show target UI
-                        }
-                    }
-                    else
-                    {
-                        if(character.targetMinion)
-                            character.targetMinion.ShowIndicator(false);
-                        character.minionInRange = false;
-                        character.targetMinion = null;
-                        character.distance = 0;
-                        GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
-                    }
+                Collider[] hits = Physics.OverlapSphere(transform.position,10);
 
-                }
-            }
-        }
-        else if(!GameManager.instance.Minion_ChampToggle.isOn)
-        {
-            Collider[] hits = Physics.OverlapSphere(transform.position,20);
-
-            foreach(Collider item in hits)
-            {
-                if(item != this)
+                foreach(Collider item in hits)
                 {
-                    Character champion = item.GetComponent<Character>();
-                    if(champion && champion.teamType != character.teamType)
+                    MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
+                    if(minionAIScript && minionAIScript.teamType != character.teamType)
                     {
-                        float objectDistance = Vector3.Distance(transform.position,champion.transform.position);
-                        if(objectDistance < champion.currentRange)
+                        float objectDistance = Vector3.Distance(transform.position,minionAIScript.transform.position);
+                        if(objectDistance < minionAIScript.attackRange)
                         {
                             if(character.minionInRange && character.targetMinion)
                             {
                                 if(objectDistance < character.distance)
                                 {
-                                    character.targetMinion.ShowIndicator(false);
-                                    character.targetChampion = null;
-                                    character.targetChampion = champion;
-                                    character.distance = objectDistance;
-                                    character.targetChampion.ShowIndicator(true);
-                                    character.minionInRange = true;
-                                    GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                    if(character.targetMinion != minionAIScript)
+                                    {
+                                        character.targetMinion.ShowIndicator(false);
+                                        character.targetMinion = null;
+                                        character.targetMinion = minionAIScript;
+                                        character.distance = objectDistance;
+                                        character.targetMinion.ShowIndicator(true);
+                                        character.minionInRange = true;
+                                        GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                    }
                                 }
-
                             }
-                            else
+                            else if(character.targetMinion == null && character.targetMinion != minionAIScript)
                             {
                                 character.minionInRange = true;
-                                character.targetChampion = champion;
+                                character.targetMinion = minionAIScript;
                                 character.distance = objectDistance;
-                                character.targetChampion.ShowIndicator(true);
+                                character.targetMinion.ShowIndicator(true);
                                 GameManager.instance.ShowTargetDetailsUI(true);//show target UI
                             }
                         }
                         else
                         {
-                            if(character.targetChampion)
-                                character.targetChampion.ShowIndicator(false);
+                            if(character.targetMinion)
+                                character.targetMinion.ShowIndicator(false);
                             character.minionInRange = false;
-                            character.targetChampion = null;
+                            character.targetMinion = null;
                             character.distance = 0;
                             GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
                         }
@@ -201,127 +153,179 @@ public class PlayerScript : MonoBehaviour
                     }
                 }
             }
-        }
-
-        if(GameManager.instance.Tower_TargetToggle.isOn)
-        {
-            Collider[] hits = Physics.OverlapSphere(transform.position,20);
-
-            foreach(Collider item in hits)
+            else if(!GameManager.instance.Minion_ChampToggle.isOn)
             {
-                TowerAIScript towerAIScript = item.GetComponent<TowerAIScript>();
-                if(towerAIScript && towerAIScript.teamType != character.teamType)
+                Collider[] hits = Physics.OverlapSphere(transform.position,20);
+
+                foreach(Collider item in hits)
                 {
-                    float objectDistance = Vector3.Distance(transform.position,towerAIScript.transform.position);
-                    if(objectDistance < towerAIScript.attackRange)
+                    if(item != this)
                     {
-                        if(character.towerInRange && character.targetTower)
+                        Character champion = item.GetComponent<Character>();
+                        if(champion && champion.teamType != character.teamType)
                         {
-                            if(objectDistance < character.tower_distance)
+                            float objectDistance = Vector3.Distance(transform.position,champion.transform.position);
+                            if(objectDistance < champion.currentRange)
                             {
-                                if(character.targetTower)
-                                character.targetTower.ShowIndicator(false);
-                                character.targetTower = null;
+                                if(character.minionInRange && character.targetMinion)
+                                {
+                                    if(objectDistance < character.distance)
+                                    {
+                                        character.targetMinion.ShowIndicator(false);
+                                        character.targetChampion = null;
+                                        character.targetChampion = champion;
+                                        character.distance = objectDistance;
+                                        character.targetChampion.ShowIndicator(true);
+                                        character.minionInRange = true;
+                                        GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                    }
+
+                                }
+                                else
+                                {
+                                    character.minionInRange = true;
+                                    character.targetChampion = champion;
+                                    character.distance = objectDistance;
+                                    character.targetChampion.ShowIndicator(true);
+                                    GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                }
+                            }
+                            else
+                            {
+                                if(character.targetChampion)
+                                    character.targetChampion.ShowIndicator(false);
+                                character.minionInRange = false;
+                                character.targetChampion = null;
+                                character.distance = 0;
+                                GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            if(GameManager.instance.Tower_TargetToggle.isOn)
+            {
+                Collider[] hits = Physics.OverlapSphere(transform.position,20);
+
+                foreach(Collider item in hits)
+                {
+                    TowerAIScript towerAIScript = item.GetComponent<TowerAIScript>();
+                    if(towerAIScript && towerAIScript.teamType != character.teamType)
+                    {
+                        float objectDistance = Vector3.Distance(transform.position,towerAIScript.transform.position);
+                        if(objectDistance < towerAIScript.attackRange)
+                        {
+                            if(character.towerInRange && character.targetTower)
+                            {
+                                if(objectDistance < character.tower_distance)
+                                {
+                                    if(character.targetTower)
+                                        character.targetTower.ShowIndicator(false);
+                                    character.targetTower = null;
+                                    character.targetTower = towerAIScript;
+                                    character.tower_distance = objectDistance;
+
+                                    if(character.targetTower)
+                                        character.targetTower.ShowIndicator(true);
+                                    character.towerInRange = true;
+                                    GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                }
+
+                            }
+                            else
+                            {
+                                character.towerInRange = true;
                                 character.targetTower = towerAIScript;
                                 character.tower_distance = objectDistance;
-
                                 if(character.targetTower)
-                                character.targetTower.ShowIndicator(true);
-                                character.towerInRange = true;
+                                    character.targetTower.ShowIndicator(true);
                                 GameManager.instance.ShowTargetDetailsUI(true);//show target UI
                             }
 
                         }
                         else
                         {
-                            character.towerInRange = true;
-                            character.targetTower = towerAIScript;
-                            character.tower_distance = objectDistance;
                             if(character.targetTower)
-                                character.targetTower.ShowIndicator(true);
-                            GameManager.instance.ShowTargetDetailsUI(true);//show target UI
+                                character.targetTower.ShowIndicator(false);
+                            character.towerInRange = false;
+                            character.targetTower = null;
+                            character.tower_distance = 0;
+                            GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
                         }
-
                     }
-                    else
+                }
+            }
+            if(Input.GetMouseButtonDown(1))
+            {
+                RaycastHit hit;
+
+                if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit,Mathf.Infinity))
+                {
+                    agent.SetDestination(hit.point);
+
+                    Quaternion rotationToLookAt = Quaternion.LookRotation(hit.point - transform.position);
+                    float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y,rotationToLookAt.eulerAngles.y,
+                    ref rotateVelocity,rotateSpeedMovement * (Time.deltaTime * 5));
+                    transform.eulerAngles = new Vector3(0,rotationY,0);
+                }
+            }
+            //Character movement and rotation
+            if(characterAnimator)
+            {
+                if(UpdatedSpeedEffect) //Decreased speed effect timer 
+                {
+                    TimePassed += Time.deltaTime;
+                    if(TimePassed > SlowEffectTime)
                     {
-                        if(character.targetTower)
-                            character.targetTower.ShowIndicator(false);
-                        character.towerInRange = false;
-                        character.targetTower = null;
-                        character.tower_distance = 0;
-                        GameManager.instance.ShowTargetDetailsUI(false);//hide target UI
+                        SetOriginalSpeed();
                     }
                 }
-            }
-        }
-        if(Input.GetMouseButtonDown(1))
-        {
-            RaycastHit hit;
-
-            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit,Mathf.Infinity))
-            {
-                agent.SetDestination(hit.point);
-
-                Quaternion rotationToLookAt = Quaternion.LookRotation(hit.point - transform.position);
-                float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y,rotationToLookAt.eulerAngles.y,
-                ref rotateVelocity,rotateSpeedMovement * (Time.deltaTime * 5));
-                transform.eulerAngles = new Vector3(0,rotationY,0);
-            }
-        }
-        //Character movement and rotation
-        if(characterAnimator)
-        {
-            if(UpdatedSpeedEffect) //Decreased speed effect timer 
-            {
-                TimePassed += Time.deltaTime;
-                if(TimePassed > SlowEffectTime)
+                if(AS_UpdatedSpeedEffect) //Decreased speed effect timer 
                 {
-                    SetOriginalSpeed();
+                    TimePassed_AS += Time.deltaTime;
+                    if(TimePassed_AS > AS_SlowEffectTime)
+                    {
+                        SetOriginalAS_Speed();
+                    }
+                }
+                if(Shield_Effect) //Decreased shield effect timer 
+                {
+                    TimePassed_Shield += Time.deltaTime;
+                    if(TimePassed_Shield > Shield_EffectTime)
+                    {
+                        ResetOriginalShieldPercentage();
+                    }
+                }
+                if(joyStick.Direction.sqrMagnitude == 0)
+                {
+                    characterAnimator.SetBool("run",false);
+                }
+                else
+                {
+                    RotateCharacter();
                 }
             }
-            if(AS_UpdatedSpeedEffect) //Decreased speed effect timer 
-            {
-                TimePassed_AS += Time.deltaTime;
-                if(TimePassed_AS > AS_SlowEffectTime)
-                {
-                    SetOriginalAS_Speed();
-                }
-            }
-            if(Shield_Effect) //Decreased shield effect timer 
-            {
-                TimePassed_Shield += Time.deltaTime;
-                if(TimePassed_Shield > Shield_EffectTime)
-                {
-                    ResetOriginalShieldPercentage();
-                }
-            }
-            if(joyStick.Direction.sqrMagnitude == 0)
-            {
-                characterAnimator.SetBool("run",false);
-            }
-            else
-            {
-                RotateCharacter();
-            }
-        }
 
-        //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
-        //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
+            //characterController.Move(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
+            //transform.Translate(new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed);
 
 
-        if(moving) //If animation with movement then auto move rigidbody
-        {
-            var vel2 = transform.forward * _speed * AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
-            vel2.y = _rb.velocity.y;
-            _rb.velocity = vel2;
+            if(moving) //If animation with movement then auto move rigidbody
+            {
+                var vel2 = transform.forward * _speed * AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
+                vel2.y = _rb.velocity.y;
+                _rb.velocity = vel2;
+            }
+            else //Move character with respect to josystick
+            {
+                var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
+                vel.y = _rb.velocity.y;
+                _rb.velocity = vel;
+            }
         }
-        else //Move character with respect to josystick
-        {
-            var vel = new Vector3(joyStick.Horizontal,0,joyStick.Vertical) * _speed;
-            vel.y = _rb.velocity.y;
-            _rb.velocity = vel;
-        }
+        
     }
     /// <summary>
     /// Rotate character with respect to joystic direction
