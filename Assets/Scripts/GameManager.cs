@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public TMPro.TextMeshProUGUI ToggleButtonText;                                   //Minion toggle text
     public TMPro.TextMeshProUGUI TowerToggleButtonText;                              //Tower toggle text
     [SerializeField]
-    CameraFollow cameraFollow;                                                       //Reference for camerafollow script
+    public CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
     [SerializeField]
     TargetDetailsUIManager targetDetails;
@@ -300,7 +300,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void SpawnCharacter()
     {
-       
             Vector3 spawnPosition =  characterSpawnTranform.position;
             if(CharacterLastPosition != Vector3.zero)
             {
@@ -308,7 +307,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             //GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
 
-            GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); cameraFollow.SetPlayerAndOffset(character.transform);
+            GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); //cameraFollow.SetPlayerAndOffset(character.transform);
             character.gameObject.SetActive(false);
             Character characterScirpt = character.GetComponent<Character>();
             for(int i = 0 ; i < AttackButtons.Count ; i++)
@@ -319,8 +318,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             currentCharacter = characterScirpt;
             currentCharacter.gameObject.SetActive(true);
-        
-       
     }
     //Trigger attack active coroutine 
     public void TriggerAttackActiveCoroutine(AttackType attackType,float duration) 

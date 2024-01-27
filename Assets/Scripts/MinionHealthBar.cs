@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class MinionHealthBar : MonoBehaviour
+using Photon.Pun;
+public class MinionHealthBar : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
     [SerializeField]
     bool local = false;
@@ -22,6 +23,8 @@ public class MinionHealthBar : MonoBehaviour
     List<Transform> animationPoints = new List<Transform>();
     [SerializeField]
     Color ADDamageColor, APDamageColor;
+   
+
     private void OnEnable()
     {
         camera = Camera.main;
@@ -37,7 +40,6 @@ public class MinionHealthBar : MonoBehaviour
         slider.value = health;
         effectBar.value = health;
         SetHealthText(slider.value);
-
     }
 
     public void SetHealth(float health,bool damage = true,GameObject objectToDestroy = null,DamageDetails damageDetails = null)
@@ -143,7 +145,6 @@ public class MinionHealthBar : MonoBehaviour
                             GameManager.instance.UpdateXp(minionObject.Xp,damageDetails.damageById);
                             GameManager.instance.UpdateGold(minionObject.Gold);
                         }
-
                     }
 
                     if(minionTarget && minionTarget == minionObject)
@@ -256,5 +257,10 @@ public class MinionHealthBar : MonoBehaviour
         {
             HealthText.text = Convert.ToInt32(value).ToString();
         }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        object[] data = info.photonView.InstantiationData;
     }
 }

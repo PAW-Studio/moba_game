@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
     public int Id;                                                             //Id is used to decide uniqe player in team 
     Otrill characterOtrill;
@@ -721,9 +722,20 @@ public class Character : MonoBehaviour
         if(TargetIndicator)
         TargetIndicator.SetActive(show);
         championHealthBar.ShowOutline(show);
-
     }
 
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        //object[] data= info.photonView.InstantiationData;
+      //   transform.position = data[0];
+        Vector3 pos = GameManager.instance.cameraFollow.transform.position;
+      
+       transform.position = PhotonNetwork.IsMasterClient ? GameManager.instance.blueSpawnLocation : GameManager.instance.redSpawnLocation;
+        pos.x = transform.position.x;
+        pos.z = transform.position.z;
+        GameManager.instance.cameraFollow.transform.position = pos;
+        GameManager.instance.cameraFollow.SetPlayerAndOffset(transform);
+    }
 }
 /// <summary>
 /// This class is used to hold the character type and character model object in the script

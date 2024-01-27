@@ -13,10 +13,10 @@ public class CameraFollow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(player) 
-        {
-            SetPlayerAndOffset(player);
-        }
+        //if(player) 
+        //{
+        //    SetPlayerAndOffset(player);
+        //}
     }
     /// <summary>
     /// Set player and offeset transform
@@ -24,7 +24,6 @@ public class CameraFollow : MonoBehaviour
     /// <param name="_player">Target player transform</param>
     public void SetPlayerAndOffset(Transform _player) 
     {
-       
         if(_player) 
         {
             player = _player;
@@ -37,10 +36,8 @@ public class CameraFollow : MonoBehaviour
             else 
             {
                 cameraOffset = StartingOffset;
-            }
-           
+            }  
         }
-        
     }
     // Update is called once per frame
     void Update()
