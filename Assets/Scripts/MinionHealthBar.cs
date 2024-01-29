@@ -26,7 +26,7 @@ public class MinionHealthBar : MonoBehaviourPunCallbacks, IPunInstantiateMagicCa
    
 
     private void OnEnable()
-    {
+    { 
         camera = Camera.main;
     }
     public void SetMaxHealth(float health)
@@ -261,6 +261,17 @@ public class MinionHealthBar : MonoBehaviourPunCallbacks, IPunInstantiateMagicCa
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        object[] data = info.photonView.InstantiationData;
+        if(photonView.IsMine) 
+        {
+            transform.SetParent(GameManager.instance.MinionHealthbarsParent);
+            object[] data = info.photonView.InstantiationData;
+            gameObject.name = "Champion HealthBar";
+            gameObject.transform.localScale = Vector3.one;
+            Invoke(nameof(Show),0.3f);
+        }
+    }
+    public void Show() 
+    {
+        gameObject.SetActive(true);
     }
 }

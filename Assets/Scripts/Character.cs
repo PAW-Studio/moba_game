@@ -70,27 +70,31 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     public Character targetChampion = null;
     public GameObject TargetIndicator;
     public float Xp = 0;
+    [SerializeField]
+    Transform cameraRef;
     //
     void Start()
     {
-
+       // if(!photonView.IsMine) return;
         //Temp 
         Id = Random.Range(1,10);
-        teamType = TeamType.Blue;
+        teamType =PhotonNetwork.IsMasterClient? TeamType.Blue: TeamType.Red;
         gameObject.layer = teamType == TeamType.Blue ? 9 : 10;
        
         characterOtrill = new Otrill();
         characterOtrill.CheckLevel();
         characterOtrill.DisplayStats();
 
-
+        cam = FindObjectOfType<Camera>();
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
-         GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
+        //GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
+
+        GameObject Healthbar = PhotonNetwork.Instantiate(GameManager.instance.ChampionHealthBar.name,cam.WorldToScreenPoint(referenceObject.transform.position),Quaternion.identity);
         Healthbar.name = "Champion HealthBar";
         Healthbar.transform.localScale = Vector3.one;
         championHealthBar = Healthbar.GetComponent<MinionHealthBar>();
         healthBarTransform = championHealthBar.transform;
-        cam = FindObjectOfType<Camera>();
+       
        // Debug.LogError("Object created " + Healthbar.name);
         //
         //Set Default character on start
@@ -726,15 +730,18 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        //object[] data= info.photonView.InstantiationData;
-      //   transform.position = data[0];
-        Vector3 pos = GameManager.instance.cameraFollow.transform.position;
-      
-       transform.position = PhotonNetwork.IsMasterClient ? GameManager.instance.blueSpawnLocation : GameManager.instance.redSpawnLocation;
-        pos.x = transform.position.x;
-        pos.z = transform.position.z;
-        GameManager.instance.cameraFollow.transform.position = pos;
-        GameManager.instance.cameraFollow.SetPlayerAndOffset(transform);
+        if(photonView.IsMine)
+        {   //object[] data= info.photonView.InstantiationData;
+            //   transform.position = data[0];
+            Vector3 pos = GameManager.instance.cameraFollow.transform.position;
+
+            transform.position = PhotonNetwork.IsMasterClient ? GameManager.instance.blueSpawnLocation : GameManager.instance.redSpawnLocation;
+            pos.x = transform.position.x;
+            pos.z = transform.position.z;
+
+            GameManager.instance.cameraFollow.transform.position = cameraRef.transform.position; //pos;
+            GameManager.instance.cameraFollow.SetPlayerAndOffset(transform);
+        }
     }
 }
 /// <summary>
