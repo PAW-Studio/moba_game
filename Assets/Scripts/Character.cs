@@ -88,8 +88,9 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         cam = FindObjectOfType<Camera>();
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
         //GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
-
-        GameObject Healthbar = PhotonNetwork.Instantiate(GameManager.instance.ChampionHealthBar.name,cam.WorldToScreenPoint(referenceObject.transform.position),Quaternion.identity);
+        object[] data = new object[2];
+        data[0] = referenceObject.transform.position;
+        GameObject Healthbar = PhotonNetwork.Instantiate(GameManager.instance.ChampionHealthBar.name,cam.WorldToScreenPoint(referenceObject.transform.position),Quaternion.identity,0,data);
         Healthbar.name = "Champion HealthBar";
         Healthbar.transform.localScale = Vector3.one;
         championHealthBar = Healthbar.GetComponent<MinionHealthBar>();

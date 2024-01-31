@@ -239,7 +239,7 @@ public class MinionHealthBar : MonoBehaviourPunCallbacks, IPunInstantiateMagicCa
         _image.color = endValue;
     }
     private void Update()
-    {
+    {    
         if(local)
             transform.parent.LookAt(camera.transform);
     }
