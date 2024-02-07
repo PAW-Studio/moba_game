@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class MinionAIScript : MonoBehaviour
 {
@@ -27,7 +24,8 @@ public class MinionAIScript : MonoBehaviour
     Renderer renderer;
     [SerializeField]
     public GameObject referenceObject;                                      //Healthbar display reference object for the minion
-
+    [SerializeField]
+    public Transform modelReference;                                       //Object asset reference
     public MinionHealthBar minionHealthBar;
     public GameObject TargetIndicator;
     Camera cam;
@@ -41,10 +39,30 @@ public class MinionAIScript : MonoBehaviour
     public float Gold,Xp;
     [SerializeField]
     SpriteRenderer minimapSprite;
+    public MinionType minionType;
    
     // Start is called before the first frame update
     void Start()
-    { 
+    {
+        //Instantiate model
+        if(minionType == MinionType.Melee)
+        { 
+          GameObject model=  Instantiate(isBlue ? GameManager.instance.blueMelee: GameManager.instance.redMelee,modelReference.position,modelReference.rotation,transform);
+            model.SetActive(false); //Temp disable untill assets are ready
+        }
+        else  
+        if(minionType == MinionType.Caster)
+        { GameObject model = Instantiate(isBlue ? GameManager.instance.blueCaster : GameManager.instance.redCaster,modelReference.position,modelReference.rotation,transform);
+            model.SetActive(false); //Temp disable untill assets are ready
+        }
+        else 
+        if(minionType == MinionType.Cannon)
+        {
+            GameObject model = Instantiate(isBlue ? GameManager.instance.blueCannon : GameManager.instance.redCannon,modelReference.position,modelReference.rotation,transform);
+           
+        }
+        //
+        //
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
         GameObject Healthbar = Instantiate(GameManager.instance.MinioinHealthBar,GameManager.instance.MinionHealthbarsParent);
         Healthbar.transform.localScale = Vector3.one;

@@ -1609,6 +1609,18 @@ MonoBehaviour:
     LevelGold: 125
     FinalGoldWithiInRange: 250
     FinalGold_OutOfRange: 50
+  blueCannon: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  redCannon: {fileID: 7495029918480691367, guid: b39a6bfaab128c04bb6b6e0af1fad7da,
+    type: 3}
+  blueMelee: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  redMelee: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  blueCaster: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  redCaster: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
   XpFill: {fileID: 2017052367}
   CurrnetLevel: {fileID: 336956602}
   XpText: {fileID: 476684851}

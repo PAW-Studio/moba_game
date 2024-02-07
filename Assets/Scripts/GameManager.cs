@@ -71,6 +71,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<Character> TeamPlayers;                                            //List of all players
     [SerializeField]
     public TowerDetails TowerDestroyDetails=new TowerDetails();                    //Tower damage details to manage gold rewards of players
+    
+    public GameObject blueCannon, redCannon,blueMelee,redMelee,blueCaster,redCaster;
     public Image XpFill;
     public TMPro.TextMeshProUGUI CurrnetLevel,XpText;                              
     public List<XpData> xpData = new List<XpData>();
@@ -747,6 +749,8 @@ public class AttackButton
 }
 [System.Serializable]
 public enum TeamType { Blue, Red}
+[System.Serializable]
+public enum MinionType {Melee,Cannon,Caster }
 /// <summary>
 /// Tower damage and gold reward details
 /// </summary>

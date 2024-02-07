@@ -531,10 +531,10 @@ GameObject:
   - component: {fileID: 8506052491735743960}
   - component: {fileID: 4841571065067252626}
   - component: {fileID: 5334743331889047215}
-  - component: {fileID: 8642010622492658571}
   - component: {fileID: 4526640522818737913}
   - component: {fileID: -1914293143120551198}
   - component: {fileID: -2428361455725928911}
+  - component: {fileID: 2607884403123683492}
   m_Layer: 0
   m_Name: CannonMinion
   m_TagString: Untagged
@@ -559,6 +559,7 @@ Transform:
   - {fileID: 7548093261130951358}
   - {fileID: 4384850733598691102}
   - {fileID: 5668533005597118503}
+  - {fileID: 4995883651497342244}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -612,20 +613,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8642010622492658571
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5598692286795633532}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.55
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: -0.51, z: -0.00000008940697}
 --- !u!114 &4526640522818737913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -638,6 +625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6175bc02026afe54c85bdb7e1fee1b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Id: -1
   destination: {x: 28, y: 0, z: 51}
   blueMinionMat: {fileID: 2100000, guid: 325a63e75eef28944a7f505a6ff09026, type: 2}
   redMinionMat: {fileID: 2100000, guid: 065e2e6205b95c9439a7439b0a8c6124, type: 2}
@@ -653,11 +641,13 @@ MonoBehaviour:
   offset: {x: 5, y: 0, z: 5}
   teamType: 0
   referenceObject: {fileID: 1242347814248633524}
+  modelReference: {fileID: 4995883651497342244}
   minionHealthBar: {fileID: 6427617232901066831}
   TargetIndicator: {fileID: 8563240457472391814}
   Gold: 27
   Xp: 95
   minimapSprite: {fileID: 3548899852493689051}
+  minionType: 1
 --- !u!195 &-1914293143120551198
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -696,6 +686,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!65 &2607884403123683492
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5598692286795633532}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.2419558, y: 3.671517, z: 4.661418}
+  m_Center: {x: 0.07296324, y: 0.10612798, z: 0.22552156}
 --- !u!1 &7932063857228073694
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,4 +901,84 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8087706225891190522, guid: 564167ce4297a2f4b8614cea55d7d16d,
     type: 3}
   m_PrefabInstance: {fileID: 498756226399640700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2777295974913656076
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8506052491735743960}
+    m_Modifications:
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_Name
+      value: Mst_Truck2_Mid_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6d330d69820f37346af51ece351aaa17, type: 3}
+--- !u!4 &4995883651497342244 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7196222580418146344, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  m_PrefabInstance: {fileID: 2777295974913656076}
   m_PrefabAsset: {fileID: 0}
