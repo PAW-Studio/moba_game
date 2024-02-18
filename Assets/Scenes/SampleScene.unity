@@ -1478,6 +1478,7 @@ GameObject:
   m_Component:
   - component: {fileID: 190088900}
   - component: {fileID: 190088901}
+  - component: {fileID: 190088902}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1608,31 +1609,102 @@ MonoBehaviour:
     LevelGold: 125
     FinalGoldWithiInRange: 250
     FinalGold_OutOfRange: 50
+  blueCannon: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  redCannon: {fileID: 7495029918480691367, guid: b39a6bfaab128c04bb6b6e0af1fad7da,
+    type: 3}
+  blueMelee: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  redMelee: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  blueCaster: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
+  redCaster: {fileID: 7495029918480691367, guid: 6d330d69820f37346af51ece351aaa17,
+    type: 3}
   XpFill: {fileID: 2017052367}
   CurrnetLevel: {fileID: 336956602}
   XpText: {fileID: 476684851}
   xpData:
   - CurrentLevel: 1
     NextLevel: 2
-    XpNeeded: 552
+    XpNeeded: 280
   - CurrentLevel: 2
     NextLevel: 3
-    XpNeeded: 923
+    XpNeeded: 380
   - CurrentLevel: 3
     NextLevel: 4
-    XpNeeded: 1475
+    XpNeeded: 480
   - CurrentLevel: 4
     NextLevel: 5
-    XpNeeded: 1846
+    XpNeeded: 580
   - CurrentLevel: 5
     NextLevel: 6
-    XpNeeded: 3045
+    XpNeeded: 680
+  - CurrentLevel: 6
+    NextLevel: 7
+    XpNeeded: 780
+  - CurrentLevel: 7
+    NextLevel: 8
+    XpNeeded: 880
+  - CurrentLevel: 8
+    NextLevel: 9
+    XpNeeded: 980
+  - CurrentLevel: 9
+    NextLevel: 10
+    XpNeeded: 1080
+  - CurrentLevel: 10
+    NextLevel: 11
+    XpNeeded: 1180
+  - CurrentLevel: 11
+    NextLevel: 12
+    XpNeeded: 1280
+  - CurrentLevel: 12
+    NextLevel: 13
+    XpNeeded: 1380
+  - CurrentLevel: 13
+    NextLevel: 14
+    XpNeeded: 1480
+  - CurrentLevel: 14
+    NextLevel: 15
+    XpNeeded: 1580
+  - CurrentLevel: 15
+    NextLevel: 16
+    XpNeeded: 1680
+  - CurrentLevel: 16
+    NextLevel: 17
+    XpNeeded: 1780
+  - CurrentLevel: 17
+    NextLevel: 18
+    XpNeeded: 1880
   CurrnetLevelXpData:
     CurrentLevel: 0
     NextLevel: 0
     XpNeeded: 0
   XpUI: {fileID: 789040162}
+  CurrnetXpValue: 0
   tower: {fileID: 358397099}
+--- !u!114 &190088902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190088899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &199858039
 GameObject:
   m_ObjectHideFlags: 0
@@ -17946,7 +18018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 177638, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22424132, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -34954,6 +35026,7 @@ MonoBehaviour:
   targetChampion: {fileID: 0}
   TargetIndicator: {fileID: 0}
   Xp: 0
+  cameraRef: {fileID: 0}
 --- !u!23 &4237582128924020807
 MeshRenderer:
   m_ObjectHideFlags: 0

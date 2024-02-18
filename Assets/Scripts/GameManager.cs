@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject meleeMinion;
     public GameObject casterMinion;
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
     public TMPro.TextMeshProUGUI ToggleButtonText;                                   //Minion toggle text
     public TMPro.TextMeshProUGUI TowerToggleButtonText;                              //Tower toggle text
     [SerializeField]
-    CameraFollow cameraFollow;                                                       //Reference for camerafollow script
+    public CameraFollow cameraFollow;                                                       //Reference for camerafollow script
 
     [SerializeField]
     TargetDetailsUIManager targetDetails;
@@ -70,27 +71,31 @@ public class GameManager : MonoBehaviour
     public List<Character> TeamPlayers;                                            //List of all players
     [SerializeField]
     public TowerDetails TowerDestroyDetails=new TowerDetails();                    //Tower damage details to manage gold rewards of players
+    
+    public GameObject blueCannon, redCannon,blueMelee,redMelee,blueCaster,redCaster;
     public Image XpFill;
     public TMPro.TextMeshProUGUI CurrnetLevel,XpText;                              
     public List<XpData> xpData = new List<XpData>();
     public XpData CurrnetLevelXpData = new XpData();
     public GameObject XpUI;
     public float CurrnetXpValue;
-
+    
     private void Awake()
     {
+        PhotonNetwork.AutomaticallySyncScene=true;
         if(instance == null) 
         {
             instance = this;
         }
     }
+   
     /// <summary>
     /// Spawn character and set grahics quality level
     /// </summary>
     void Start()
     {
         //spawn character
-        SpawnCharacter();
+       // SpawnCharacter();
         qLevel = 2;                                         //Default graphics quality level-2 (Medium) : (0->VeryLow,1->Low,2->Medium,3->High,4->VeryHigh,5->Ultra
         QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
 
@@ -101,7 +106,17 @@ public class GameManager : MonoBehaviour
         CurrnetLevel.text = "1".ToString();
         CurrnetLevelXpData = xpData[0];
         XpText.text = "0" + "/" + CurrnetLevelXpData.XpNeeded;
+        photonView.RPC("PlayersReady",RpcTarget.MasterClient);
+
     }
+    //public void SpawnCharacter() 
+    //{
+    //    GameObject playerCharacter = PhotonNetwork.Instantiate("CharacterPrefab",Vector3.zero,Quaternion.identity);
+    //    playerCharacter.gameObject.SetActive(false);
+    //    playerCharacter.GetComponent<Rigidbody>().useGravity = false;
+    //    currentCharacter = playerCharacter.GetComponent<Character>();
+    //    playerCharacter.gameObject.SetActive(true);
+    //}
     /// <summary>
     /// Change graphics quality level
     /// </summary>
@@ -119,7 +134,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
       //  SpawnTime();
-    
     }
     
 
@@ -179,7 +193,6 @@ public class GameManager : MonoBehaviour
                 meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
             }
         }
-       
     }
 
     void CasterMinionSpawn()
@@ -270,26 +283,43 @@ public class GameManager : MonoBehaviour
           //  waveCount = 0;
        // }
     }
+    int readycount;
+    [PunRPC]
+    public void PlayersReady() 
+    {
+        if(PhotonNetwork.IsMasterClient) 
+        {
+            readycount += 1;
+            if(readycount== PhotonNetwork.CurrentRoom.MaxPlayers) 
+            {
+                photonView.RPC("SpawnCharacter",RpcTarget.All);
+            }
+        }
+    }
+    [PunRPC]
     /// <summary>
     /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
     /// </summary>
     public void SpawnCharacter()
     {
-        Vector3 spawnPosition = characterSpawnTranform.position;
-        if(CharacterLastPosition != Vector3.zero) 
-        {
-            spawnPosition = CharacterLastPosition;
-        }
-        GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
+            Vector3 spawnPosition =  characterSpawnTranform.position;
+            if(CharacterLastPosition != Vector3.zero)
+            {
+                spawnPosition = CharacterLastPosition;
+            }
+            //GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
 
-        Character characterScirpt = character.GetComponent<Character>();
-        for(int i = 0 ; i < AttackButtons.Count ; i++)
-        {
-            int val = characterScirpt.AttackValues[i];
-            AttackType type = AttackTypes[i];
-            AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttackWrapper(val,type));
-        }
-        currentCharacter = characterScirpt;
+            GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); //cameraFollow.SetPlayerAndOffset(character.transform);
+            character.gameObject.SetActive(false);
+            Character characterScirpt = character.GetComponent<Character>();
+            for(int i = 0 ; i < AttackButtons.Count ; i++)
+            {
+                int val = characterScirpt.AttackValues[i];
+                AttackType type = AttackTypes[i];
+                AttackButtons[i].button.onClick.AddListener(() => characterScirpt.playerScript.InitiateAttackWrapper(val,type));
+            }
+            currentCharacter = characterScirpt;
+            currentCharacter.gameObject.SetActive(true);
     }
     //Trigger attack active coroutine 
     public void TriggerAttackActiveCoroutine(AttackType attackType,float duration) 
@@ -327,9 +357,10 @@ public class GameManager : MonoBehaviour
 
     //Temp to change character
     public void ChangeCharacter()
-    {
+    {     
         currentCharacter.ChangeCharacter();
     }
+   
     /// <summary>
     /// Trigger die animation for current player character
     /// </summary>
@@ -399,7 +430,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Show_QWER_LevelUpdatePanel()
     {
-        Debug.LogError(currentCharacter.characterData.characterModel.characterType);
+       // Debug.LogError(currentCharacter.characterData.characterModel.characterType);
         foreach(AttackTypeReference item in attackTypeReferences)
         {
             //Allow button to be interactable only if attack level is less then max(5) attack level
@@ -535,10 +566,9 @@ public class GameManager : MonoBehaviour
     {
         float distance = ((towerDetails.Range / 10) / 2);
         List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType && Vector3.Distance(x.transform.position,towerPostion) < distance );
-        int goldForEachPlayer = towerDetails.LevelGold / list.Count;
+        int goldForEachPlayer = list.Count>0? towerDetails.LevelGold / list.Count: towerDetails.LevelGold;
         foreach(Character item in list)
         {
-            
             item.UpdateGold(goldForEachPlayer);
             UpdateGold(goldForEachPlayer);
         }
@@ -549,7 +579,7 @@ public class GameManager : MonoBehaviour
     public void TriggerGoldRewardForPlayersForTowerDestroy(TeamType towerType,Vector3 towerPostion,TowerDetails towerDetails)
     {
         List<Character> list = TeamPlayers.FindAll(x => x.teamType != towerType);
-        int goldForEachPlayer = towerDetails.FinalGoldWithiInRange / list.Count;
+        int goldForEachPlayer = list.Count>0? towerDetails.FinalGoldWithiInRange / list.Count: towerDetails.FinalGoldWithiInRange;
         foreach(Character item in list)
         {
             item.UpdateGold(goldForEachPlayer);
@@ -561,33 +591,57 @@ public class GameManager : MonoBehaviour
         //    UpdateGold(towerDetails.FinalGold_OutOfRange);
         //}
     }
+    float xpReminder = 0;
     public void UpdateXpData(float xp) 
     {
         CurrnetXpValue += xp;
-       XpText.text =  CurrnetXpValue + "/" + CurrnetLevelXpData.XpNeeded;
+     
         float amount= (xp * 100) / CurrnetLevelXpData.XpNeeded;
         amount = amount/ 100;  
         XpFill.fillAmount += amount; //Xp added
+        if(XpFill.fillAmount >= 1) 
+        {
+            XpFill.fillAmount = 1;
+            if(CurrnetXpValue > CurrnetLevelXpData.XpNeeded) 
+            {
+                xpReminder = CurrnetXpValue - CurrnetLevelXpData.XpNeeded;
+                CurrnetXpValue -= xpReminder;
+            }
+        }
+        XpText.text = CurrnetXpValue+ "/" + CurrnetLevelXpData.XpNeeded;
+
         if(XpFill.fillAmount == 1)
         {
             //Xp level increase
             LeanTween.scale(XpUI,Vector3.one * 1.1f,0.25f);
             LeanTween.scale(XpUI,Vector3.one * 1f,0.25f).setDelay(0.25f);
+
             Invoke(nameof(UpdateXpUIForNextLevel),2f);
         }
 
     }
-
+   
+    bool levelUpdate = false;
     private void UpdateXpUIForNextLevel()
     {
+        if(levelUpdate) return;
+
+            levelUpdate = true;
+        Debug.LogError(xpReminder);
         XpData _CurrnetLevel, NextLevel;
         _CurrnetLevel = CurrnetLevelXpData;
         NextLevel = xpData.Find(x => x.CurrentLevel == _CurrnetLevel.NextLevel);
         CurrnetLevelXpData = NextLevel;
         CurrnetLevel.text = CurrnetLevelXpData.CurrentLevel.ToString();
         XpFill.fillAmount = 0;
-        CurrnetXpValue = 0;
-        XpText.text = 0 + "/" + CurrnetLevelXpData.XpNeeded;
+        CurrnetXpValue = 0+xpReminder;
+        XpText.text = CurrnetXpValue + "/" + CurrnetLevelXpData.XpNeeded;
+        UpdateXpData(xpReminder);
+        Invoke("ResetLevelUpdate",0.5f);
+    }
+    public void ResetLevelUpdate() 
+    {
+        levelUpdate = false;
     }
 }
 [System.Serializable]
@@ -695,6 +749,8 @@ public class AttackButton
 }
 [System.Serializable]
 public enum TeamType { Blue, Red}
+[System.Serializable]
+public enum MinionType {Melee,Cannon,Caster }
 /// <summary>
 /// Tower damage and gold reward details
 /// </summary>
