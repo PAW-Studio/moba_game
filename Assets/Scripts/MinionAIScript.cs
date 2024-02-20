@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class MinionAIScript : MonoBehaviour
+public class MinionAIScript : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
     public int Id = -1;                       
     public Vector3 destination;
@@ -323,5 +324,26 @@ public class MinionAIScript : MonoBehaviour
         minionHealthBar.ShowOutline(show);
        
     }
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        Debug.LogError("Minion Instnatiate");
+        if(info.photonView.InstantiationData == null) return;
+
+       //if(photonView.IsMine)
+       // {
+            object[] data = info.photonView.InstantiationData;
+            Vector3 _destination = new Vector3();
+
+            int _teamType = (int)data[0];
+            Debug.LogError("Team TYPE : " + _teamType);
+            teamType = _teamType == 0 ? TeamType.Blue : TeamType.Red;
+            isBlue = _teamType == 0 ? true : false;
+            _destination.x = (float)data[1];
+            _destination.y = (float)data[2];
+            _destination.z = (float)data[3];
+            destination = _destination;
+      //  }
+    }
+
     public void NewTarget() { }
 }

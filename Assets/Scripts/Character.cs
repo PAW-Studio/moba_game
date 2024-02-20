@@ -78,7 +78,7 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
        // if(!photonView.IsMine) return;
         //Temp 
         Id = Random.Range(1,10);
-        teamType =PhotonNetwork.IsMasterClient? TeamType.Blue: TeamType.Red;
+      //  teamType =PhotonNetwork.IsMasterClient? TeamType.Blue: TeamType.Red;
         gameObject.layer = teamType == TeamType.Blue ? 9 : 10;
        
         characterOtrill = new Otrill();
@@ -88,12 +88,12 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         cam = FindObjectOfType<Camera>();
         //Instntiate healthbar for the minion and set it in canvas and set proper scale 
         //GameObject Healthbar = Instantiate(GameManager.instance.ChampionHealthBar,GameManager.instance.MinionHealthbarsParent);
-        object[] data = new object[2];
-        data[0] = referenceObject.transform.position;
-        GameObject Healthbar = PhotonNetwork.Instantiate(GameManager.instance.ChampionHealthBar.name,cam.WorldToScreenPoint(referenceObject.transform.position),Quaternion.identity,0,data);
-        Healthbar.name = "Champion HealthBar";
-        Healthbar.transform.localScale = Vector3.one;
-        championHealthBar = Healthbar.GetComponent<MinionHealthBar>();
+      //  object[] data = new object[2];
+      //  data[0] = referenceObject.transform.position;
+      //  GameObject Healthbar = PhotonNetwork.Instantiate(GameManager.instance.ChampionHealthBar.name,cam.WorldToScreenPoint(referenceObject.transform.position),Quaternion.identity,0,data);
+      //  Healthbar.name = "Champion HealthBar";
+       // Healthbar.transform.localScale = Vector3.one;
+      //  championHealthBar = Healthbar.GetComponent<MinionHealthBar>();
         healthBarTransform = championHealthBar.transform;
        
        // Debug.LogError("Object created " + Healthbar.name);
@@ -104,7 +104,7 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         // Healthbar.gameObject.SetActive(true);
         if(referenceObject)         //Handle exception for null reference 
         {
-            healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
+          //  healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
         }
         GameManager.instance.Hide_QWER_LevelUpdatePanel();
         Invoke(nameof(ShowHealthBar),0.3f);
@@ -126,15 +126,36 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     /// </summary>
     public void ChangeCharacter()
     {
-        if(SelectedCharacterIndex < characterModels.Count - 1)
+        if(photonView.IsMine)
         {
-            SelectedCharacterIndex += 1;
+            if(SelectedCharacterIndex < characterModels.Count - 1)
+            {
+                SelectedCharacterIndex += 1;
+            }
+            else
+            {
+                SelectedCharacterIndex = 0;
+            }
+            photonView.RPC("ChangeCharacter_RPC",RpcTarget.All,SelectedCharacterIndex);
         }
-        else
+    }
+    [PunRPC]
+    public void ChangeCharacter_RPC(int index)
+    {
+        if(photonView.IsMine)
         {
-            SelectedCharacterIndex = 0;
+            SelectedCharacterIndex = index;
         }
-        SelectCharacter(SelectedCharacterIndex);
+            //if(SelectedCharacterIndex < characterModels.Count - 1)
+            //{
+            //    SelectedCharacterIndex += 1;
+            //}
+            //else
+            //{
+            //    SelectedCharacterIndex = 0;
+            //}
+            SelectCharacter(index);
+        
     }
     /// <summary>
     /// Selects character model from list with respect to input index and set current character model
@@ -731,9 +752,11 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
+        object[] data = info.photonView.InstantiationData;
         if(photonView.IsMine)
-        {   //object[] data= info.photonView.InstantiationData;
-            //   transform.position = data[0];
+        {   
+            //transform.position = data[0];
+            //teamType = (int)data[0]==0? TeamType.Blue : TeamType.Red;
             Vector3 pos = GameManager.instance.cameraFollow.transform.position;
 
             transform.position = PhotonNetwork.IsMasterClient ? GameManager.instance.blueSpawnLocation : GameManager.instance.redSpawnLocation;
@@ -743,6 +766,8 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
             GameManager.instance.cameraFollow.transform.position = cameraRef.transform.position; //pos;
             GameManager.instance.cameraFollow.SetPlayerAndOffset(transform);
         }
+        teamType = (int)data[0] == 0 ? TeamType.Blue : TeamType.Red;
+        Debug.LogError("Team Type " + teamType);
     }
 }
 /// <summary>
