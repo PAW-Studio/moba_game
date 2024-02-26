@@ -52,9 +52,11 @@ public class MinionHealthBar : MonoBehaviourPunCallbacks, IPunInstantiateMagicCa
         SetHealthText(slider.value);
         if(effectBar && damage)
         {
+            Debug.LogError(" Old value " + oldValue + "  New Value " + slider.value);
             StartCoroutine(EffectBar(slider.value,oldValue,objectToDestroy,damageDetails));
         }
     }
+   
     /// <summary>
     /// This bar creates effect of decrease healthbar effect 
     /// </summary>

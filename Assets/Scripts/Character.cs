@@ -684,9 +684,44 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     /// <param name="damage">damage value</param>
     public void DealDamage(DamageDetails damageDetails = null)
     {
-        if(damageDetails.damangeValue <= 0) return;
-        currentHealth  -= damageDetails.damangeValue;
-        if(currentHealth < 0) 
+        //if(damageDetails.damangeValue <= 0) return;
+
+        //Call RPC
+        //Deal damange to data for RPC
+        if(damageDetails == null || damageDetails.damangeValue <= 0)
+        {
+            return;
+        }
+        
+        //
+        photonView.RPC("RPC_DealDamage",RpcTarget.All,damageDetails.damageById,(int)damageDetails.damagedItem,(int)damageDetails.damagetype,damageDetails.damangeValue,(int)damageDetails.ScaleCondition,damageDetails.damagePosition.x,damageDetails.damagePosition.y,damageDetails.damagePosition.z);
+        //
+
+        //currentHealth  -= damageDetails.damangeValue;
+        //if(currentHealth < 0) 
+        //{
+        //    currentHealth = 0;
+        //}
+        //damageDetails.damagePosition = transform.position;
+        //championHealthBar.SetHealth((float)currentHealth,true,gameObject,damageDetails);
+        //GameManager.instance.UpdateTargetDetailsUI();
+    }
+
+    [PunRPC]
+    public void RPC_DealDamage(int damageById,int damagedItemEnumValue,int damageTypeDetails,float damageValue,int scaleConditionEnum,float damagePositionX,float damagePostitionY,float damagePositonZ)
+    {
+        DamageDetails damageDetails = new DamageDetails();
+        damageDetails.damageById = damageById;
+        damageDetails.damagedItem = (DamagedItem)damagedItemEnumValue;
+        damageDetails.damagetype = (DamageTypeDetails)damageTypeDetails;
+        damageDetails.damangeValue = damageValue;
+        damageDetails.ScaleCondition = (ScalingConditionTypes)scaleConditionEnum;
+        Vector3 damagePosition = new Vector3(damagePositionX,damagePostitionY,damagePositonZ);
+        damageDetails.damagePosition = damagePosition;
+        //
+        Debug.LogError("Damage Value : " + damageDetails.damangeValue);
+        currentHealth -= damageDetails.damangeValue;
+        if(currentHealth < 0)
         {
             currentHealth = 0;
         }
@@ -694,6 +729,7 @@ public class Character : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         championHealthBar.SetHealth((float)currentHealth,true,gameObject,damageDetails);
         GameManager.instance.UpdateTargetDetailsUI();
     }
+
     /// <summary>
     /// Regain health and update healthbar
     /// </summary>

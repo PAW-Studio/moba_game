@@ -367,7 +367,6 @@ public class MinionAIScript : MonoBehaviourPunCallbacks, IPunInstantiateMagicCal
             Vector3 _destination = new Vector3();
 
             int _teamType = (int)data[0];
-            Debug.LogError("Team TYPE : " + _teamType);
             teamType = _teamType == 0 ? TeamType.Blue : TeamType.Red;
             isBlue = _teamType == 0 ? true : false;
             _destination.x = (float)data[1];
