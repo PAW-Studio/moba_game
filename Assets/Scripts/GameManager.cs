@@ -698,7 +698,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             dataRed[3] = DestinationPosRed.z;
 
 
-            cannonMinionRed = PhotonNetwork.Instantiate("CannonMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+            cannonMinionRed = PhotonNetwork.Instantiate("CannonMinionRed",redSpawnLocation,Quaternion.identity,0,dataRed);
             //cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
             //cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
             //cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
