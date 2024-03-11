@@ -42,6 +42,8 @@ MonoBehaviour:
   - PlayersReady
   - SpawnCharacter
   - ChangeCharacter_RPC
+  - RPC_DealDamage
+  - RPC_SetHealth
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

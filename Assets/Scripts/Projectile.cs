@@ -23,7 +23,8 @@ public class Projectile : MonoBehaviour
             bool hit = false;
             foreach(Collider item in hits)
             {
-                if(item.GetComponent<MinionAIScript>()) 
+                MinionAIScript minionAIScript = item.GetComponent<MinionAIScript>();
+                if(minionAIScript && character.teamType != minionAIScript.teamType) 
                 {
                   DamageDetails damageDetails=  GameManager.instance.currentCharacter.CalculateDamangeForAttack(attackType);
                   damageDetails.damageById = character.Id; //Owner of projectile
@@ -52,7 +53,6 @@ public class Projectile : MonoBehaviour
                         }
                     }
                         break;
-                    
                 }
                 else if(item.GetComponent<Character>() && character.gameObject!= item.gameObject) // Avoid self hit
                 {

@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject meleeMinion;
     public GameObject casterMinion;
     public GameObject cannonMinion;
+    public List<Transform> LeftLaneMinionSpawnPositions_Blue, MidLaneMinionSpawnPositions_Blue, RightLaneMinionSpawnPositions_Blue, LeftLaneMinionSpawnPositions_Red, MidLaneMinionSpawnPositions_Red, RightLaneMinionSpawnPositions_Red;
     public Vector3 blueSpawnLocation = new Vector3(-159,1,-152);
     public Vector3 redSpawnLocation = new Vector3(132,1,140);
     public Transform blueLeftLaneMidPoint, blueRightLaneMidPoint;                       //Mid points
@@ -99,7 +100,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         qLevel = 2;                                         //Default graphics quality level-2 (Medium) : (0->VeryLow,1->Low,2->Medium,3->High,4->VeryHigh,5->Ultra
         QalityDropdown.value = qLevel;                      //Set Temporary dropdown value as per current graphics quality level
 
-        StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
+        if(PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
+        }
+
         TeamPlayers = FindObjectsOfType<Character>().ToList();
         //Temp
         XpFill.fillAmount = 0;
@@ -154,134 +159,667 @@ public class GameManager : MonoBehaviourPunCallbacks
             CannonMinionSpawn();
         }
     }
-
-    void MeleeMinionSpawn()
+    public IEnumerator LaneSpawn(Lane lane) 
     {
-        // Spawning and setting destination for melee minions
+        //Melee spawn
         GameObject[] meleeMinions = new GameObject[3];
-        for(int j = 0 ; j < 3 ; j++)
+       
+        Lane lanetype = lane;
+       
+        for(int i = 0 ; i < 3 ; i++)
         {
-            Lane lanetype = Lane.Center;
-            switch(j)
-            {
-                case 0:
-                    lanetype = Lane.Center;
-                    break;
 
-                case 1:
-                    lanetype = Lane.Left;
-                    break;
+            object[] data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
 
-                case 2:
-                    lanetype = Lane.Right;
-                    break;
-                default:
-                    break;
-            }
-            for(int i = 0 ; i < 3 ; i++)
-            {
-                meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
-                meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+            Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetype); ;
+            Vector3 spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",spwanLocation,Quaternion.identity,0,data);
+            // meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+            // meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
 
-                // Blue minions
-                meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+            // Blue minions
+            // meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
 
-                meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
-                meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
 
-                // Red minions
-                meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
-            }
+            //Red
+            object[] dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+             spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Red[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Red[0] : RightLaneMinionSpawnPositions_Red[0]).position;
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+            meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",spwanLocation,Quaternion.identity,0,dataRed);
+            //meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+            //meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+            // Red minions
+            //  meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            yield return new WaitForSeconds(1f);
+        }
+
+        //Caster spawn
+        // Spawning and setting destination for caster minions
+        GameObject[] casterMinions = new GameObject[3];
+       
+         //lanetype = Lane.Center;
+      
+        for(int i = 0 ; i < 3 ; i++)
+        {
+            object[] data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+            Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetype); ;
+            Vector3 spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",spwanLocation,Quaternion.identity,0,data);
+            // casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+            //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+
+            // Blue minions
+            // casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+            // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+
+            object[] dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+            spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Red[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Red[0] : RightLaneMinionSpawnPositions_Red[0]).position;
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+            casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",spwanLocation,Quaternion.identity,0,dataRed);
+            // casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+            //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+            // Red minions
+            //casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+            yield return new WaitForSeconds(1f);
+        }
+
+        //Cannon Spawn for third wave
+
+        // Every third wave spawns a cannon minion and sets destination as above
+        if(WaveCounter % SpawnCannonAfterWaves == 0)
+        {
+            // lanetype = Lane.Center;
+            //switch(i)
+
+            GameObject cannonMinionBlue, cannonMinionRed;
+            //CannonMinion
+            object[] data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+            Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetype); ;
+            Vector3 spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            cannonMinionBlue = PhotonNetwork.Instantiate("CannonMinion",spwanLocation,Quaternion.identity,0,data);
+            //cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
+            //cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+
+            object[] dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+            spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Red[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Red[0] : RightLaneMinionSpawnPositions_Red[0]).position;
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+
+
+            cannonMinionRed = PhotonNetwork.Instantiate("CannonMinion",spwanLocation,Quaternion.identity,0,dataRed);
+            //cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
+            //cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
+            //cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+           // yield return new WaitForSeconds(1f);
+            // }
+            //
         }
     }
+    public IEnumerator MeleeMinionSpawn()
+    {
+       
+        // Spawning and setting destination for melee minions
+        GameObject[] meleeMinions = new GameObject[3];
+       // for(int j = 0 ; j < 3 ; j++)
+      //  {
+           // yield return new WaitForSeconds(.5f);
+            Lane lanetype = Lane.Center;
+            //switch(j)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
 
-    void CasterMinionSpawn()
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
+
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
+            for(int i = 0 ; i < 3 ; i++)
+            {
+              
+                object[] data = new object[4];
+                data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+                Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetype); ;
+                Vector3 spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetype== Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+                data[1] = DestinationPos.x;
+                data[2] = DestinationPos.y;
+                data[3] = DestinationPos.z;
+                meleeMinions[i] =PhotonNetwork.Instantiate("MeleeMinion",spwanLocation,Quaternion.identity,0,data);
+                // meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                // meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+
+                // Blue minions
+                // meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+
+
+                //Red
+                object[] dataRed = new object[4];
+                dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+                Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+
+                dataRed[1] = DestinationPosRed.x;
+                dataRed[2] = DestinationPosRed.y;
+                dataRed[3] = DestinationPosRed.z;
+                meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+                //meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                //meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                //  meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                yield return new WaitForSeconds(1f);
+            }
+       // }
+
+      //  for(int j = 0 ; j < 3 ; j++)
+      //  {
+            //yield return new WaitForSeconds(.5f);
+            Lane lanetypeL = Lane.Left;
+            //switch(j)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
+
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
+
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
+            for(int i = 0 ; i < 3 ; i++)
+            {
+
+                object[] data = new object[4];
+                data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+                Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetypeL); ;
+                Vector3 spwanLocation = lanetypeL == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetypeL == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+                data[1] = DestinationPos.x;
+                data[2] = DestinationPos.y;
+                data[3] = DestinationPos.z;
+                meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",spwanLocation,Quaternion.identity,0,data);
+                // meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                // meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+
+                // Blue minions
+                // meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+
+
+                //Red
+                object[] dataRed = new object[4];
+                dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+                Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+
+                dataRed[1] = DestinationPosRed.x;
+                dataRed[2] = DestinationPosRed.y;
+                dataRed[3] = DestinationPosRed.z;
+                meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+                //meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                //meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                //  meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                yield return new WaitForSeconds(1f);
+            }
+     //   }
+
+      //  for(int j = 0 ; j < 3 ; j++)
+      //  {
+          //  yield return new WaitForSeconds(.5f);
+            Lane lanetypeR = Lane.Right;
+            //switch(j)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
+
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
+
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
+            for(int i = 0 ; i < 3 ; i++)
+            {
+
+                object[] data = new object[4];
+                data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+                Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetypeR); ;
+                Vector3 spwanLocation = lanetypeR == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetypeR == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+                data[1] = DestinationPos.x;
+                data[2] = DestinationPos.y;
+                data[3] = DestinationPos.z;
+                meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",spwanLocation,Quaternion.identity,0,data);
+                // meleeMinions[i] = Instantiate(meleeMinion,blueSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                // meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+
+                // Blue minions
+                // meleeMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+
+
+                //Red
+                object[] dataRed = new object[4];
+                dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+                Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+
+                dataRed[1] = DestinationPosRed.x;
+                dataRed[2] = DestinationPosRed.y;
+                dataRed[3] = DestinationPosRed.z;
+                meleeMinions[i] = PhotonNetwork.Instantiate("MeleeMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+                //meleeMinions[i] = Instantiate(meleeMinion,redSpawnLocation,Quaternion.identity,MeleeMinionParentContainer);
+                //meleeMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                //  meleeMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                yield return new WaitForSeconds(1f);
+            }
+       // }
+
+    }
+
+   public IEnumerator CasterMinionSpawn()
     {
         // Spawning and setting destination for caster minions
         GameObject[] casterMinions = new GameObject[3];
-        for(int j = 0 ; j < 3 ; j++)
-        {
+       // for(int j = 0 ; j < 3 ; j++)
+       // {
+           // yield return new WaitForSeconds(.5f);
+            //yield return new WaitForSeconds(.25f);
             Lane lanetype = Lane.Center;
-            switch(j)
-            {
-                case 0:
-                    lanetype = Lane.Center;
-                    break;
+            //switch(j)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
 
-                case 1:
-                    lanetype = Lane.Left;
-                    break;
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
 
-                case 2:
-                    lanetype = Lane.Right;
-                    break;
-                default:
-                    break;
-            }
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
             for(int i = 0 ; i < 3 ; i++)
             {
+                object[] data = new object[4];
+                data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
 
-                casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
-                casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+                Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetype); ;
+                Vector3 spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+                data[1] = DestinationPos.x;
+                data[2] = DestinationPos.y;
+                data[3] = DestinationPos.z;
+                casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",spwanLocation,Quaternion.identity,0,data);
+                // casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
 
                 // Blue minions
-                casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
-                casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+                // casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+                // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
 
-                casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
-                casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                object[] dataRed = new object[4];
+                dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+                Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+
+                dataRed[1] = DestinationPosRed.x;
+                dataRed[2] = DestinationPosRed.y;
+                dataRed[3] = DestinationPosRed.z;
+                casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+                // casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
 
                 // Red minions
-                casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
-                casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
-
+                //casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+                yield return new WaitForSeconds(1f);
             }
+       // }
+
+     //   for(int j = 0 ; j < 3 ; j++)
+     //   {
+          //  yield return new WaitForSeconds(.5f);
+            //yield return new WaitForSeconds(.25f);
+            Lane lanetypeL = Lane.Left;
+            //switch(j)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
+
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
+
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
+            for(int i = 0 ; i < 3 ; i++)
+            {
+                object[] data = new object[4];
+                data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+                Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetypeL); ;
+                Vector3 spwanLocation = lanetypeL == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetypeL == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+                data[1] = DestinationPos.x;
+                data[2] = DestinationPos.y;
+                data[3] = DestinationPos.z;
+                casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",spwanLocation,Quaternion.identity,0,data);
+                // casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+
+                // Blue minions
+                // casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+                // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+
+                object[] dataRed = new object[4];
+                dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+                Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetypeL); ;
+
+                dataRed[1] = DestinationPosRed.x;
+                dataRed[2] = DestinationPosRed.y;
+                dataRed[3] = DestinationPosRed.z;
+                casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+                // casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+                //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+                // Red minions
+                //casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+                // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+                yield return new WaitForSeconds(1f);
+            }
+        //}
+
+        //   for(int j = 0 ; j < 3 ; j++)
+        //   {
+       // yield return new WaitForSeconds(.5f);
+        //yield return new WaitForSeconds(.25f);
+        Lane lanetypeR = Lane.Right;
+        //switch(j)
+        //{
+        //    case 0:
+        //        lanetype = Lane.Center;
+        //        break;
+
+        //    case 1:
+        //        lanetype = Lane.Left;
+        //        break;
+
+        //    case 2:
+        //        lanetype = Lane.Right;
+        //        break;
+        //    default:
+        //        break;
+        //}
+        for(int i = 0 ; i < 3 ; i++)
+        {
+            object[] data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+            Vector3 DestinationPos = GetDestinationPoint(TeamType.Blue,lanetypeR); ;
+            Vector3 spwanLocation = lanetypeR== Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetypeR == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",spwanLocation,Quaternion.identity,0,data);
+            // casterMinions[i] = Instantiate(casterMinion,blueSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+            //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+
+            // Blue minions
+            // casterMinions[i].GetComponent<MinionAIScript>().isBlue = true;
+            // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+
+            object[] dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetypeL); ;
+
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+            casterMinions[i] = PhotonNetwork.Instantiate("casterMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+            // casterMinions[i] = Instantiate(casterMinion,redSpawnLocation,Quaternion.identity,CasterMinionParentContainer);
+            //casterMinions[i].GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype);
+
+            // Red minions
+            //casterMinions[i].GetComponent<MinionAIScript>().isBlue = false;
+            // casterMinions[i].GetComponent<MinionAIScript>().teamType = TeamType.Red;
+            yield return new WaitForSeconds(1f);
         }
-       
+        //}
+
     }
 
-    void CannonMinionSpawn()
+    public IEnumerator  CannonMinionSpawn()
     {
         // Every third wave spawns a cannon minion and sets destination as above
       //  if(waveCount == 3)
       //  {
-            for(int i = 0 ; i < 3 ; i++)
-            {
-                Lane lanetype = Lane.Center;
-                switch(i)
-                {
-                    case 0:
-                        lanetype = Lane.Center;
-                        break;
+          //  for(int i = 0 ; i < 3 ; i++)
+          //  {
+           // yield return new WaitForSeconds(.25f);
+            Lane lanetype = Lane.Center;
+                //switch(i)
+                //{
+                //    case 0:
+                //        lanetype = Lane.Center;
+                //        break;
 
-                    case 1:
-                        lanetype = Lane.Left;
-                        break;
+                //    case 1:
+                //        lanetype = Lane.Left;
+                //        break;
 
-                    case 2:
-                        lanetype = Lane.Right;
-                        break;
-                    default:
-                        break;
-                }
+                //    case 2:
+                //        lanetype = Lane.Right;
+                //        break;
+                //    default:
+                //        break;
+                //}
                 
                 GameObject cannonMinionBlue, cannonMinionRed;
+            //CannonMinion
+            object[] data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
 
-                cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
-                cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
-                cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
-                cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+            Vector3 DestinationPos= GetDestinationPoint(TeamType.Blue,lanetype); ;
+            Vector3 spwanLocation = lanetype == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetype == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            cannonMinionBlue = PhotonNetwork.Instantiate("CannonMinion",spwanLocation,Quaternion.identity,0,data);
+            //cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
+            //cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
 
-                cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
-                cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
-                cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
-                cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
 
-            }
+            object[] dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            Vector3 DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
 
-            // Resetting wave count for next cannon minion wave
-          //  waveCount = 0;
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+
+
+            cannonMinionRed = PhotonNetwork.Instantiate("CannonMinionRed",redSpawnLocation,Quaternion.identity,0,dataRed);
+            //cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
+            //cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
+            //cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+            yield return new WaitForSeconds(1f);
        // }
+
+
+      //  for(int i = 0 ; i < 3 ; i++)
+     //   {
+            // yield return new WaitForSeconds(.25f);
+            Lane lanetypeL = Lane.Left;
+            //switch(i)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
+
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
+
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            // cannonMinionBlue, cannonMinionRed;
+            //CannonMinion
+             data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+             DestinationPos = GetDestinationPoint(TeamType.Blue,lanetypeL); ;
+             spwanLocation = lanetypeL == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetypeL == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            cannonMinionBlue = PhotonNetwork.Instantiate("CannonMinion",spwanLocation,Quaternion.identity,0,data);
+            //cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
+            //cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+
+            dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+
+
+            cannonMinionRed = PhotonNetwork.Instantiate("CannonMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+            //cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
+            //cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
+            //cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+            yield return new WaitForSeconds(1f);
+      //  }
+
+      //  for(int i = 0 ; i < 3 ; i++)
+     //   {
+            // yield return new WaitForSeconds(.25f);
+            Lane lanetypeR = Lane.Right;
+            //switch(i)
+            //{
+            //    case 0:
+            //        lanetype = Lane.Center;
+            //        break;
+
+            //    case 1:
+            //        lanetype = Lane.Left;
+            //        break;
+
+            //    case 2:
+            //        lanetype = Lane.Right;
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+           // GameObject cannonMinionBlue, cannonMinionRed;
+            //CannonMinion
+           // object[] data = new object[4];
+            data[0] = 0; //Team type - set 0 =>Blue, 1 =>Red
+
+            DestinationPos = GetDestinationPoint(TeamType.Blue,lanetypeR); ;
+            spwanLocation = lanetypeR == Lane.Center ? MidLaneMinionSpawnPositions_Blue[0].position : (lanetypeR == Lane.Left ? LeftLaneMinionSpawnPositions_Blue[0] : RightLaneMinionSpawnPositions_Blue[0]).position;
+            data[1] = DestinationPos.x;
+            data[2] = DestinationPos.y;
+            data[3] = DestinationPos.z;
+            cannonMinionBlue = PhotonNetwork.Instantiate("CannonMinion",spwanLocation,Quaternion.identity,0,data);
+            //cannonMinionBlue = Instantiate(cannonMinion,blueSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Blue,lanetype);
+            //cannonMinionBlue.GetComponent<MinionAIScript>().isBlue = true;
+            //cannonMinionBlue.GetComponent<MinionAIScript>().teamType = TeamType.Blue;
+
+
+          //  object[] dataRed = new object[4];
+            dataRed[0] = 1; //Team type - set 0 =>Blue, 1 =>Red
+            DestinationPosRed = GetDestinationPoint(TeamType.Red,lanetype); ;
+
+            dataRed[1] = DestinationPosRed.x;
+            dataRed[2] = DestinationPosRed.y;
+            dataRed[3] = DestinationPosRed.z;
+
+
+            cannonMinionRed = PhotonNetwork.Instantiate("CannonMinion",redSpawnLocation,Quaternion.identity,0,dataRed);
+            //cannonMinionRed = Instantiate(cannonMinion,redSpawnLocation,Quaternion.identity,CannonMinionParentContainer);
+            //cannonMinionRed.GetComponent<MinionAIScript>().destination = GetDestinationPoint(TeamType.Red,lanetype); ;
+            //cannonMinionRed.GetComponent<MinionAIScript>().isBlue = false;
+            //cannonMinionRed.GetComponent<MinionAIScript>().teamType = TeamType.Red;
+            yield return new WaitForSeconds(1f);
+       // }
+
+        // Resetting wave count for next cannon minion wave
+        //  waveCount = 0;
+        // }
     }
     int readycount;
     [PunRPC]
@@ -292,7 +830,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             readycount += 1;
             if(readycount== PhotonNetwork.CurrentRoom.MaxPlayers) 
             {
-                photonView.RPC("SpawnCharacter",RpcTarget.All);
+                photonView.RPC("SpawnCharacter",RpcTarget.All,-1); //-1-Temp value :For future use,team type-0 for Blue,1 for Red 
             }
         }
     }
@@ -300,16 +838,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// <summary>
     /// Spawns character at given transform position and sets parent of character transform, assigns attack click methods for the character
     /// </summary>
-    public void SpawnCharacter()
+    public void SpawnCharacter(int team=-1)
     {
             Vector3 spawnPosition =  characterSpawnTranform.position;
+            object[] data = new object[1];
+            data[0] = PhotonNetwork.IsMasterClient ? 0 : 1;
             if(CharacterLastPosition != Vector3.zero)
             {
                 spawnPosition = CharacterLastPosition;
             }
             //GameObject character = Instantiate(characterPrefab,spawnPosition,Quaternion.identity,characterSpawnTranform.parent); cameraFollow.SetPlayerAndOffset(character.transform);
 
-            GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity); //cameraFollow.SetPlayerAndOffset(character.transform);
+            GameObject character = PhotonNetwork.Instantiate("CharacterPrefab",spawnPosition,Quaternion.identity,0,data); //cameraFollow.SetPlayerAndOffset(character.transform);
             character.gameObject.SetActive(false);
             Character characterScirpt = character.GetComponent<Character>();
             for(int i = 0 ; i < AttackButtons.Count ; i++)
@@ -385,13 +925,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         if(canSpawnNextWave)
         {
             WaveCounter += 1;
-            MeleeMinionSpawn();
-            CasterMinionSpawn();
+            StartCoroutine(LaneSpawn(Lane.Center));
+            StartCoroutine(LaneSpawn(Lane.Left));
+            StartCoroutine(LaneSpawn(Lane.Right));
+            //  StartCoroutine( MeleeMinionSpawn());
+            //   StartCoroutine( CasterMinionSpawn());
             if(WaveCounter % SpawnCannonAfterWaves == 0)                // checks that if the wave is multiple of the given variable for spawning cannon or not
             {
-                CannonMinionSpawn();
+               //StartCoroutine( CannonMinionSpawn());
             }
-            
         }
       StartCoroutine(SpawnWave());                              //Continue spawn coroutine                                             
     }

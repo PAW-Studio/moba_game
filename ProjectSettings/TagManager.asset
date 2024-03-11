@@ -44,6 +44,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Healthbars
+    uniqueID: 3141285851
+    locked: 0
   - name: UIControls
     uniqueID: 2521864053
     locked: 0

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 559a96121ffd7fc48a2b41c14c04b6bd
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - KoPub Batang
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3231a5e257cb0a7428d1f7973cabbf4e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

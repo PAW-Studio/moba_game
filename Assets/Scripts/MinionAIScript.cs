@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class MinionAIScript : MonoBehaviour
+public class MinionAIScript : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
     public int Id = -1;                       
     public Vector3 destination;
@@ -293,13 +294,45 @@ public class MinionAIScript : MonoBehaviour
     /// <param name="damage">damage value</param>
     public void DealDamage( DamageDetails damageDetails=null)
     {
+        //Deal damange to data for RPC
+        if(damageDetails == null || damageDetails.damangeValue<=0) 
+        {
+            return;
+        }
+        //
+        photonView.RPC("RPC_DealDamage",RpcTarget.All,damageDetails.damageById,(int)damageDetails.damagedItem,(int)damageDetails.damagetype,damageDetails.damangeValue,(int)damageDetails.ScaleCondition,damageDetails.damagePosition.x,damageDetails.damagePosition.y,damageDetails.damagePosition.z);
+        //
+        //if(damageDetails.damangeValue <= 0) return;
+        ////Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
+        //currentHealth -= damageDetails.damangeValue;
+        //damageDetails.damagePosition = transform.position;
+        //minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails);
+        //GameManager.instance.UpdateTargetDetailsUI();
+    }
+    [PunRPC]
+    public void RPC_DealDamage(int damageById,int damagedItemEnumValue,int damageTypeDetails,float damageValue,int scaleConditionEnum,float damagePositionX,float damagePostitionY,float damagePositonZ) 
+    {
+        DamageDetails damageDetails = new DamageDetails();
+        damageDetails.damageById = damageById;
+        damageDetails.damagedItem = (DamagedItem)damagedItemEnumValue;
+        damageDetails.damagetype = (DamageTypeDetails)damageTypeDetails;
+        damageDetails.damangeValue = damageValue;
+        damageDetails.ScaleCondition = (ScalingConditionTypes)scaleConditionEnum;
+        Vector3 damagePosition = new Vector3(damagePositionX,damagePostitionY,damagePositonZ);
+        damageDetails.damagePosition = damagePosition;
+
+        //Apply damage
         if(damageDetails.damangeValue <= 0) return;
-        Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
+        //Debug.LogError(GameManager.instance.currentCharacter.playerScript.currentAttackType);
         currentHealth -= damageDetails.damangeValue;
         damageDetails.damagePosition = transform.position;
         minionHealthBar.SetHealth(currentHealth,true,gameObject,damageDetails);
+        if(photonView.IsMine)
         GameManager.instance.UpdateTargetDetailsUI();
+        //
     }
+
+   
     /// <summary>
     /// Set slower movement speed for the given time
     /// </summary>
@@ -323,5 +356,25 @@ public class MinionAIScript : MonoBehaviour
         minionHealthBar.ShowOutline(show);
        
     }
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        Debug.LogError("Minion Instnatiate");
+        if(info.photonView.InstantiationData == null) return;
+
+       //if(photonView.IsMine)
+       // {
+            object[] data = info.photonView.InstantiationData;
+            Vector3 _destination = new Vector3();
+
+            int _teamType = (int)data[0];
+            teamType = _teamType == 0 ? TeamType.Blue : TeamType.Red;
+            isBlue = _teamType == 0 ? true : false;
+            _destination.x = (float)data[1];
+            _destination.y = (float)data[2];
+            _destination.z = (float)data[3];
+            destination = _destination;
+      //  }
+    }
+
     public void NewTarget() { }
 }
