@@ -40,6 +40,7 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
         Debug.LogError("Connected..");
         RoomDetails.text = "Connected..";
         SetButtonsInteractable(true);
+      
     }
     public void CreateRoom(string roomName = "") 
     {
@@ -70,7 +71,7 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
             {
                 if(item.IsMasterClient)
                 {
-                    PhotonNetwork.LoadLevel(1);
+                    PhotonNetwork.LoadLevel(2);
                 }
             }
         }
@@ -86,7 +87,8 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
             {
                 if(item.IsMasterClient)
                 {
-                    PhotonNetwork.LoadLevel(1);
+                    PhotonNetwork.LoadLevel(2);
+
                 }
             }
         }
