@@ -1,0 +1,7 @@
+3rdParty/Adventure_Character/Textures/Man_Body_Metallic.tga filter=lfs diff=lfs merge=lfs -text
+3rdParty/Adventure_Character/Textures/Man_Cloth_Down_Metallic.tga filter=lfs diff=lfs merge=lfs -text
+3rdParty/Adventure_Character/Textures/Man_Cloth_Up_Metallic.tga filter=lfs diff=lfs merge=lfs -text
+3rdParty/Hands_Weapons_Animations_Pack_Update[[:space:]]1/Modelas/Hands_Automatic_rifle03/Textures/Black/Automatic_Rifle_Black_Metallic03.tga filter=lfs diff=lfs merge=lfs -text
+Characters/NewCharacters/Otrill[[:space:]]2/Otrill[[:space:]]FBX[[:space:]]4(1).fbx filter=lfs diff=lfs merge=lfs -text
+Characters/NewCharacters/Otrill[[:space:]]2/Otrill[[:space:]]New[[:space:]]Head[[:space:]]Update.fbx filter=lfs diff=lfs merge=lfs -text
+Characters/NewCharacters/Otrill[[:space:]]2/Otrill.zip filter=lfs diff=lfs merge=lfs -text
