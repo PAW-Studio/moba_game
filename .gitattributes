@@ -5,3 +5,5 @@
 Characters/NewCharacters/Otrill[[:space:]]2/Otrill[[:space:]]FBX[[:space:]]4(1).fbx filter=lfs diff=lfs merge=lfs -text
 Characters/NewCharacters/Otrill[[:space:]]2/Otrill[[:space:]]New[[:space:]]Head[[:space:]]Update.fbx filter=lfs diff=lfs merge=lfs -text
 Characters/NewCharacters/Otrill[[:space:]]2/Otrill.zip filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
