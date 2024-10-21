@@ -80,7 +80,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public XpData CurrnetLevelXpData = new XpData();
     public GameObject XpUI;
     public float CurrnetXpValue;
-    
+    //Temp dummy
+    public GameObject dummyEnemy;
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene=true;
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if(PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
+          //  StartCoroutine(MinionSpawnCoroutine());            //Trigger minion waves coroutine
         }
 
         TeamPlayers = FindObjectsOfType<Character>().ToList();
@@ -112,7 +113,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         CurrnetLevelXpData = xpData[0];
         XpText.text = "0" + "/" + CurrnetLevelXpData.XpNeeded;
         photonView.RPC("PlayersReady",RpcTarget.MasterClient);
-
     }
     //public void SpawnCharacter() 
     //{
@@ -133,6 +133,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.LogError(qLevel);
         if(qLevel == 6) qLevel = 0;
     }
+
+    public void Recall() 
+    {
+        List<PlayerScript> playerScripts = FindObjectsOfType<PlayerScript>().ToList();
+        if(playerScripts.Count > 0)
+        {
+            foreach(PlayerScript item in playerScripts)
+            {
+                if(item.photonView.IsMine) 
+                {
+                    //Use this code in fusion after finding local player
+                    item.Recall();
+                    break;
+                }
+            }
+        }
+    }
+
     [SerializeField]
     public GameObject tower;
     // Update is called once per frame

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using Photon.Pun;
+using System;
 
 //MS-> Movement speed
 //AS-> Attack speed  for auto attacks
@@ -85,8 +86,10 @@ public class PlayerScript : MonoBehaviourPunCallbacks
     float Shield_EffectTime;                                                                         //Time duration for effect        
     bool Shield_UpdateOnce = false;                                                                  //To ensure only one time start effect
     //
-
-
+  
+    //Temp
+    [SerializeField]
+    GameObject beam;
     // Set references 
     void Start()
     {
@@ -101,8 +104,8 @@ public class PlayerScript : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if(photonView.IsMine)
-        {
+       // if(photonView.IsMine)
+      //  {
             if(GameManager.instance.Minion_ChampToggle.isOn)
             {
                 Collider[] hits = Physics.OverlapSphere(transform.position,10);
@@ -314,6 +317,8 @@ public class PlayerScript : MonoBehaviourPunCallbacks
 
             if(moving) //If animation with movement then auto move rigidbody
             {
+               
+            
                 var vel2 = transform.forward * _speed * AnimationMovementSpeedModifier;  //Increased speed -can be variable with respect to character and animations
                 vel2.y = _rb.velocity.y;
                 _rb.velocity = vel2;
@@ -324,7 +329,7 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 vel.y = _rb.velocity.y;
                 _rb.velocity = vel;
             }
-        }
+      // }
         
     }
     /// <summary>
@@ -368,6 +373,7 @@ public class PlayerScript : MonoBehaviourPunCallbacks
     public void InitiateAttack(int AttackValue,AttackType attackType)
     {
         bool OtrillRActivated = false; //Used to detect "R" click
+        bool SuraRActivated = false;   //Used to detect "R" click
         //Check for special attack instead of animation
         //if(character.currentCharacterModel.characterType == CharacterType.Hakka)
         //{
@@ -394,7 +400,9 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                
+                AnimationMovementManager animationMovementManager = GetComponentInChildren<AnimationMovementManager>();
+                //animationMovementManager.SetOtrill_EVFXOn();
+                animationMovementManager.EnableOtrill_R_VFX();
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
@@ -404,7 +412,8 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime + R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
                 OtrillRActivated = true;
-                GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Mele";
+               
+                //GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Mele";
             }
             else if(attackType == AttackType.auto)
             {
@@ -444,7 +453,7 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                
+                GetComponentInChildren<AnimationMovementManager>().EnableOtrill_W_AuraVFX();
                 EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
@@ -505,7 +514,7 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
-
+                GetComponentInChildren<AnimationMovementManager>().EnableMoorg_W_VFX();
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
                 character.ApplyEffectOnPlayerForAttack(attackType);
@@ -533,12 +542,12 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
                 Attack_R_IsAtcitve = true;
                 Attack_R_CoolDown = true;
-                
+               
                  EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
-
+                GetComponentInChildren<AnimationMovementManager>().EnableMoorg_UltVFX();
 
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
@@ -576,7 +585,8 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 if(Attack_W_IsAtcitve || Attack_W_CoolDown) return;
                 Attack_W_IsAtcitve = true;
                 Attack_W_CoolDown = true;
-                 EnableDeactiveIndicator(attackType);
+                GetComponentInChildren<AnimationMovementManager>().EnableOtrill_W_AuraVFX();
+                EnableDeactiveIndicator(attackType);
                 R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
@@ -692,10 +702,52 @@ public class PlayerScript : MonoBehaviourPunCallbacks
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Sura)
         {
+            if(attackType == AttackType.r)
+            {
+                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
+                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
+                Attack_R_IsAtcitve = true;
+                Attack_R_CoolDown = true;
+
+                EnableDeactiveIndicator(attackType);
+                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x => x.attackType == attackType).level);
+                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
+                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
+                attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
+                lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+                Debug.LogError(attackType);
+
+               // StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+               // StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+                                                                                                                     //New code
+                Invoke(nameof(ResetRAttackIndicator),R_Attack_ActiveTime);  //Reset indicator of R attack after acitve time limit( default 5 seconds)
+                Invoke(nameof(ResetRAttackCoolDownIndicator),R_Attack_ActiveTime + R_Attack_CooldownTime);  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
+
+                //
+
+
+                //Sura Specific:
+                character.ApplyEffectOnPlayerForAttack(attackType);  // AS, MS speed up ,damange reductions, heal effects
+                //
+                SuraRActivated = true;
+            }
             if(attackType == AttackType.auto)
             {
-                if(!Attack_Auto_Allowed) return;
-                Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+                //  if(!Attack_Auto_Allowed) return;
+                //  Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+
+                if(!Attack_R_IsAtcitve)
+                {
+                    if(!Attack_Auto_Allowed) return;
+                    Check_AutoAttackAllowed(); //Allow auto attack if AS time is passed from last auto attack
+                }
+
+                if(Attack_R_IsAtcitve)
+                {
+                    //Auto become R-left and R-right while R is active
+                    attackType = lastAutoAttackWasLeft ? AttackType.rRight : AttackType.rLeft;  //One by one left then right then left -attacks
+                    lastAutoAttackWasLeft = !lastAutoAttackWasLeft; //toggle value for next attack
+                }
             }
             if(attackType == AttackType.q)
             {
@@ -740,29 +792,12 @@ public class PlayerScript : MonoBehaviourPunCallbacks
                 R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
                 GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
 
-
+                GetComponentInChildren<AnimationMovementManager>().Enable_Sura_E_HealVFX();
+                //Heal_RegainHealth(R_Attack_ActiveTime,character.currentHealth as float,5f);
                 StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
                 StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
             }
-            if(attackType == AttackType.r)
-            {
-                if(Attack_Q_IsAtcitve || Attack_E_IsAtcitve || Attack_W_IsAtcitve || Attack_R_IsAtcitve) return;
-                if(Attack_R_IsAtcitve || Attack_R_CoolDown) return;
-                Attack_R_IsAtcitve = true;
-                Attack_R_CoolDown = true;
-                
-                 EnableDeactiveIndicator(attackType);
-                R_Attack_CooldownTime = character.characterData.GetCoolDownTime(attackType,character.attackLevels.Find(x=>x.attackType==attackType).level);
-                R_Attack_ActiveTime = character.characterData.GetActiveTime(attackType);
-                GameManager.instance.TriggerAttackActiveCoroutine(attackType,R_Attack_ActiveTime);
-
-
-                StartCoroutine(ResetAttackIndicator(R_Attack_ActiveTime,attackType));  //Reset indicator of R attack after acitve time limit( default 5 seconds)
-                StartCoroutine(ResetCoolDownAttackIndicator(R_Attack_ActiveTime,R_Attack_CooldownTime,attackType));  //Reset indicator for R attack cool down after acitve time limit( default 5 seconds)
-                 //Sura Specific:
-                character.ApplyEffectOnPlayerForAttack(attackType);  // AS, MS speed up ,damange reductions, heal effects
-                //
-            }
+            
         }
         else if(character.currentCharacterModel.characterType == CharacterType.Ranzeb)
         {
@@ -1138,6 +1173,10 @@ public class PlayerScript : MonoBehaviourPunCallbacks
         {
             OtrillRActivated = false;
         }
+        else if(character.currentCharacterModel.characterType == CharacterType.Sura && SuraRActivated)
+        {
+            SuraRActivated = false;
+        }
         else
         {
             if(characterAnimator)
@@ -1189,32 +1228,45 @@ public class PlayerScript : MonoBehaviourPunCallbacks
     public void ResetRAttackIndicator()
     {
         Attack_R_IsAtcitve = false;
-        GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Auto";
+        //GameManager.instance.AttackButtons.Find(x => x.attackType == AttackType.auto).button.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Auto";
+        Debug.LogError("OTRILL FX disable for R");
+        GetComponentInChildren<AnimationMovementManager>().DisableOtrill_R_VFX();
     }
+
     //Reset after cool down time
     public void ResetRAttackCoolDownIndicator()
     {
         Attack_R_CoolDown = false;
         Debug.LogError("Stop");
     }
-
+   
     //Reset indicator boolean of attack
     public IEnumerator ResetAttackIndicator(float delay,AttackType attackType)
     {
         yield return new WaitForSeconds(delay);
+        AnimationMovementManager animationMovementManager = GetComponentInChildren<AnimationMovementManager>();
         switch(attackType)
         {
             case AttackType.w:
                 Attack_W_IsAtcitve = false;
+                if(animationMovementManager)
+                {
+                    animationMovementManager.DisableOtrill_W_AuraVFX();
+
+                    if(character.characterData.characterModel.characterType== CharacterType.Moorg)
+                    animationMovementManager.DisableMoorg_W_VFX();
+                }
                 break;
             case AttackType.q:
                 Attack_Q_IsAtcitve = false;
                 break;
             case AttackType.e:
                 Attack_E_IsAtcitve = false;
+                animationMovementManager.Disable_Sura_E_HealVFX();
                 break;
             case AttackType.r:
                 Attack_R_IsAtcitve = false;
+                animationMovementManager.DisableSuraHandBlade();
                 break;
             case AttackType.auto:
                 break;
@@ -1287,7 +1339,10 @@ public class PlayerScript : MonoBehaviourPunCallbacks
     public void TriggerDeathAnimation()
     {
         characterAnimator.SetBool("die",true);
-        Invoke("SetDeathBoolOff",0.3f);
+       // beam.SetActive(true);
+        Debug.LogError("Death");
+      //  GetComponentInChildren<AnimationMovementManager>().DeathBeamAnimation();
+        Invoke("SetDeathBoolOff",5.0f);
     }
     /// <summary>
     /// Reset death animation bool to avoid death animation loop
@@ -1492,6 +1547,12 @@ public class PlayerScript : MonoBehaviourPunCallbacks
         return allowed;
     }
     //
+    public void Recall() 
+    {
+        PhotonNetwork.Instantiate("FX_Recall",transform.position,Quaternion.identity);
+        GetComponentInChildren<AnimationMovementManager>().RecallProcess();
+    }
+    
 }
 /// <summary>
 /// Character attack types

@@ -24,7 +24,7 @@ MonoBehaviour:
   - attackType: 0
     movementSpeedModifier: 2
   - attackType: 2
-    movementSpeedModifier: 1.5
+    movementSpeedModifier: 1.25
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1

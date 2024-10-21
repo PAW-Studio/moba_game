@@ -75,7 +75,7 @@ MonoBehaviour:
     - level: 5
       cooldownValue: 6
   - attackType: 3
-    ActiveTime: 2
+    ActiveTime: 5
     levelCoolDownValues:
     - level: 1
       cooldownValue: 120

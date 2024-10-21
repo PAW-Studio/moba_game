@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4622551012224294221
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 0
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NerversMat
+  m_Shader: {fileID: -6465566751694194690, guid: 0c60fe6e5c70e4748af2713f051ef979,
+    type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_08018ac9cf5779ce25607b2c98dc4ad8_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_0dfd49491d588c55981381b73dde88ce_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_13baa4e72a248cd58bd6c156aa1cce35_Gradient11198_14:
+        m_Texture: {fileID: 2800000, guid: fdd1bb796731eaa4b8d802e2bc76d635, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_13c72413769cb8f07f66ca1e02937efd_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_19d4141ac325033efed632141907b499_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_1d4c5f2b1dd62288b225cef6932a34a7_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_20bdc0f980c71c15cb393836d0283f08_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_3f37bb7de64ca602d036471740c2a498_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_48bbbaa7025517f4418c81aa451b6078_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_4e544e76993cdd5eb1936816af272b82_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_57c568091377f6657a17e1e6276e5b79_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_5b03ad844635525f8f79a652425e3ec9_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_619bcac2935e42e5a97ed455f9f51171_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_683c34bdac2f43f6f5c69206d8966aff_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_6b87c54078c0b78caf19774933ce42a6_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_6c237607b80685dc8ca6637dc63302c6_Gradient11198_14:
+        m_Texture: {fileID: 2800000, guid: fdd1bb796731eaa4b8d802e2bc76d635, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_7ddab4cc47c86f72bdcf2ea2adcb3a21_Gradient11198_14:
+        m_Texture: {fileID: 2800000, guid: fdd1bb796731eaa4b8d802e2bc76d635, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_8a43e5857c65b89c12908038c19bcdaa_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_96cc29f3c6ef86af7374fa0840c19eda_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_a25e4898e28214ccfb3de7c4a06073d0_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_adaa5e5a23dc04811f46b4457dad1189_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_b922726f877d37082b443f5f240bb8cf_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_c4dd7be28c2d8cc3bb27e5358afd80f0_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_c60ed6d1faccedd790e8712660ca7572_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_d09f84c1703db909d6d5c6115563faa0_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_d73384888bbdd5e23f939f193f57fffa_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_df57b81e85f0bb9b7b3b77fc8496b61a_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_e9ef347b1b703578130ea3bdd3b10c95_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NervesCustomFunction_fb6cba5c0126247bc4b23830fe45356f_Gradient12114_14:
+        m_Texture: {fileID: 2800000, guid: 6a8402c052be02b459246adbd5671c45, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BUILTIN_QueueControl: 0
+    - _BUILTIN_QueueOffset: 0
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _WIn: 1
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
