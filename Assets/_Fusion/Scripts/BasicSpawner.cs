@@ -8,11 +8,21 @@ using System;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Threading.Tasks;
+using System.Linq;
 
 public enum Team
 {
     TeamA,
     TeamB
+}
+
+public enum Lanes
+{
+    Lane1,
+    Lane2,
+    Lane3,
+    Lane4,
+    Lane5
 }
 
 [System.Serializable]
@@ -23,10 +33,17 @@ public class PlayerSpawnPoints
     public Transform point;
     public Team team;
 }
+[System.Serializable]
+public class LaneInfo
+{
+    public string playerName;
+    public Lanes lane;
+    public bool isOcupied = false;
+}
 
 public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
 {
-    private NetworkRunner _runner;
+    public NetworkRunner _runner;
 
     public GameObject matchMakingScreen;
     public GameObject characterScreen;
@@ -47,19 +64,31 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
 
     public List<PlayerSpawnPoints> playerSpawnPoints = new List<PlayerSpawnPoints>();
 
+
+    public List<LaneInfo> laneInfos = new List<LaneInfo>();
     public int PlayerCount = 0;
+    public int teamAPlayers = 0;
+    public int teamBPlayers = 0;
 
 
+    public ServerMessageHandler serverMessageHandler;
+    public PlayerSelectionManager playerSelectionManager;
+    public NetworkManager networkManager;
+    public int tempTimeValue;
+
+    public int maxTimerCount = 60;
+    public bool tempValue = false;
     #region UNITY_METHODS
     private void Start()
     {
-
-
 #if LOCAL_SERVER
         inputField.text = sessionName;
         StartServer();
 #endif
     }
+
+
+
     #endregion
 
     async void StartGame(GameMode mode)
@@ -146,12 +175,9 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
-
         sessionName = inputField.text;
-
-
+        _runner.AddCallbacks(new NetworkCallbacks());
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
-
 
         StartGameArgs startGameArgs = new StartGameArgs()
         {
@@ -159,7 +185,6 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
             Scene = scene,
             SessionName = sessionName // Set the session name
         };
-
         _runner.StartGame(startGameArgs).ContinueWith(OnStartGameCompleted);
 
     }
@@ -168,7 +193,7 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
-
+        _runner.AddCallbacks(new NetworkCallbacks());
         sessionName = inputField.text;
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
 
@@ -194,12 +219,31 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
             Debug.LogError($"Failed to start game: {task.Result.ErrorMessage}");
         }
     }
+
+
+    IEnumerator GameStartTimer()
+    {
+        int tempTime = 0;
+        while (maxTimerCount > tempTime)
+        {
+            Debug.Log(tempTime);
+            yield return new WaitForSeconds(1);
+            tempTime++;
+            networkManager.charSelectionTimer = tempTime;
+        }
+        gameObject.SetActive(false);
+
+    }
+    private void Update()
+    {
+        if (tempValue)
+        {
+            tempTimeValue = networkManager.charSelectionTimer;
+        }
+    }
     public void OnConnectedToServer(NetworkRunner runner)
     {
-
-
         Debug.Log("OnConnectedToServer : " + runner);
-
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
@@ -231,23 +275,6 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        /* Debug.Log(input);
-         var data = new NetworkInputData();
-
-         if (Input.GetKey(KeyCode.W))
-             data.direction += Vector3.forward;
-
-         if (Input.GetKey(KeyCode.S))
-             data.direction += Vector3.back;
-
-         if (Input.GetKey(KeyCode.A))
-             data.direction += Vector3.left;
-
-         if (Input.GetKey(KeyCode.D))
-             data.direction += Vector3.right;
-
-         input.Set(data);*/
-
         var data = new NetworkInputData();
 
         // Get input from the joystick
@@ -266,12 +293,6 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
         if (joystickInput.x > 0.1f)
             data.direction += Vector3.right;
 
-        /* // Rotation
-         if (joystickInput.sqrMagnitude > 0.01f)
-         {
-             float angle = Mathf.Atan2(joystickInput.x, joystickInput.y) * Mathf.Rad2Deg;
-             data.rotation = Quaternion.Euler(0, angle, 0);
-         }*/
 
         input.Set(data);
     }
@@ -296,38 +317,73 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
 
         if (runner.IsServer)
         {
-            // Create a unique position for the player
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
 
+            Team team;
+            Lanes lanes;
             if (PlayerCount % 2 == 0)
             {
+                lanes = laneInfos[teamAPlayers].lane;
+                teamAPlayers++;
+                team = Team.TeamA;
                 spawnPosition = GetSpawnPointTeamA().point.position;
             }
             else
             {
+                lanes = laneInfos[teamBPlayers].lane;
+                teamBPlayers++;
+                team = Team.TeamB;
                 spawnPosition = GetSpawnPointTeamB().point.position;
             }
 
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-            networkPlayerObject.GetComponent<RoomPlayer>().id = PlayerCount;
-            // networkPlayerObject.GetComponent<RoomPlayer>().RPC_SetId(PlayerCount);
+
+            RoomPlayer roomPlayer = networkPlayerObject.GetComponent<RoomPlayer>();
+
+            roomPlayer.id = PlayerCount;
+            roomPlayer.teamName = team;
+            roomPlayer.currentLane = lanes;
+            roomPlayer.charSelectionTimer = 10;
+
             PlayerCount++;
-
-            // Keep track of the player avatars for easy access
+            StartCoroutine(GameStartTimer());
             _spawnedCharacters.Add(player, networkPlayerObject);
-        }
+            playerSelectionManager.StartPlayerSelection(runner);
 
-        foreach (var item in _spawnedCharacters)
-        {
-            if (runner.LocalPlayer == item.Key)
+            Debug.Log("---------------------->>> " + (runner.SessionInfo.PlayerCount));
+
+            if (PlayerCount == (runner.SessionInfo.PlayerCount - 1))
             {
-                Debug.Log("-------------------- >>>> " + runner.LocalPlayer);
-                matchMakingScreen.SetActive(false);
-                characterScreen.SetActive(true);
-                findMatchScreen.SetActive(true);
+                tempValue = true;
+                Debug.Log("----------------------- >>>>> ");
+                
             }
         }
+    }
 
+    public TMP_Text _messages;
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
+    public void RPC_RelayMessage(string message, PlayerRef messageSource)
+    {
+        if (messageSource == _runner.LocalPlayer)
+        {
+            message = $"You said: {message}\n";
+        }
+        else
+        {
+            message = $"Some other player said: {message}\n";
+        }
+
+        Debug.Log("MESSAGE : " + message);
+        _messages.text += message;
+    }
+    // Define an RPC method that will be called on all clients
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void RpcSendMessage(string message)
+    {
+        Debug.Log($"Message from server: {message}");
+        // You can add more functionality here to handle the message on the client side
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -399,11 +455,4 @@ public class BasicSpawner : Singleton<BasicSpawner>, INetworkRunnerCallbacks
         Debug.Log("OnUserSimulationMessage : " + runner);
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

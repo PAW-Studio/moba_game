@@ -6,14 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenui.unity
-    guid: e8988fdad3acf4e4d9936b32934dd153
-  - enabled: 1
-    path: Assets/Scenes/MatchMaking.unity
-    guid: f9aa3385e7d98e64682e5c390423228e
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: c850ee8c3b14cc8459e7e186857cf567
+    path: Assets/_Fusion/Scene/ServerScene.unity
+    guid: 0a413767fa4df4c4f8c02bfafc298357
   m_configObjects:
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
-      guid: 77124694027b1ea4cb8493394c85d098, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 08e82ebe142d551428e75a317bba4b10, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 77124694027b1ea4cb8493394c85d098, type: 2}

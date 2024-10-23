@@ -8,15 +8,16 @@ public class MenuScreen : MonoBehaviour
     public GameObject charecterSelectionScreen;
     public GameObject serverClientScreen;
     public GameObject findMatchScreen;
+    public BasicSpawner basicSpawner;
 
     #endregion
 
     #region PUBLIC_METHOD
     public void PlayButton()
     {
-        if (BasicSpawner.Instance.serverToggle.isOn)
+        if (basicSpawner.serverToggle.isOn)
         {
-            BasicSpawner.Instance.ServerClientCreate();
+            basicSpawner.ServerClientCreate();
         }
         else
         {

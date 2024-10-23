@@ -81472,22 +81472,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.23333333
-    functionName: JahanDeathAnimation
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.0666667
-    functionName: HideCharacter
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.1333333
-    functionName: SetRootMotionOff
+  - time: 1.8
+    functionName: TriggerDestroyCharacter
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

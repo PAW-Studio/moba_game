@@ -18,7 +18,7 @@ MonoBehaviour:
       type: 3}
   attackAnimationDetails:
   - attackType: 2
-    movementSpeedModifier: 1
+    movementSpeedModifier: 2
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1

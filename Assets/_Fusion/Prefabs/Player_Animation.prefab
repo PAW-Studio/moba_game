@@ -212,7 +212,16 @@ MonoBehaviour:
   _GameState: 1
   _KartId: 0
   _id: 0
+  _charSelectionTimer: 0
+  _teamName: 0
+  _IsFindMatch:
+    _value: 0
+  _isCharacterSelect:
+    _value: 0
+  _currentLane: 0
   playerMovement: {fileID: 608559762638872892}
+  laneInfos: []
+  isTimerCoroutineStart: 0
 --- !u!1 &2105457730980204104
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ChampionsAbilityManager : MonoBehaviour
 {
     [SerializeField]
-    TMPro.TextMeshProUGUI ChampionName, ChampionSubTitle,OverviewText;
+    TMPro.TextMeshProUGUI ChampionName, ChampionSubTitle;
     [SerializeField]
     TMPro.TextMeshProUGUI AbiltiyTitle, AblitlityDescription;
     [SerializeField]
@@ -59,7 +59,6 @@ public class ChampionsAbilityManager : MonoBehaviour
     {
         ChampionName.text = championAblilities.champion.ToString().ToUpper();
         ChampionSubTitle.text = championAblilities.Subtitle.ToString();
-        OverviewText.text = championAblilities.OverviewText.ToString();
         foreach(Transform item in Ablitiesparent.transform)
         {
             if(item.CompareTag("child"))
@@ -149,7 +148,6 @@ public class ChampionAblilities
     public CharacterType champion;
     public string Subtitle;
     public List<Ability> abilities = new List<Ability>();
-    public string OverviewText;
 }
 [System.Serializable]
 public class Ability

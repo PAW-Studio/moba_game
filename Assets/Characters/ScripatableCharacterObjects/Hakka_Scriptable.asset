@@ -20,7 +20,7 @@ MonoBehaviour:
   - attackType: 1
     movementSpeedModifier: 2
   - attackType: 3
-    movementSpeedModifier: 0.5
+    movementSpeedModifier: 1.5
   attackDamageDetails:
   - attackType: 4
     attackSubType: 1
@@ -32,7 +32,7 @@ MonoBehaviour:
     attackSubType: 1
   attackCoolDownDetails:
   - attackType: 0
-    ActiveTime: 1
+    ActiveTime: 2
     levelCoolDownValues:
     - level: 1
       cooldownValue: 28

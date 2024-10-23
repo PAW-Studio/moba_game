@@ -11,8 +11,10 @@ public class FindMatchScreen : MonoBehaviour
     public TMP_Text buttonText;
     public Button findMatchButton;
     public int findGameMaxTime = 60;
-
     public GameObject characterSelectionScreen;
+    public BasicSpawner basicSpawner;
+
+
     #endregion
 
     #region UNITY_METODS
@@ -42,7 +44,7 @@ public class FindMatchScreen : MonoBehaviour
     {
         findMatchButton.interactable = false;
         buttonText.text = "IN QUEUE";
-        BasicSpawner.Instance.JoinGame();
+        basicSpawner.JoinGame();
         StartCoroutine(GameStartTimer());
     }
     #endregion
@@ -55,11 +57,19 @@ public class FindMatchScreen : MonoBehaviour
         {
             timerText.text = "" + tempTime;
             yield return new WaitForSeconds(1);
+          
             tempTime++;
         }
         gameObject.SetActive(false);
         characterSelectionScreen.SetActive(true);
-        characterSelectionScreen.transform.LeanScale(Vector3.one, 0.5f);
+        characterSelectionScreen.transform.LeanScale(Vector3.one, 0.3f);
+        characterSelectionScreen.GetComponent<CharecterSelectionScreen>().CheckAllTeamPlayer();
+
+
+        if (RoomPlayer.Local != null)
+        {
+            RoomPlayer.Local.IsFindMatch = true;
+        }
 
     }
     #endregion

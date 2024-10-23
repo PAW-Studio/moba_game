@@ -26,6 +26,7 @@ public class TowerAIScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        return;
         towerDestroyDetails = GameManager.instance.TowerDestroyDetails;
         maxHealth = towerDestroyDetails.MaxHealth;
         GameObject Healthbar = Instantiate(GameManager.instance.TowerHealthBar,GameManager.instance.MinionHealthbarsParent);
@@ -57,6 +58,7 @@ public class TowerAIScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        return;
         if(referenceObject && healthBarTransform)         //Handle exception for null reference 
         {
             healthBarTransform.position = cam.WorldToScreenPoint(referenceObject.transform.position);   //Set position of healthbar continuously at healbar reference position for the minion
@@ -65,6 +67,7 @@ public class TowerAIScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        return;
         // Similar to MinionAIScript
         if (hasTarget && targetMinion != null)
         {

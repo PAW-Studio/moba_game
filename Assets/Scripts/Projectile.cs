@@ -12,13 +12,6 @@ public class Projectile : MonoBehaviour
     public float collisionRadius=5f;
     public Character character;                                                //Character who originated this projectile 
     public AttackType attackType;                                              //Attack type from which the projectile is instantiated
-    public float distance_Range=75f;
-    [SerializeField]
-    GameObject DestroyVFXPrefab;                                              //Projectile destroy vfx prefab
-    [SerializeField]
-    GameObject InHandProjectileObject, ShootObject;                           //In hand object and shoot object if applicable
-    [SerializeField]
-    GameObject HealOnCharacter, HealVFXWithMovement;
     /// <summary>
     /// Move projectile in forward direction and detect hit, destroy on hit or when life time is over
     /// </summary>
@@ -76,57 +69,19 @@ public class Projectile : MonoBehaviour
             }
             transform.Translate(transform.forward*speed*Time.deltaTime,Space.World);
             timePassed += Time.deltaTime;
-            float dist = Vector3.Distance(character.transform.position,transform.position);
-            
-            if(dist>distance_Range || hit)
+            if(timePassed > lifeTime || hit) 
             {
-                
-                DestoryVFX();
-                //Heal effects
-                if(hit|| 1==1) //For testing  second condition set
-                {
-                    if(HealVFXWithMovement) 
-                    {
-                        SpawnHealEffect();
-                    }
-                }
-                //
                 Destroy(this.gameObject);
             }
-            //if(timePassed > lifeTime / 100 || hit)
-            //{
-            //    Destroy(this.gameObject);
-            //}
         }
-    }   
+    }
     /// <summary>
     /// Trigger movement of projectile
     /// </summary>
     public void Shoot() 
     {
         shoot = true;
-        if(ShootObject) 
-        {
-            InHandProjectileObject.SetActive(false);
-            ShootObject.SetActive(true);
-        }
         Debug.DrawRay(transform.position,transform.forward * 130,Color.blue,10f);
-    }
-    public void SpawnHealEffect() 
-    {
-        Character character = GetComponentInParent<Character>();
-        GameObject healProjectile = Instantiate(HealVFXWithMovement,transform.parent);
-        healProjectile.transform.position = transform.position;
-        healProjectile.SetActive(true);
-        HealProjectile _heal = healProjectile.GetComponent<HealProjectile>();
-        _heal.MoveTowardsParent(character,0);
-    }
-    public void DestoryVFX() 
-    {
-        if(DestroyVFXPrefab) 
-        {
-            Instantiate(DestroyVFXPrefab,transform.position,Quaternion.identity,transform.parent);
-        }
     }
 }
 

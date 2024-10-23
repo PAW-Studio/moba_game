@@ -11,15 +11,15 @@ public class CollisionDetector : MonoBehaviour
     Character character;
     private void OnEnable()
     {
-        character = AnimationMovementManager.playerScript.GetComponent<Character>();       
+      //  character = AnimationMovementManager.playerScript.GetComponent<Character>();       
     }
     private void Update()
     {
-        //When the attack/punch animation is ON detect all colliders that collided with character arm reference object
+       /* //When the attack/punch animation is ON detect all colliders that collided with character arm reference object
         if(AnimationMovementManager.Attacking)
         {
             DetectTarget();
-        }
+        }*/
     }
     /// <summary>
     /// Set list of targets 
@@ -156,7 +156,6 @@ public class CollisionDetector : MonoBehaviour
                 }
                 else 
                 {
-                 
                     Debug.LogError("Outside Arc" + hits[i].name);
                 }
             }

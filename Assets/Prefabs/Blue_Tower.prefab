@@ -108,13 +108,8 @@ MonoBehaviour:
   effectBar: {fileID: 0}
   damageText: {fileID: 0}
   HealthText: {fileID: 0}
-  textPrefab: {fileID: 0}
-  goldTextPrefab: {fileID: 0}
   damageTextReference: {fileID: 0}
   indicator: {fileID: 0}
-  animationPoints: []
-  ADDamageColor: {r: 0, g: 0, b: 0, a: 0}
-  APDamageColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2587006123438751367
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,17 +514,7 @@ MonoBehaviour:
   currentHealth: 0
   teamType: 0
   minionHealthBar: {fileID: 8261316663517207451}
-  TargetIndicator: {fileID: 0}
   referenceObject: {fileID: 2587006123848702281}
-  Gold: 0
-  Xp: 0
-  towerDestroyDetails:
-    MaxHealth: 5000
-    Levels: 5
-    Range: 1200
-    LevelGold: 125
-    FinalGoldWithiInRange: 250
-    FinalGold_OutOfRange: 50
 --- !u!1 &4646872106780800088
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +615,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

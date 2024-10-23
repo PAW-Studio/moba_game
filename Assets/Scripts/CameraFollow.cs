@@ -13,10 +13,10 @@ public class CameraFollow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //if(player) 
-        //{
-        //    SetPlayerAndOffset(player);
-        //}
+      /*  if (player)
+        {
+            SetPlayerAndOffset(player);
+        }*/
     }
     /// <summary>
     /// Set player and offeset transform
