@@ -6,77 +6,105 @@ namespace FusionNetwork
     using System.Linq;
     using UnityEngine;
 
+    /// <summary>
+    /// Manages the overall game state, team allocation, and player interactions.
+    /// </summary>
     public class GameManager : NetworkBehaviour
     {
         #region PUBLIC_VAR
-        public CameraFollow cameraFollow;
-        public int selectedCharacterIndex = 0;
-        public int maxPlayer = 2;
+        public CameraFollow cameraFollow; // Reference to the camera follow component
+        public int selectedCharacterIndex = 0; // Default selected character index
+        public int maxPlayer = 2; // Maximum number of players allowed
 
-        public static GameManager Instance;
+        public static GameManager Instance; // Singleton instance of GameManager
         #endregion
 
-        private GameState gameState;
+        #region PRIVATE_VAR
+        private GameState gameState; // Tracks the current game state
+        private Coroutine commonRoundTimerRoutine = null; // Reference to the common round timer coroutine
+        private Coroutine individualTimerRoutine = null; // Reference to the individual round timer coroutine
+        #endregion
 
+        /// <summary>
+        /// Dictionary to store server-side player data.
+        /// </summary>
         public Dictionary<string, ServerPlayerData> players = new Dictionary<string, ServerPlayerData>();
+
+        #region UNITY_CALLBACKS
 
         private void Awake()
         {
+            // Initialize the singleton instance
             Instance = this;
         }
+        #endregion
 
+        #region TEAM_ALLOCATION
+
+        /// <summary>
+        /// Starts the team allocation process.
+        /// </summary>
         public void StartTeamAllocation()
         {
-            // Team allocation
             StartCoroutine(AllocateTeams());
         }
 
-        #region LOGIC
-
+        /// <summary>
+        /// Allocates players into two teams and assigns initial lane indices.
+        /// </summary>
         private IEnumerator AllocateTeams()
         {
-            gameState = new GameState();
+            gameState = new GameState(); // Initialize game state
 
-            int playerCounter = 0;
+            int playerCounter = 0; // Counter to distribute players across teams
 
-            Debug.LogError("AllocateTeams");
+            Debug.LogError("Allocating Teams...");
             gameState.state = GameStateEnum.LaneAllocation;
+
+            // Allocate players into Team A and Team B
             foreach (var playerData in players.Values)
             {
                 LobbyPlayerData lobbyPlayer = new LobbyPlayerData
                 {
                     userID = playerData.userID,
                     playerName = playerData.playerName,
-                    laneIndex = playerCounter % 5, // Assign laneIndex 0 to 4
-                    selectedCharacter = -1, // You can customize this as per player choice
-                    individualTimer = 0f // Initialize or set default timer if needed
+                    laneIndex = playerCounter % 5, // Assign laneIndex in a round-robin fashion
+                    selectedCharacter = -1, // Default: no character selected
+                    individualTimer = 0f // Default: no timer initialized
                 };
 
+                // Alternate between Team A and Team B
                 if (playerCounter % 2 == 0)
                 {
-                    gameState.Team_A.Add(lobbyPlayer); // Assign to Team A
+                    gameState.Team_A.Add(lobbyPlayer);
                 }
                 else
                 {
-                    gameState.Team_B.Add(lobbyPlayer); // Assign to Team B
+                    gameState.Team_B.Add(lobbyPlayer);
                 }
 
                 playerCounter++;
             }
 
+            // Broadcast the updated game state
             RPC_SendGameState(JsonUtility.ToJson(gameState));
 
             yield return new WaitForSeconds(5f);
 
+            // Transition to team selection phase
             gameState.state = GameStateEnum.TeamSelection_A;
-            StartCoroutine(HandleTeamSelection(gameState, gameState.Team_A, 0)); // Move to Team A
+            StartCoroutine(HandleTeamSelection(gameState, gameState.Team_A, 0)); // Start with Team A
         }
+        #endregion
 
-        Coroutine commonRoundTimerRoutine = null;
-        Coroutine individualTimerRoutine = null;
+        #region TIMER_LOGIC
+
+        /// <summary>
+        /// Manages the common timer for a team's turn.
+        /// </summary>
         private IEnumerator CommonRoundTimer(GameState gameState, int teamIndex)
         {
-            gameState.commonTimer = 20f; // Players per team * 10
+            gameState.commonTimer = 20f; // Set the timer (e.g., players per team * 10)
             RPC_SendGameState(JsonUtility.ToJson(gameState));
 
             while (gameState.commonTimer > 0)
@@ -84,40 +112,21 @@ namespace FusionNetwork
                 yield return new WaitForSeconds(1f);
                 gameState.commonTimer -= 1f;
                 RPC_SendGameState(JsonUtility.ToJson(gameState));
-
-                //// Check if all players in the team have selected a character
-                //if (teamIndex == 0 && gameState.Team_A.All(p => p.selectedCharacter != -1))
-                //{
-                //    break; // Stop the common timer for Team A when all players have selected their character
-                //}
-                //else if (teamIndex == 1 && gameState.Team_B.All(p => p.selectedCharacter != -1))
-                //{
-                //    break; // Stop the common timer for Team B when all players have selected their character
-                //}
-
                 Debug.Log($"Common Timer: {gameState.commonTimer}");
             }
 
             if (gameState.commonTimer <= 0)
             {
-                Debug.Log("Common timer ran out!");
+                Debug.Log("Common timer expired!");
             }
-
-            //// Transition to the next team if Team A has finished
-            //if (teamIndex == 0)
-            //{
-            //    gameState.state = GameStateEnum.TeamSelection_B;
-            //    StartCoroutine(HandleTeamSelection(gameState, gameState.Team_B, 1)); // Move to Team B
-            //}
-            //else
-            //{
-            //    Debug.LogError("Game will start!");
-            //}
         }
 
+        /// <summary>
+        /// Handles the individual timer for a single player's turn.
+        /// </summary>
         private IEnumerator IndividualRoundTimer(LobbyPlayerData player, GameState gameState, List<LobbyPlayerData> team, int currentPlayerIndex)
         {
-            player.individualTimer = 10f;
+            player.individualTimer = 10f; // Set individual player timer
             RPC_SendGameState(JsonUtility.ToJson(gameState));
 
             while (player.individualTimer > 0)
@@ -125,23 +134,16 @@ namespace FusionNetwork
                 yield return new WaitForSeconds(1f);
                 player.individualTimer -= 1f;
                 RPC_SendGameState(JsonUtility.ToJson(gameState));
-                Debug.Log($"Player {player.playerName}'s Individual Timer: {player.individualTimer}");
+                Debug.Log($"Player {player.playerName}'s Timer: {player.individualTimer}");
 
-                // If player has already selected their character, stop the timer
                 if (player.selectedCharacter != -1)
                 {
-                    Debug.Log($"{player.playerName} selected a character.");
+                    Debug.Log($"{player.playerName} selected a character!");
                     break;
                 }
             }
 
-            // Move to the next player if their time runs out or they select a character
-            if (player.individualTimer <= 0)
-            {
-                Debug.Log($"Player {player.playerName}'s timer ran out!");
-            }
-
-            // Move to the next player
+            // Proceed to the next player or end the round
             currentPlayerIndex++;
             if (currentPlayerIndex < team.Count)
             {
@@ -149,132 +151,105 @@ namespace FusionNetwork
             }
             else
             {
-                // If all players in Team A have selected, move on to Team B or end the round
+                // Transition to the next phase
                 if (gameState.state == GameStateEnum.TeamSelection_A)
                 {
-                    Debug.LogError("Team A timer runs out!");
-                    StopCoroutine(commonRoundTimerRoutine); // Stop Team A's common timer
+                    Debug.LogError("Team A completed selection!");
+                    StopCoroutine(commonRoundTimerRoutine);
 
                     gameState.state = GameStateEnum.TeamSelection_B;
                     StartCoroutine(HandleTeamSelection(gameState, gameState.Team_B, 1)); // Move to Team B
                 }
                 else if (gameState.state == GameStateEnum.TeamSelection_B)
                 {
-                    Debug.LogError("Team B timer runs out!");
-                    StopCoroutine(commonRoundTimerRoutine); // Stop Team B's common timer
-
-                    Debug.LogError("Starting the game!!");
+                    Debug.LogError("Team B completed selection! Starting the game.");
+                    StopCoroutine(commonRoundTimerRoutine);
                 }
             }
         }
+        #endregion
 
+        #region GAME_FLOW
+
+        /// <summary>
+        /// Handles the selection phase for a given team.
+        /// </summary>
         private IEnumerator HandleTeamSelection(GameState gameState, List<LobbyPlayerData> team, int teamIndex)
         {
-            // Start common timer for the team
+            // Start the team's common timer
             commonRoundTimerRoutine = StartCoroutine(CommonRoundTimer(gameState, teamIndex));
 
-            // Start individual timers for each player in the team, starting with the first player
+            // Start individual player selection
             yield return StartCoroutine(IndividualRoundTimer(team[0], gameState, team, 0));
         }
+        #endregion
 
-        public void SelectCharacter()
-        {
-            RPC_SelectCharacter("123", 1);
-        }
+        #region RPC_METHODS
 
+        /// <summary>
+        /// Server-side method for a player to select a character.
+        /// </summary>
         [Rpc(sources: RpcSources.All, targets: RpcTargets.StateAuthority)]
         public void RPC_SelectCharacter(string userID, int characterIndex)
         {
-            Debug.LogError("Selected the character!");
-            NetworkManager nm = FindObjectOfType<NetworkManager>();
-            if (nm._networkRunner.IsServer)
+            Debug.LogError("Character selected!");
+            if (FindObjectOfType<NetworkManager>()._networkRunner.IsServer)
             {
-                foreach (var player in gameState.Team_A.Concat(gameState.Team_B))
+                var player = gameState.FindPlayer(userID);
+                if (player != null)
                 {
-                    if (player.userID == userID)
-                    {
-                        player.selectedCharacter = characterIndex;
-                        Debug.Log($"Player {player.playerName} selected character {characterIndex}");
-                        break;
-                    }
+                    player.selectedCharacter = characterIndex;
+                    Debug.Log($"Player {player.playerName} selected character {characterIndex}");
                 }
             }
         }
 
-
+        /// <summary>
+        /// Broadcasts the current game state to all clients.
+        /// </summary>
         [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_SendGameState(string jsonData)
         {
-            GameState gameState = JsonUtility.FromJson<GameState>(jsonData);
-
-            NetworkManager nm = FindObjectOfType<NetworkManager>();
-            if (!nm._networkRunner.IsServer)
+            gameState = JsonUtility.FromJson<GameState>(jsonData);
+            if (!FindObjectOfType<NetworkManager>()._networkRunner.IsServer)
             {
-                if (gameState.state == GameStateEnum.LaneAllocation)
-                {
-                    PrintGameState(gameState);
-                    //Debug.Log("Showing lanes!!");
-                }
-                else if (gameState.state == GameStateEnum.TeamSelection_A)
-                {
-                    PrintGameState(gameState);
-                    //Debug.Log("Team A is selecting characters!!");
-                }
-                else if (gameState.state == GameStateEnum.TeamSelection_B)
-                {
-                    PrintGameState(gameState);
-                    //Debug.Log("Team B is selecting characters!!");
-                }
+                PrintGameState(gameState);
             }
         }
+        #endregion
 
+        #region DEBUGGING
+
+        /// <summary>
+        /// Prints the game state for debugging purposes.
+        /// </summary>
         private void PrintGameState(GameState gameState)
         {
-            // Get current date and time for the log entry
             string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-            // Create a StringBuilder to build the log message
-            System.Text.StringBuilder logMessage = new System.Text.StringBuilder();
-
-            // Add the header with timestamp
-            logMessage.AppendLine($"[{timestamp}] === GameState ===");
-
-            // Add common timer and team selection state
-            logMessage.AppendLine($"[{timestamp}] Common Timer: {gameState.commonTimer}");
-            logMessage.AppendLine($"[{timestamp}] Is First Team Selecting: {gameState.isFirstTeamSelecting}");
-
-            // Add details of Team A
-            logMessage.AppendLine($"[{timestamp}] === Team A ===");
-            foreach (var player in gameState.Team_A)
-            {
-                logMessage.AppendLine(
-                    $"[{timestamp}] Player Name: {player.playerName}, " +
-                    $"UserID: {player.userID}, " +
-                    $"Lane Index: {player.laneIndex}, " +
-                    $"Selected Character: {player.selectedCharacter}, " +
-                    $"Individual Timer: {player.individualTimer}"
-                );
-            }
-
-            // Add details of Team B
-            logMessage.AppendLine($"[{timestamp}] === Team B ===");
-            foreach (var player in gameState.Team_B)
-            {
-                logMessage.AppendLine(
-                    $"[{timestamp}] Player Name: {player.playerName}, " +
-                    $"UserID: {player.userID}, " +
-                    $"Lane Index: {player.laneIndex}, " +
-                    $"Selected Character: {player.selectedCharacter}, " +
-                    $"Individual Timer: {player.individualTimer}"
-                );
-            }
-
-            // Add footer
-            logMessage.AppendLine($"[{timestamp}] === End of GameState ===");
-
-            // Print the entire log message as a single formatted string
-            Debug.Log(logMessage.ToString());
+            System.Text.StringBuilder log = new System.Text.StringBuilder();
+            log.AppendLine($"[{timestamp}] === GameState ===");
+            log.AppendLine($"Common Timer: {gameState.commonTimer}");
+            log.AppendLine($"Is First Team Selecting: {gameState.isFirstTeamSelecting}");
+            log.AppendLine($"=== Team A ===");
+            foreach (var player in gameState.Team_A) log.AppendLine(player.ToString());
+            log.AppendLine($"=== Team B ===");
+            foreach (var player in gameState.Team_B) log.AppendLine(player.ToString());
+            log.AppendLine($"[{timestamp}] === End of GameState ===");
+            Debug.Log(log.ToString());
         }
         #endregion
     }
+
+    #region EXTENSIONS
+    public static class GameStateExtensions
+    {
+        /// <summary>
+        /// Finds a player in either team by their userID.
+        /// </summary>
+        public static LobbyPlayerData FindPlayer(this GameState gameState, string userID)
+        {
+            return gameState.Team_A.Concat(gameState.Team_B).FirstOrDefault(p => p.userID == userID);
+        }
+    }
+    #endregion
 }

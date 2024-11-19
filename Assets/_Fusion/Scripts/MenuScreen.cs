@@ -10,12 +10,14 @@ public class MenuScreen : MonoBehaviour
     public GameObject findMatchScreen;
     public BasicSpawner basicSpawner;
 
+    [SerializeField] private NetworkManager networkManager;
+
     #endregion
 
     #region PUBLIC_METHOD
     public void PlayButton()
     {
-        if (basicSpawner.serverToggle.isOn)
+        if (networkManager.IsServer)
         {
             basicSpawner.ServerClientCreate();
         }

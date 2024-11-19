@@ -165,7 +165,7 @@ public class CharecterSelectionScreen : NetworkBehaviour
         }
 
         NetworkManager nm = FindObjectOfType<NetworkManager>();
-        nm.charecterIndex = index;
+        nm.characterIndex = index;
         FusionNetwork.GameManager.Instance.selectedCharacterIndex = index;
         foreach (var item in characterSelectionButtons)
         {
